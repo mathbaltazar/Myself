@@ -1,27 +1,29 @@
 package com.baltazarstudio.regular.adapter
 
 import android.view.View
-import android.view.ViewGroup
-import androidx.viewpager.widget.PagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 
-class MainPagerAdapter(var viewPages: ArrayList<View>) : PagerAdapter() {
+class MainPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
+    val viewPages = ArrayList<Fragment>()
+    val viewPagesTitle = ArrayList<String>()
 
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view == `object`
+    override fun getItem(position: Int): Fragment {
+        return viewPages[position]
+    }
+
+    fun addFragment(fragment: Fragment, title: String) {
+        viewPages.add(fragment)
+        viewPagesTitle.add(title)
     }
 
     override fun getCount(): Int {
         return viewPages.size
     }
 
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val view = viewPages[position]
-        container.addView(view)
-        return view
-    }
-
     override fun getPageTitle(position: Int): CharSequence? {
-        return viewPages[position].tag as String
+        return viewPagesTitle[position]
     }
 
 }
