@@ -13,4 +13,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="toast_item_carteira_adicionado">Adicionado!</string>
     <string name="all_string_adicionar_invalido">Nenhum campo pode ficar em branco</string>
+    <string name="activity_title_detalhes_item_carteira">Pendência</string>
 </resources>

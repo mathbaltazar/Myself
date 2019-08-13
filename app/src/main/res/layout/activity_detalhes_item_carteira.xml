@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.DetalhesItemCarteiraActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/layout_item_carteira_detalhes_action_buttons"
+        android:orientation="vertical"
+        android:padding="@dimen/all_default_layout_offset">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Valor:"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                    android:id="@+id/tv_item_carteira_valor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="R$ 460,00"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/off_white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Iniciada em:" />
+
+            <TextView
+                    android:id="@+id/tv_item_carteira_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="24/07/2019"
+                android:textAlignment="textEnd" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".3"
+                android:text="Descrição:" />
+
+            <TextView
+                    android:id="@+id/tv_item_carteira_descricao"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".7"
+                android:maxLines="2"
+                android:text="Parcelas do carro"
+                android:textAlignment="textEnd"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Valor pago:" />
+
+            <TextView
+                    android:id="@+id/tv_item_carteira_valor_pago"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="R$ 200,00"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resumo de Ajustes" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/all_border_background_grey"
+                android:padding="@dimen/all_default_layout_offset">
+
+                <TextView
+                    android:id="@+id/tv_sem_registros_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Não há registros."
+                    android:textAlignment="center" />
+
+                <ListView
+                    android:id="@+id/listview_item_carteira_registro"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@null" />
+
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_item_carteira_detalhes_action_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:padding="@dimen/all_default_layout_offset">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/all_button_border_background"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            android:text="Nova Parcela" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/all_button_background"
+            android:textColor="@android:color/white"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            android:text="Marcar como pago" />
+    </LinearLayout>
+
+</RelativeLayout>

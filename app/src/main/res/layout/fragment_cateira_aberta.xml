@@ -80,8 +80,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/all_carteira_input_hint_descricao"
-                    app:errorEnabled="true">
+                    android:hint="@string/all_carteira_input_hint_descricao">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/textinput_descricao"
@@ -108,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginTop="@dimen/all_default_layout_offset"
-                    android:background="@drawable/all_border_background"
+                    android:background="@drawable/all_button_border_background"
                     android:text="@string/all_string_adicionar"
                     android:textColor="@color/colorPrimary"
                     android:textSize="18sp" />
@@ -132,5 +131,6 @@
         android:id="@+id/list_carteira_aberta"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 
 </LinearLayout>

@@ -7,7 +7,7 @@ import java.util.*
 
 class ItemCarteiraAbertaDAO(context: Context) : Database(context) {
 
-    override fun get(id: Long): ItemCarteiraAberta {
+    override fun get(id: Int): ItemCarteiraAberta {
         val query = "SELECT * FROM $TABELA_ITEM_CARTEIRA WHERE $TABLE_ID = $id"
 
         val cursor = readableDatabase.rawQuery(query, null)
@@ -23,8 +23,9 @@ class ItemCarteiraAbertaDAO(context: Context) : Database(context) {
 
     override fun getTodos(): List<ItemCarteiraAberta> {
         val listaItens = ArrayList<ItemCarteiraAberta>()
+        val query = "SELECT * FROM $TABELA_ITEM_CARTEIRA ORDER BY $TABLE_ID DESC"
 
-        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABELA_ITEM_CARTEIRA", null)
+        val cursor = readableDatabase.rawQuery(query, null)
         while (cursor.moveToNext()) {
             listaItens.add(
                 ItemCarteiraAberta(

@@ -8,38 +8,37 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.model.ItemCarteiraAberta
-import kotlinx.android.synthetic.main.item_recycler_carteira_aberta.view.*
-import java.text.NumberFormat
-import java.util.*
+import com.baltazarstudio.regular.model.RegistroItemCarteira
+import com.baltazarstudio.regular.util.Utils
+import kotlinx.android.synthetic.main.item_carteira_aberta_registro.view.*
 
-class ItemCarteiraRecyclerAdapter(private var context: Context,
-                                  private var itens: List<ItemCarteiraAberta>) : BaseAdapter() {
-
+class ItemCarteiraRegistroAdapter(var context: Context,
+                                  var registros: List<RegistroItemCarteira>
+) : BaseAdapter() {
 
     @SuppressLint("InflateParams")
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
         val holder: ViewHolder
         if (convertView == null) {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_recycler_carteira_aberta, null)
+            val view = LayoutInflater.from(context).inflate(R.layout.item_carteira_aberta_registro, null)
             holder = ViewHolder()
-            holder.descricao = view.tv_item_carteira_descricao
-            holder.valor = view.tv_item_carteira_valor
+            holder.descricao = view.tv_item_carteira_registro_descricao
+            holder.valor = view.tv_item_carteira_registro_valor
 
-            bindView(holder, position)
+            bindView(holder, registros[position])
             view.tag = holder
             return view
         } else {
             holder = convertView.tag as ViewHolder
         }
 
-        bindView(holder, position)
+        bindView(holder, registros[position])
         convertView.tag = holder
         return convertView
     }
 
     override fun getItem(position: Int): Any {
-        return itens[position]
+        return registros[position]
     }
 
     override fun getItemId(p0: Int): Long {
@@ -47,14 +46,12 @@ class ItemCarteiraRecyclerAdapter(private var context: Context,
     }
 
     override fun getCount(): Int {
-        return itens.size
+        return registros.size
     }
 
-    private fun bindView(holder: ViewHolder, position: Int) {
-        val itemCarteira = itens[position]
-        holder.descricao!!.text = itemCarteira.descricao
-        holder.valor!!.text = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
-                .format(itemCarteira.valor)
+    private fun bindView(holder: ViewHolder, registro: RegistroItemCarteira) {
+        holder.descricao!!.text = registro.descricao
+        holder.valor!!.text = Utils.formatCurrency(registro.valor)
     }
 
     companion object {
@@ -63,5 +60,4 @@ class ItemCarteiraRecyclerAdapter(private var context: Context,
             var valor: TextView? = null
         }
     }
-
 }
