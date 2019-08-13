@@ -133,8 +133,8 @@
                     android:id="@+id/listview_item_carteira_registro"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/all_default_layout_offset"
-                    android:divider="@null" />
+                    android:divider="@null"
+                    android:padding="@dimen/all_default_layout_offset" />
 
             </FrameLayout>
         </LinearLayout>
@@ -149,18 +149,20 @@
         android:padding="@dimen/all_default_layout_offset">
 
         <TextView
+            android:id="@+id/button_detalhes_item_carteira_novo_ajuste"
             android:layout_width="match_parent"
             android:layout_height="@dimen/all_button_default_height"
             android:layout_margin="@dimen/all_default_layout_offset"
+            android:background="@drawable/all_button_border_background"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/all_button_border_background"
-            android:text="NOVO AJUSTE"
-            android:textStyle="bold"
             android:gravity="center"
-            android:textColor="@color/colorPrimary" />
+            android:text="NOVO AJUSTE"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
 
         <Button
+            android:id="@+id/button_detalhes_item_carteira_marcar_como_pago"
             android:layout_width="match_parent"
             android:layout_height="@dimen/all_button_default_height"
             android:layout_margin="@dimen/all_default_layout_offset"

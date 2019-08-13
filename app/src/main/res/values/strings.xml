@@ -4,8 +4,8 @@
     <string name="view_pager_fragment_title_carteira">Carteira Aberta</string>
     <string name="view_pager_fragment_title_economias">Economias</string>
     <string name="all_string_adicionar">Adicionar</string>
-    <string name="all_carteira_input_hint_valor">Valor</string>
-    <string name="all_carteira_input_hint_descricao">Descrição</string>
+    <string name="all_input_hint_valor">Valor</string>
+    <string name="all_input_hint_descricao">Descrição</string>
     <string name="all_carteira_title_pendencias">Pendências</string>
     <string name="all_label_sem_pendencias">Não há pendências registradas.</string>
 
@@ -14,4 +14,6 @@
     <string name="toast_item_carteira_adicionado">Adicionado!</string>
     <string name="all_string_adicionar_invalido">Nenhum campo pode ficar em branco</string>
     <string name="activity_title_detalhes_item_carteira">Pendência</string>
+    <string name="toast_detalhe_item_carteira_registro_adicionado">Registro adicionado</string>
+    <string name="all_string_adicionar_registro_invalido">O campo *Valor não pode ficar em branco</string>
 </resources>

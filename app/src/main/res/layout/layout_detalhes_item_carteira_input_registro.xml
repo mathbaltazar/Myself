@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_inserir_item_registro"
+        android:orientation="vertical"
+        android:padding="@dimen/all_default_layout_offset">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset"
+            android:layout_marginBottom="@dimen/all_default_layout_offset"
+            android:text="@string/all_string_adicionar"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textinput_item_registro_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/all_string_adicionar_registro_invalido"
+            android:textColor="@android:color/holo_red_light"
+            android:visibility="gone" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/all_input_hint_descricao">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textinput_item_registro_descricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset"
+            android:hint="@string/all_input_hint_valor">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textinput_item_registro_valor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_inserir_item_registro"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/all_default_layout_offset"
+        android:background="@drawable/all_button_background"
+        android:text="@string/all_string_adicionar"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</RelativeLayout>

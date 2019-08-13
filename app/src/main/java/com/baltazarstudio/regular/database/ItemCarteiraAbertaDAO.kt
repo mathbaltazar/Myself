@@ -7,6 +7,7 @@ import com.baltazarstudio.regular.model.ItemCarteiraAberta
 import java.util.*
 
 class ItemCarteiraAbertaDAO(context: Context) : Database<ItemCarteiraAberta>(context) {
+    val registroItemDAO = RegistroItemDAO(context)
 
     override fun get(id: Int): ItemCarteiraAberta {
         val query = "SELECT * FROM $TABELA_ITEM_CARTEIRA WHERE $TABLE_ID = $id"
@@ -50,10 +51,17 @@ class ItemCarteiraAbertaDAO(context: Context) : Database<ItemCarteiraAberta>(con
         writableDatabase.execSQL(insert)
     }
 
-    override fun alterar(objeto: ItemCarteiraAberta) {
-    }
+    override fun alterar(objeto: ItemCarteiraAberta) {}
 
     override fun excluir(objeto: ItemCarteiraAberta) {
+        val query = "DELETE FROM $TABELA_ITEM_CARTEIRA " +
+                "WHERE $TABLE_ID = " + objeto.id
+
+        writableDatabase.execSQL(query)
+
+        for (registro in objeto.registros) {
+            registroItemDAO.excluir(registro)
+        }
     }
 
 
@@ -62,6 +70,7 @@ class ItemCarteiraAbertaDAO(context: Context) : Database<ItemCarteiraAberta>(con
         objeto.descricao = cursor.getString(cursor.getColumnIndex(ITEM_CARTEIRA_DESCRICAO))
         objeto.valor = cursor.getString(cursor.getColumnIndex(ITEM_CARTEIRA_VALOR)).toBigDecimal()
         objeto.data = cursor.getString(cursor.getColumnIndex(ITEM_CARTEIRA_DATA))
+        objeto.registros.addAll(registroItemDAO.getTodos().filter { it.itemCarteiraAberta?.id == objeto.id })
     }
 
     companion object {

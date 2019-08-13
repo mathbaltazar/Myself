@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.model.RegistroItemCarteira
+import com.baltazarstudio.regular.model.RegistroItem
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.item_carteira_aberta_registro.view.*
 
 class ItemCarteiraRegistroAdapter(var context: Context,
-                                  var registros: List<RegistroItemCarteira>
+                                  var registros: List<RegistroItem>
 ) : BaseAdapter() {
 
     @SuppressLint("InflateParams")
@@ -49,7 +49,7 @@ class ItemCarteiraRegistroAdapter(var context: Context,
         return registros.size
     }
 
-    private fun bindView(holder: ViewHolder, registro: RegistroItemCarteira) {
+    private fun bindView(holder: ViewHolder, registro: RegistroItem) {
         holder.descricao!!.text = registro.descricao
         holder.valor!!.text = Utils.formatCurrency(registro.valor)
     }
