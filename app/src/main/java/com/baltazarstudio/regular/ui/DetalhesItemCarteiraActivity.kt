@@ -41,7 +41,11 @@ class DetalhesItemCarteiraActivity : AppCompatActivity() {
     }
 
     private fun calcularValorPago(registros: ArrayList<RegistroItemCarteira>): String {
-        return Utils.formatCurrency(BigDecimal.ZERO)
+        var soma = BigDecimal.ZERO
+        for (registro in registros) {
+            soma = soma.add(registro.valor)
+        }
+        return Utils.formatCurrency(soma)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

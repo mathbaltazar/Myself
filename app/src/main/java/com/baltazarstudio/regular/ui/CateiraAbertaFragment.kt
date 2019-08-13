@@ -12,7 +12,6 @@ import com.baltazarstudio.regular.adapter.ItemCarteiraAdapter
 import com.baltazarstudio.regular.database.ItemCarteiraAbertaDAO
 import com.baltazarstudio.regular.model.ItemCarteiraAberta
 import com.baltazarstudio.regular.util.Utils
-import kotlinx.android.synthetic.main.fragment_cateira_aberta.*
 import kotlinx.android.synthetic.main.fragment_cateira_aberta.view.*
 import java.math.BigDecimal
 
@@ -45,16 +44,17 @@ class CateiraAbertaFragment(var activity: Activity) : Fragment() {
                 v.layout_add_item_carteira.visibility = View.GONE
                 v.divider_add_item_carteira.visibility = View.GONE
                 v.btn_toggle_add_item_carteira.setImageResource(android.R.drawable.ic_input_add)
+                v.textinput_error.visibility = View.GONE
                 Utils.hideKeyboard(context!!, v)
             }
         }
 
         v.btn_register_item_carteira.setOnClickListener {
             if (v.textinput_descricao.text.toString() == ""
-                    || v.textinput_descricao.text.toString() == "") {
-                textinput_error.visibility = View.VISIBLE
+                    || v.textinput_valor.text.toString() == "") {
+                v.textinput_error.visibility = View.VISIBLE
             } else {
-                textinput_error.visibility = View.GONE
+                v.textinput_error.visibility = View.GONE
 
                 val item = ItemCarteiraAberta()
                 item.descricao = v.textinput_descricao.text.toString()

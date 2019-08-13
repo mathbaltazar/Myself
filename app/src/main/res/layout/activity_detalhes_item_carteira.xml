@@ -27,7 +27,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                    android:id="@+id/tv_item_carteira_valor"
+                android:id="@+id/tv_item_carteira_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="R$ 460,00"
@@ -54,7 +54,7 @@
                 android:text="Iniciada em:" />
 
             <TextView
-                    android:id="@+id/tv_item_carteira_data"
+                android:id="@+id/tv_item_carteira_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="24/07/2019"
@@ -75,7 +75,7 @@
                 android:text="Descrição:" />
 
             <TextView
-                    android:id="@+id/tv_item_carteira_descricao"
+                android:id="@+id/tv_item_carteira_descricao"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".7"
@@ -97,7 +97,7 @@
                 android:text="Valor pago:" />
 
             <TextView
-                    android:id="@+id/tv_item_carteira_valor_pago"
+                android:id="@+id/tv_item_carteira_valor_pago"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="R$ 200,00"
@@ -119,13 +119,13 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/all_border_background_grey"
-                android:padding="@dimen/all_default_layout_offset">
+                android:background="@drawable/all_border_background_grey">
 
                 <TextView
                     android:id="@+id/tv_sem_registros_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/all_default_layout_offset"
                     android:text="Não há registros."
                     android:textAlignment="center" />
 
@@ -133,6 +133,7 @@
                     android:id="@+id/listview_item_carteira_registro"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:padding="@dimen/all_default_layout_offset"
                     android:divider="@null" />
 
             </FrameLayout>
@@ -147,21 +148,25 @@
         android:orientation="vertical"
         android:padding="@dimen/all_default_layout_offset">
 
-        <Button
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/all_button_border_background"
-            android:textColor="@color/colorPrimary"
+            android:layout_height="@dimen/all_button_default_height"
             android:layout_margin="@dimen/all_default_layout_offset"
-            android:text="Nova Parcela" />
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/all_button_border_background"
+            android:text="NOVO AJUSTE"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary" />
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/all_button_background"
-            android:textColor="@android:color/white"
+            android:layout_height="@dimen/all_button_default_height"
             android:layout_margin="@dimen/all_default_layout_offset"
-            android:text="Marcar como pago" />
+            android:background="@drawable/all_button_background"
+            android:text="Marcar como pago"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 
 </RelativeLayout>

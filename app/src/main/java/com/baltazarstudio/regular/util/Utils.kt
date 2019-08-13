@@ -24,12 +24,13 @@ class Utils {
 
         @SuppressLint("SimpleDateFormat")
         fun currentDateFormatted(): String {
-            return sdf.format(Date())
+            return sdf.format(Calendar.getInstance().time)
         }
 
         fun formatCurrency(valor: BigDecimal?): String {
             return NumberFormat.getCurrencyInstance(mLocale)
                     .format(valor)
+                    .replace("R$", "R$ ")
         }
     }
 }
