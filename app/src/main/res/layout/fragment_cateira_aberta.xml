@@ -73,7 +73,7 @@
                     android:id="@+id/textinput_error"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/all_string_adicionar_invalido"
+                    android:text="@string/all_string_dialog_adicionar_campos_vazios"
                     android:textColor="@android:color/holo_red_light"
                     android:visibility="gone" />
 
@@ -128,7 +128,7 @@
 
 
     <ListView
-        android:id="@+id/list_carteira_aberta"
+        android:id="@+id/listview_carteira_aberta"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

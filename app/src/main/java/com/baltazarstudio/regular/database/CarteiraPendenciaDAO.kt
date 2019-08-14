@@ -3,17 +3,17 @@ package com.baltazarstudio.regular.database
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.baltazarstudio.regular.model.ItemCarteiraAberta
+import com.baltazarstudio.regular.model.CarteiraPendencia
 import java.util.*
 
-class ItemCarteiraAbertaDAO(context: Context) : Database<ItemCarteiraAberta>(context) {
+class CarteiraPendenciaDAO(context: Context) : Database<CarteiraPendencia>(context) {
     val registroItemDAO = RegistroItemDAO(context)
 
-    override fun get(id: Int): ItemCarteiraAberta {
+    override fun get(id: Int): CarteiraPendencia {
         val query = "SELECT * FROM $TABELA_ITEM_CARTEIRA WHERE $TABLE_ID = $id"
 
         val cursor = readableDatabase.rawQuery(query, null)
-        val itemCarteira = ItemCarteiraAberta()
+        val itemCarteira = CarteiraPendencia()
         cursor.moveToFirst()
         bind(cursor, itemCarteira)
 
@@ -21,13 +21,13 @@ class ItemCarteiraAbertaDAO(context: Context) : Database<ItemCarteiraAberta>(con
         return itemCarteira
     }
 
-    override fun getTodos(): List<ItemCarteiraAberta> {
-        val listaItens = ArrayList<ItemCarteiraAberta>()
+    override fun getTodos(): List<CarteiraPendencia> {
+        val listaItens = ArrayList<CarteiraPendencia>()
         val query = "SELECT * FROM $TABELA_ITEM_CARTEIRA ORDER BY $TABLE_ID DESC"
 
         val cursor = readableDatabase.rawQuery(query, null)
         while (cursor.moveToNext()) {
-            val item = ItemCarteiraAberta()
+            val item = CarteiraPendencia()
             bind(cursor, item)
 
             listaItens.add(item)
@@ -37,7 +37,7 @@ class ItemCarteiraAbertaDAO(context: Context) : Database<ItemCarteiraAberta>(con
         return listaItens
     }
 
-    override fun inserir(objeto: ItemCarteiraAberta) {
+    override fun inserir(objeto: CarteiraPendencia) {
         val insert = "INSERT INTO $TABELA_ITEM_CARTEIRA (" +
                 "$ITEM_CARTEIRA_DESCRICAO," +
                 "$ITEM_CARTEIRA_DATA," +
@@ -51,9 +51,9 @@ class ItemCarteiraAbertaDAO(context: Context) : Database<ItemCarteiraAberta>(con
         writableDatabase.execSQL(insert)
     }
 
-    override fun alterar(objeto: ItemCarteiraAberta) {}
+    override fun alterar(objeto: CarteiraPendencia) {}
 
-    override fun excluir(objeto: ItemCarteiraAberta) {
+    override fun excluir(objeto: CarteiraPendencia) {
         val query = "DELETE FROM $TABELA_ITEM_CARTEIRA " +
                 "WHERE $TABLE_ID = " + objeto.id
 
@@ -65,12 +65,12 @@ class ItemCarteiraAbertaDAO(context: Context) : Database<ItemCarteiraAberta>(con
     }
 
 
-    override fun bind(cursor: Cursor, objeto: ItemCarteiraAberta) {
+    override fun bind(cursor: Cursor, objeto: CarteiraPendencia) {
         objeto.id = cursor.getInt(cursor.getColumnIndex(TABLE_ID))
         objeto.descricao = cursor.getString(cursor.getColumnIndex(ITEM_CARTEIRA_DESCRICAO))
         objeto.valor = cursor.getString(cursor.getColumnIndex(ITEM_CARTEIRA_VALOR)).toBigDecimal()
         objeto.data = cursor.getString(cursor.getColumnIndex(ITEM_CARTEIRA_DATA))
-        objeto.registros.addAll(registroItemDAO.getTodos().filter { it.itemCarteiraAberta?.id == objeto.id })
+        objeto.registros.addAll(registroItemDAO.getTodos().filter { it.carteiraPendencia?.id == objeto.id })
     }
 
     companion object {

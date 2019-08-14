@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="off_white">#ECECEC</color>
+    <color name="colorTextWarning">@android:color/holo_orange_dark</color>
 </resources>

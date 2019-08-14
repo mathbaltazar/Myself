@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/button_inserir_item_registro"
         android:orientation="vertical"
         android:padding="@dimen/all_default_layout_offset">
 
@@ -23,7 +22,8 @@
             android:id="@+id/textinput_item_registro_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/all_string_adicionar_registro_invalido"
+            android:layout_marginBottom="@dimen/all_default_layout_offset"
+            android:text="@string/all_string_dialog_adicionar_campos_vazios"
             android:textColor="@android:color/holo_red_light"
             android:visibility="gone" />
 
@@ -34,6 +34,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textinput_item_registro_descricao"
+                android:inputType="textCapSentences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -51,17 +52,16 @@
                 android:layout_height="wrap_content"
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
     <Button
         android:id="@+id/button_inserir_item_registro"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/all_default_layout_offset"
-        android:background="@drawable/all_button_background"
+        android:layout_height="@dimen/all_button_default_height"
+        android:background="@drawable/dialog_action_button_background"
         android:text="@string/all_string_adicionar"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 
-</RelativeLayout>
+</LinearLayout>

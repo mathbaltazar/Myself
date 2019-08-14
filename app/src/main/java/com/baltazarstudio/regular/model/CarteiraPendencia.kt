@@ -2,7 +2,7 @@ package com.baltazarstudio.regular.model
 
 import java.math.BigDecimal
 
-class ItemCarteiraAberta {
+class CarteiraPendencia {
     var id: Int? = null
     var descricao: String? = null
     var data: String? = null

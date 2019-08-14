@@ -10,9 +10,9 @@ import android.widget.TextView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.RegistroItem
 import com.baltazarstudio.regular.util.Utils
-import kotlinx.android.synthetic.main.item_carteira_aberta_registro.view.*
+import kotlinx.android.synthetic.main.list_item_registro_carteira.view.*
 
-class ItemCarteiraRegistroAdapter(var context: Context,
+class RegistroItemCarteiraAdapter(var context: Context,
                                   var registros: List<RegistroItem>
 ) : BaseAdapter() {
 
@@ -20,7 +20,7 @@ class ItemCarteiraRegistroAdapter(var context: Context,
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
         val holder: ViewHolder
         if (convertView == null) {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_carteira_aberta_registro, null)
+            val view = LayoutInflater.from(context).inflate(R.layout.list_item_registro_carteira, null)
             holder = ViewHolder()
             holder.descricao = view.tv_item_carteira_registro_descricao
             holder.valor = view.tv_item_carteira_registro_valor

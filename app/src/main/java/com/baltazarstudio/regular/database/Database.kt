@@ -15,7 +15,7 @@ abstract class Database<T>(context: Context) :
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        ItemCarteiraAbertaDAO.onCreate(db)
+        CarteiraPendenciaDAO.onCreate(db)
         RegistroItemDAO.onCreate(db)
     }
 

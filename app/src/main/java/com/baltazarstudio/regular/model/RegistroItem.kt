@@ -7,5 +7,5 @@ class RegistroItem {
     var descricao: String? = null
     var valor: BigDecimal? = null
 
-    var itemCarteiraAberta: ItemCarteiraAberta? = null
+    var carteiraPendencia: CarteiraPendencia? = null
 }

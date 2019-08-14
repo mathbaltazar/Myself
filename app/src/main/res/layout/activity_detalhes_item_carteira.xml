@@ -89,20 +89,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/all_default_layout_offset"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Valor pago:" />
-
-            <TextView
-                android:id="@+id/tv_item_carteira_valor_pago"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="R$ 200,00"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Valor pago:" />
+
+                <TextView
+                    android:id="@+id/tv_item_carteira_valor_pago"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="R$ 200,00"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_aviso_valor_ultrapassado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/all_string_detalhes_item_carteira_valor_ultrapassado"
                 android:textAlignment="textEnd"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorTextWarning"
+                android:textSize="@dimen/text_size_10" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -130,11 +146,10 @@
                     android:textAlignment="center" />
 
                 <ListView
-                    android:id="@+id/listview_item_carteira_registro"
+                    android:id="@+id/listview_registro_item_carteira"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:divider="@null"
-                    android:padding="@dimen/all_default_layout_offset" />
+                    android:divider="@null" />
 
             </FrameLayout>
         </LinearLayout>

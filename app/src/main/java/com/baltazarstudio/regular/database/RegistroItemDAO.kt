@@ -3,7 +3,7 @@ package com.baltazarstudio.regular.database
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.baltazarstudio.regular.model.ItemCarteiraAberta
+import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.model.RegistroItem
 import java.math.BigDecimal
 
@@ -38,7 +38,7 @@ class RegistroItemDAO(context: Context) : Database<RegistroItem>(context) {
                 " VALUES (" +
                 "'${objeto.descricao}'," +
                 "'${objeto.valor.toString()}'," +
-                "${objeto.itemCarteiraAberta!!.id}" +
+                "${objeto.carteiraPendencia!!.id}" +
                 ")"
 
         writableDatabase.execSQL(query)
@@ -57,8 +57,8 @@ class RegistroItemDAO(context: Context) : Database<RegistroItem>(context) {
         objeto.id = cursor.getInt(cursor.getColumnIndex(TABLE_ID))
         objeto.descricao = cursor.getString(cursor.getColumnIndex(REGISTRO_ITEM_DESCRICAO))
         objeto.valor = BigDecimal(cursor.getString(cursor.getColumnIndex(REGISTRO_ITEM_VALOR)))
-        objeto.itemCarteiraAberta = ItemCarteiraAberta()
-        objeto.itemCarteiraAberta!!.id = cursor.getInt(cursor.getColumnIndex(REGISTRO_ITEM_FK_ITEM_CARTEIRA_TABLE_ID))
+        objeto.carteiraPendencia = CarteiraPendencia()
+        objeto.carteiraPendencia!!.id = cursor.getInt(cursor.getColumnIndex(REGISTRO_ITEM_FK_ITEM_CARTEIRA_TABLE_ID))
     }
 
 

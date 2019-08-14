@@ -1,28 +1,31 @@
 package com.baltazarstudio.regular.adapter
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.model.ItemCarteiraAberta
+import com.baltazarstudio.regular.model.CarteiraPendencia
+import com.baltazarstudio.regular.ui.CarteiraAbertaFragment
 import com.baltazarstudio.regular.ui.DetalhesItemCarteiraActivity
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.item_carteira_aberta.view.*
 
-class ItemCarteiraAdapter(private var activity: Activity,
-                          private var itens: List<ItemCarteiraAberta>) : BaseAdapter() {
+class CarteiraPendenciaAdapter(private var fragment: Fragment,
+                               private var itens: List<CarteiraPendencia>) : BaseAdapter() {
 
+
+    private val context = fragment.context
 
     @SuppressLint("InflateParams")
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
         val holder: ViewHolder
         if (convertView == null) {
-            val view = LayoutInflater.from(activity.baseContext).inflate(R.layout.item_carteira_aberta, null)
+            val view = LayoutInflater.from(context).inflate(R.layout.item_carteira_aberta, null)
             holder = ViewHolder()
             holder.descricao = view.tv_item_carteira_descricao
             holder.valor = view.tv_item_carteira_valor
@@ -52,13 +55,16 @@ class ItemCarteiraAdapter(private var activity: Activity,
         return itens.size
     }
 
-    private fun bindView(holder: ViewHolder, itemCarteira: ItemCarteiraAberta) {
-        holder.descricao!!.text = itemCarteira.descricao
-        holder.valor!!.text = Utils.formatCurrency(itemCarteira.valor)
+    private fun bindView(holder: ViewHolder, carteira: CarteiraPendencia) {
+        holder.descricao!!.text = carteira.descricao
+        holder.valor!!.text = Utils.formatCurrency(carteira.valor)
         holder.frame!!.setOnClickListener {
-            val i = Intent(activity, DetalhesItemCarteiraActivity::class.java)
-            i.putExtra("id", itemCarteira.id)
-            activity.startActivity(i)
+            val i = Intent(context, DetalhesItemCarteiraActivity::class.java)
+            i.putExtra("id", carteira.id)
+            context!!.startActivity(i)
+        }
+        holder.frame!!.setOnLongClickListener {
+            (fragment as CarteiraAbertaFragment).createDialogExcluir(carteira)
         }
     }
 

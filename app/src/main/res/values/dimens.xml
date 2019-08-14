@@ -3,4 +3,5 @@
     <dimen name="all_default_layout_offset">4dp</dimen>
     <dimen name="rounded_border_width">2dp</dimen>
     <dimen name="all_button_default_height">48dp</dimen>
+    <dimen name="text_size_10">10sp</dimen>
 </resources>
