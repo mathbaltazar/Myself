@@ -10,16 +10,16 @@
     <string name="all_label_sem_pendencias">Não há pendências registradas.</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="toast_item_carteira_adicionado">Adicionado!</string>
+    <string name="toast_carteira_pendencia_adicionada">Pendência adicionada</string>
     <string name="all_string_dialog_adicionar_campos_vazios">Todos os campos devem ser preenchidos</string>
     <string name="activity_title_detalhes_item_carteira">Pendência</string>
     <string name="toast_detalhe_item_carteira_registro_adicionado">Registro adicionado</string>
     <string name="all_string_detalhes_item_carteira_valor_ultrapassado">O valor pago ultrapassou o valor pendente*</string>
     <string name="all_string_sim">Sim</string>
     <string name="all_string_nao">Não</string>
-    <string name="all_toast_detalhe_item_carteira_registro_removido">Registro removido</string>
+    <string name="toast_detalhe_item_carteira_registro_removido">Registro removido</string>
     <string name="all_dialog_title_excluir">Excluir</string>
     <string name="all_dialog_message_excluir">Confirma a exclusão?</string>
-    <string name="all_toast_carteira_pendencia_removida">Pendência removida</string>
+    <string name="toast_carteira_pendencia_removida">Pendência removida</string>
     <string name="activity_title_main">Controles</string>
 </resources>

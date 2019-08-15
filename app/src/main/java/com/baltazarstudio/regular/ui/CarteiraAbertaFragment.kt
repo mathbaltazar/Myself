@@ -13,6 +13,7 @@ import com.baltazarstudio.regular.adapter.CarteiraPendenciaAdapter
 import com.baltazarstudio.regular.database.CarteiraPendenciaDAO
 import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.util.Utils
+import kotlinx.android.synthetic.main.dialog_add_element.view.*
 import kotlinx.android.synthetic.main.fragment_cateira_aberta.view.*
 import java.math.BigDecimal
 
@@ -37,48 +38,11 @@ class CarteiraAbertaFragment : Fragment() {
         carteiraPendenciaDAO = CarteiraPendenciaDAO(context!!)
 
         v.btn_toggle_add_item_carteira.setOnClickListener {
-            toggleNewItem()
-        }
-
-        v.btn_register_item_carteira.setOnClickListener {
-            if (v.textinput_descricao.text.toString() == ""
-                    || v.textinput_valor.text.toString() == "") {
-                v.textinput_error.visibility = View.VISIBLE
-            } else {
-                v.textinput_error.visibility = View.GONE
-
-                val item = CarteiraPendencia()
-                item.descricao = v.textinput_descricao.text.toString()
-                item.valor = BigDecimal(v.textinput_valor.text.toString())
-                item.data = Utils.currentDateFormatted()
-                carteiraPendenciaDAO.inserir(item)
-
-                Toast.makeText(context, R.string.toast_item_carteira_adicionado, Toast.LENGTH_LONG).show()
-
-                toggleNewItem()
-
-                v.textinput_descricao.text = null
-                v.textinput_valor.text = null
-
-                initializeCarteiraPendencias()
-            }
+            createDialogNovaPendencia()
         }
 
     }
 
-    private fun toggleNewItem() {
-        if (v.layout_add_item_carteira.visibility != View.VISIBLE) {
-            v.layout_add_item_carteira.visibility = View.VISIBLE
-            v.divider_add_item_carteira.visibility = View.VISIBLE
-            v.btn_toggle_add_item_carteira.setImageResource(android.R.drawable.ic_delete)
-        } else {
-            v.layout_add_item_carteira.visibility = View.GONE
-            v.divider_add_item_carteira.visibility = View.GONE
-            v.btn_toggle_add_item_carteira.setImageResource(android.R.drawable.ic_input_add)
-            v.textinput_error.visibility = View.GONE
-            Utils.hideKeyboard(context!!, v)
-        }
-    }
 
     private fun initializeCarteiraPendencias() {
         val itensCarteiraAberta = carteiraPendenciaDAO.getTodos()
@@ -91,6 +55,37 @@ class CarteiraAbertaFragment : Fragment() {
         }
     }
 
+    private fun createDialogNovaPendencia() {
+
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_element, null)
+        val dialog = AlertDialog.Builder(context!!)
+                .setView(dialogView)
+                .create()
+
+        dialogView.dialog_add_element_button_adicionar.setOnClickListener {
+            if (dialogView.textinput_descricao.text.toString() == ""
+                    || dialogView.textinput_valor.text.toString() == "") {
+                dialogView.textinput_error.visibility = View.VISIBLE
+            } else {
+                dialogView.textinput_error.visibility = View.GONE
+
+                val item = CarteiraPendencia()
+                item.descricao = dialogView.textinput_descricao.text.toString()
+                item.valor = BigDecimal(dialogView.textinput_valor.text.toString())
+                item.data = Utils.currentDateFormatted()
+                carteiraPendenciaDAO.inserir(item)
+
+                Toast.makeText(context, R.string.toast_carteira_pendencia_adicionada, Toast.LENGTH_LONG).show()
+
+                initializeCarteiraPendencias()
+            }
+        }
+
+        dialog.show()
+
+
+    }
+
     fun createDialogExcluir(item: CarteiraPendencia): Boolean {
         AlertDialog.Builder(context!!)
                 .setTitle(R.string.all_dialog_title_excluir)
@@ -98,7 +93,7 @@ class CarteiraAbertaFragment : Fragment() {
                 .setPositiveButton(R.string.all_string_sim, object : DialogInterface.OnClickListener {
                     override fun onClick(p0: DialogInterface?, p1: Int) {
                         carteiraPendenciaDAO.excluir(item)
-                        Toast.makeText(context, R.string.all_toast_carteira_pendencia_removida, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_carteira_pendencia_removida, Toast.LENGTH_SHORT).show()
 
                         initializeCarteiraPendencias()
                     }

@@ -16,7 +16,7 @@ import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.model.RegistroItem
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.activity_detalhes_item_carteira.*
-import kotlinx.android.synthetic.main.dialog_detalhe_item_carteira_add_registro.view.*
+import kotlinx.android.synthetic.main.dialog_add_element.view.*
 import java.math.BigDecimal
 
 class DetalhesItemCarteiraActivity : AppCompatActivity() {
@@ -83,19 +83,19 @@ class DetalhesItemCarteiraActivity : AppCompatActivity() {
 
     @SuppressLint("InflateParams")
     private fun createDialogNovoAjuste() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_detalhe_item_carteira_add_registro, null)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_element, null)
         val dialog = AlertDialog.Builder(this)
                 .setView(dialogView)
                 .create()
 
-        dialogView.button_inserir_item_registro.setOnClickListener {
-            if (dialogView.textinput_item_registro_valor.text.toString() == ""
-                    || dialogView.textinput_item_registro_descricao.text.toString() == "") {
-                dialogView.textinput_item_registro_error.visibility = View.VISIBLE
+        dialogView.dialog_add_element_button_adicionar.setOnClickListener {
+            if (dialogView.textinput_valor.text.toString() == ""
+                    || dialogView.textinput_descricao.text.toString() == "") {
+                dialogView.textinput_error.visibility = View.VISIBLE
             } else {
                 val novoRegistro = RegistroItem()
-                novoRegistro.descricao = dialogView.textinput_item_registro_descricao.text.toString()
-                novoRegistro.valor = BigDecimal(dialogView.textinput_item_registro_valor.text.toString())
+                novoRegistro.descricao = dialogView.textinput_descricao.text.toString()
+                novoRegistro.valor = BigDecimal(dialogView.textinput_valor.text.toString())
                 novoRegistro.carteiraPendencia = item
 
                 RegistroItemDAO(this).inserir(novoRegistro)
@@ -117,7 +117,7 @@ class DetalhesItemCarteiraActivity : AppCompatActivity() {
                 .setPositiveButton(R.string.all_string_sim, object : DialogInterface.OnClickListener {
                     override fun onClick(p0: DialogInterface?, p1: Int) {
                         RegistroItemDAO(this@DetalhesItemCarteiraActivity).excluir(item)
-                        Toast.makeText(this@DetalhesItemCarteiraActivity, R.string.all_toast_detalhe_item_carteira_registro_removido, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@DetalhesItemCarteiraActivity, R.string.toast_detalhe_item_carteira_registro_removido, Toast.LENGTH_SHORT).show()
                         initializeItemCarteira()
                     }
                 })

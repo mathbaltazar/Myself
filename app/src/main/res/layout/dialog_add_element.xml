@@ -19,7 +19,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/textinput_item_registro_error"
+            android:id="@+id/textinput_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/all_default_layout_offset"
@@ -33,7 +33,7 @@
             android:hint="@string/all_input_hint_descricao">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textinput_item_registro_descricao"
+                android:id="@+id/textinput_descricao"
                 android:inputType="textCapSentences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -47,7 +47,7 @@
             android:hint="@string/all_input_hint_valor">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textinput_item_registro_valor"
+                android:id="@+id/textinput_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number" />
@@ -56,7 +56,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button_inserir_item_registro"
+        android:id="@+id/dialog_add_element_button_adicionar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/all_button_default_height"
         android:background="@drawable/dialog_action_button_background"
