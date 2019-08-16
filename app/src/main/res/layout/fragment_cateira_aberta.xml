@@ -58,7 +58,7 @@
 
 
     <ListView
-        android:id="@+id/listview_carteira_aberta"
+        android:id="@+id/listview_carteira_pendencias"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
