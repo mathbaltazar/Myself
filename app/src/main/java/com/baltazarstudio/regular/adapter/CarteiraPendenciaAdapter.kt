@@ -13,7 +13,7 @@ import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.ui.CarteiraAbertaFragment
 import com.baltazarstudio.regular.ui.DetalhesItemCarteiraActivity
 import com.baltazarstudio.regular.util.Utils
-import kotlinx.android.synthetic.main.item_carteira_aberta_pendencia.view.*
+import kotlinx.android.synthetic.main.list_item_carteira_aberta_pendencia.view.*
 
 class CarteiraPendenciaAdapter(private var fragment: Fragment,
                                private var itens: List<CarteiraPendencia>) : BaseAdapter() {
@@ -24,23 +24,32 @@ class CarteiraPendenciaAdapter(private var fragment: Fragment,
     @SuppressLint("InflateParams")
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
         val holder: ViewHolder
-        if (convertView == null) {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_carteira_aberta_pendencia, null)
+        var view = convertView
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.list_item_carteira_aberta_pendencia, null)
             holder = ViewHolder()
             holder.descricao = view.tv_item_carteira_descricao
             holder.valor = view.tv_item_carteira_valor
-            holder.frame = view.layout_item_carteira
-
-            bindView(holder, itens[position])
-            view.tag = holder
-            return view
+            holder.frame = view.layout_item_pendencia
         } else {
-            holder = convertView.tag as ViewHolder
+            holder = view.tag as ViewHolder
         }
 
-        bindView(holder, itens[position])
-        convertView.tag = holder
-        return convertView
+
+        val pendencia = itens[position]
+        holder.descricao!!.text = pendencia.descricao
+        holder.valor!!.text = Utils.formatCurrency(pendencia.valor)
+        holder.frame!!.setOnClickListener {
+            val i = Intent(context, DetalhesItemCarteiraActivity::class.java)
+            i.putExtra("id", pendencia.id)
+            context!!.startActivity(i)
+        }
+        holder.frame!!.setOnLongClickListener {
+            (fragment as CarteiraAbertaFragment).createDialogExcluir(pendencia)
+        }
+
+        view!!.tag = holder
+        return view
     }
 
     override fun getItem(position: Int): Any {
@@ -53,19 +62,6 @@ class CarteiraPendenciaAdapter(private var fragment: Fragment,
 
     override fun getCount(): Int {
         return itens.size
-    }
-
-    private fun bindView(holder: ViewHolder, carteira: CarteiraPendencia) {
-        holder.descricao!!.text = carteira.descricao
-        holder.valor!!.text = Utils.formatCurrency(carteira.valor)
-        holder.frame!!.setOnClickListener {
-            val i = Intent(context, DetalhesItemCarteiraActivity::class.java)
-            i.putExtra("id", carteira.id)
-            context!!.startActivity(i)
-        }
-        holder.frame!!.setOnLongClickListener {
-            (fragment as CarteiraAbertaFragment).createDialogExcluir(carteira)
-        }
     }
 
     companion object {

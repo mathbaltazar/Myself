@@ -54,14 +54,11 @@ class CarteiraPendenciaDAO(context: Context) : Database<CarteiraPendencia>(conte
     override fun alterar(objeto: CarteiraPendencia) {}
 
     override fun excluir(objeto: CarteiraPendencia) {
-        val query = "DELETE FROM $TABELA_ITEM_CARTEIRA " +
-                "WHERE $TABLE_ID = " + objeto.id
-
+        val query = "DELETE FROM $TABELA_ITEM_CARTEIRA WHERE $TABLE_ID = ${objeto.id}"
         writableDatabase.execSQL(query)
 
-        for (registro in objeto.registros) {
-            registroItemDAO.excluir(registro)
-        }
+        objeto.registros.forEach { registroItemDAO.excluir(it) }
+
     }
 
 

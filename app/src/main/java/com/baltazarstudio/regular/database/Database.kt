@@ -17,6 +17,8 @@ abstract class Database<T>(context: Context) :
     override fun onCreate(db: SQLiteDatabase) {
         CarteiraPendenciaDAO.onCreate(db)
         RegistroItemDAO.onCreate(db)
+        EconomiaDAO.onCreate(db)
+        PoupancaDAO.onCreate(db)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {

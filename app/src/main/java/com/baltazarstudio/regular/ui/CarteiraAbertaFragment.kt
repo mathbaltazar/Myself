@@ -78,8 +78,6 @@ class CarteiraAbertaFragment : Fragment() {
         }
 
         dialog.show()
-
-
     }
 
     private fun addPendencia(descricao: String, valor: String) {

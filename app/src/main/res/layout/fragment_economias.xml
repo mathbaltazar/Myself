@@ -4,61 +4,60 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:padding="@dimen/all_default_layout_offset"
               android:orientation="vertical"
               tools:ignore="ContentDescription">
 
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            app:cardCornerRadius="4dp"
             app:cardElevation="2dp">
 
-        <LinearLayout
+        <TextView
+                android:id="@+id/button_add_economia"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/all_default_layout_offset">
-
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/all_default_layout_offset">
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toStartOf="@id/btn_toggle_add_item_carteira"
-                        android:text="@string/all_carteira_title_pendencias"
-                        android:textAlignment="textStart"
-                        android:textSize="20sp" />
-
-                <ImageView
-                        android:id="@+id/btn_toggle_add_item_carteira"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:background="?android:selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@android:drawable/ic_input_add" />
-
-            </RelativeLayout>
-
-
-        </LinearLayout>
+                android:layout_height="@dimen/all_button_default_height"
+                android:padding="@dimen/all_padding_card_button_textview"
+                android:gravity="center|start"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:textStyle="bold"
+                android:drawableEnd="@drawable/ic_add"
+                android:text="@string/all_button_novo_plano" />
     </androidx.cardview.widget.CardView>
 
     <TextView
-            android:id="@+id/tv_sem_economias"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/all_default_layout_offset"
-            android:text="@string/all_label_sem_economias"
-            android:textAlignment="center"
-            android:visibility="gone" />
+            android:layout_margin="@dimen/all_default_layout_offset"
+            android:text="@string/all_carteira_title_economias"
+            android:textStyle="bold|italic"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
 
-    <ListView
-            android:id="@+id/listview_carteira_economias"
+    <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="2dp">
 
+        <TextView
+                android:id="@+id/tv_sem_economias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/all_default_layout_offset"
+                android:text="@string/all_label_sem_economias"
+                android:textAlignment="center" />
+
+        <ListView
+                android:id="@+id/listview_carteira_economias"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

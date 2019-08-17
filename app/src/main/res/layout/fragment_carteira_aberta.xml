@@ -8,24 +8,6 @@
     android:orientation="vertical"
     tools:ignore="ContentDescription">
 
-
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/all_default_layout_offset"-->
-        <!--android:text="@string/all_string_adicionar"-->
-        <!--android:textAlignment="textStart"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--android:textSize="20sp" />-->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/all_default_layout_offset"
-        android:text="@string/all_carteira_title_pendencias"
-        android:textAlignment="textStart"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,6 +28,16 @@
             android:drawableEnd="@drawable/ic_add"
             android:text="@string/all_button_nova_pendencia" />
     </androidx.cardview.widget.CardView>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset"
+            android:text="@string/all_carteira_title_pendencias"
+            android:textStyle="bold|italic"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
 
     <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
