@@ -1,11 +1,10 @@
 package com.baltazarstudio.regular.ui
 
-import android.content.DialogInterface
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -15,7 +14,7 @@ import com.baltazarstudio.regular.database.CarteiraPendenciaDAO
 import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.dialog_add_element.view.*
-import kotlinx.android.synthetic.main.fragment_cateira_aberta.view.*
+import kotlinx.android.synthetic.main.fragment_carteira_aberta.view.*
 import java.math.BigDecimal
 
 
@@ -23,57 +22,56 @@ class CarteiraAbertaFragment : Fragment() {
 
 
     private lateinit var carteiraPendenciaDAO: CarteiraPendenciaDAO
-    private lateinit var listItensPendencias: List<CarteiraPendencia>
     private lateinit var v: View
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_cateira_aberta, container, false)
+        v = inflater.inflate(R.layout.fragment_carteira_aberta, container, false)
         return v
     }
 
 
     private fun startView() {
         carteiraPendenciaDAO = CarteiraPendenciaDAO(context!!)
-        listItensPendencias = carteiraPendenciaDAO.getTodos()
-        v.listview_carteira_pendencias.adapter = CarteiraPendenciaAdapter(this, listItensPendencias)
 
-        v.btn_toggle_add_item_carteira.setOnClickListener {
+        v.button_add_pendencia.setOnClickListener {
             createDialogNovaPendencia()
         }
+
+        refreshListPendencias()
     }
 
 
     private fun refreshListPendencias() {
-        listItensPendencias = carteiraPendenciaDAO.getTodos()
+        val listItensPendencias = carteiraPendenciaDAO.getTodos()
+        v.listview_carteira_pendencias.adapter = CarteiraPendenciaAdapter(this, listItensPendencias)
 
-        if (listItensPendencias.size == 0) {
+        if (listItensPendencias.isEmpty()) {
             v.tv_sem_pendencias.visibility = View.VISIBLE
         } else {
             v.tv_sem_pendencias.visibility = View.GONE
         }
-
-        (v.listview_carteira_pendencias.adapter as BaseAdapter).notifyDataSetChanged()
     }
 
+    @SuppressLint("InflateParams")
     private fun createDialogNovaPendencia() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_element, null)
         val dialog = AlertDialog.Builder(context!!)
-            .setView(dialogView)
-            .create()
+                .setView(dialogView)
+                .create()
 
         dialogView.dialog_add_element_button_adicionar.setOnClickListener {
             if (dialogView.textinput_descricao.text.toString() == ""
-                || dialogView.textinput_valor.text.toString() == ""
+                    || dialogView.textinput_valor.text.toString() == ""
             ) {
                 dialogView.textinput_error.visibility = View.VISIBLE
             } else {
                 addPendencia(
-                    dialogView.textinput_descricao.text.toString(),
-                    dialogView.textinput_valor.text.toString()
+                        dialogView.textinput_descricao.text.toString(),
+                        dialogView.textinput_valor.text.toString()
                 )
                 dialog.dismiss()
             }
@@ -98,18 +96,16 @@ class CarteiraAbertaFragment : Fragment() {
 
     fun createDialogExcluir(item: CarteiraPendencia): Boolean {
         AlertDialog.Builder(context!!)
-            .setTitle(R.string.all_dialog_title_excluir)
-            .setMessage(R.string.all_dialog_message_excluir)
-            .setPositiveButton(R.string.all_string_sim, object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
+                .setTitle(R.string.all_dialog_title_excluir)
+                .setMessage(R.string.all_dialog_message_excluir)
+                .setPositiveButton(R.string.all_string_sim) { _, _ ->
                     carteiraPendenciaDAO.excluir(item)
                     Toast.makeText(context, R.string.toast_carteira_pendencia_removida, Toast.LENGTH_SHORT).show()
 
                     refreshListPendencias()
                 }
-            })
-            .setNegativeButton(R.string.all_string_nao, null)
-            .show()
+                .setNegativeButton(R.string.all_string_nao, null)
+                .show()
         return true
     }
 

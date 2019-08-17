@@ -7,7 +7,9 @@
     <string name="all_input_hint_valor">Valor</string>
     <string name="all_input_hint_descricao">Descrição</string>
     <string name="all_carteira_title_pendencias">Pendências</string>
+    <string name="all_carteira_title_economias">Pendências</string>
     <string name="all_label_sem_pendencias">Não há pendências registradas.</string>
+    <string name="all_label_sem_economias">Não há economias registradas.</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="toast_carteira_pendencia_adicionada">Pendência adicionada</string>
@@ -22,4 +24,5 @@
     <string name="all_dialog_message_excluir">Confirma a exclusão?</string>
     <string name="toast_carteira_pendencia_removida">Pendência removida</string>
     <string name="activity_title_main">Controles</string>
+    <string name="all_button_nova_pendencia">ADICIONAR NOVA PENDÊNCIA</string>
 </resources>

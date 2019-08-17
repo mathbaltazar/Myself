@@ -8,6 +8,7 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.adapter.MainPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
+import kotlinx.android.synthetic.main.activity_main_content.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        toolbar.title = getString(R.string.activity_title_main)
+        supportActionBar?.title = getString(R.string.activity_title_main)
 
         tab_layout.setupWithViewPager(vp_content_main)
 
@@ -23,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         adapter.addFragment(CarteiraAbertaFragment(), getString(R.string.view_pager_fragment_title_carteira))
         adapter.addFragment(EconomiasFragment(), getString(R.string.view_pager_fragment_title_economias))
         vp_content_main.adapter = adapter
-
 
     }
 

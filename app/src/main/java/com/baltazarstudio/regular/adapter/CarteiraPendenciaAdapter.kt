@@ -13,7 +13,7 @@ import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.ui.CarteiraAbertaFragment
 import com.baltazarstudio.regular.ui.DetalhesItemCarteiraActivity
 import com.baltazarstudio.regular.util.Utils
-import kotlinx.android.synthetic.main.item_carteira_aberta.view.*
+import kotlinx.android.synthetic.main.item_carteira_aberta_pendencia.view.*
 
 class CarteiraPendenciaAdapter(private var fragment: Fragment,
                                private var itens: List<CarteiraPendencia>) : BaseAdapter() {
@@ -25,7 +25,7 @@ class CarteiraPendenciaAdapter(private var fragment: Fragment,
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
         val holder: ViewHolder
         if (convertView == null) {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_carteira_aberta, null)
+            val view = LayoutInflater.from(context).inflate(R.layout.item_carteira_aberta_pendencia, null)
             holder = ViewHolder()
             holder.descricao = view.tv_item_carteira_descricao
             holder.valor = view.tv_item_carteira_valor
