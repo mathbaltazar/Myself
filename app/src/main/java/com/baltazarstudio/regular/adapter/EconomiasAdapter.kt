@@ -1,5 +1,6 @@
 package com.baltazarstudio.regular.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.list_item_economias.view.*
 
 class EconomiasAdapter(var context: Context, var lista: List<Economia>) : BaseAdapter() {
+    @SuppressLint("InflateParams")
     override fun getView(position: Int, convertView: View?, p2: ViewGroup?): View {
         val holder: ViewHolder
         var view = convertView
@@ -52,5 +54,5 @@ class EconomiasAdapter(var context: Context, var lista: List<Economia>) : BaseAd
 open class ViewHolder {
     var descricao: TextView? = null
     var valor: TextView? = null
-    var data: TextView? = null
+    //var data: TextView? = null
 }
