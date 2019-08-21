@@ -5,8 +5,8 @@ import java.math.BigDecimal
 class Economia {
     var id: Int? = null
     var descricao: String? = null
-    var valor: BigDecimal? = null
+    var valor: BigDecimal? = BigDecimal.ZERO
+    var valorPoupanca: BigDecimal? = BigDecimal.ZERO
     var data: String? = null
 
-    var poupancas = ArrayList<Poupanca>()
 }

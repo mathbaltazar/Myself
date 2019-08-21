@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.ui.CarteiraAbertaFragment
-import com.baltazarstudio.regular.ui.DetalhesItemCarteiraActivity
+import com.baltazarstudio.regular.ui.DetalhesCarteiraPendenciaActivity
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.list_item_carteira_aberta_pendencia.view.*
 
@@ -28,8 +28,10 @@ class CarteiraPendenciaAdapter(private var fragment: Fragment,
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.list_item_carteira_aberta_pendencia, null)
             holder = ViewHolder()
-            holder.descricao = view.tv_item_carteira_descricao
-            holder.valor = view.tv_item_carteira_valor
+            holder.lblDescricao = view.tv_item_pendencia_descricao
+            holder.lblValor = view.tv_item_pendencia_valor
+            holder.lblData = view.tv_item_pendencia_data
+
             holder.frame = view.layout_item_pendencia
         } else {
             holder = view.tag as ViewHolder
@@ -37,10 +39,11 @@ class CarteiraPendenciaAdapter(private var fragment: Fragment,
 
 
         val pendencia = itens[position]
-        holder.descricao!!.text = pendencia.descricao
-        holder.valor!!.text = Utils.formatCurrency(pendencia.valor)
+        holder.lblDescricao!!.text = pendencia.descricao
+        holder.lblValor!!.text = Utils.formatCurrency(pendencia.valor)
+        holder.lblData!!.text = pendencia.data
         holder.frame!!.setOnClickListener {
-            val i = Intent(context, DetalhesItemCarteiraActivity::class.java)
+            val i = Intent(context, DetalhesCarteiraPendenciaActivity::class.java)
             i.putExtra("id", pendencia.id)
             context!!.startActivity(i)
         }
@@ -66,8 +69,9 @@ class CarteiraPendenciaAdapter(private var fragment: Fragment,
 
     companion object {
         private class ViewHolder {
-            var descricao: TextView? = null
-            var valor: TextView? = null
+            var lblDescricao: TextView? = null
+            var lblValor: TextView? = null
+            var lblData: TextView? = null
             var frame: ViewGroup? = null
         }
     }

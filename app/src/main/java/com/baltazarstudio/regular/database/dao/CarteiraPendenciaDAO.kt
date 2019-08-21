@@ -1,15 +1,16 @@
-package com.baltazarstudio.regular.database
+package com.baltazarstudio.regular.database.dao
 
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.baltazarstudio.regular.database.Database
 import com.baltazarstudio.regular.model.CarteiraPendencia
 import java.util.*
 
 class CarteiraPendenciaDAO(context: Context) : Database<CarteiraPendencia>(context) {
     val registroItemDAO = RegistroItemDAO(context)
 
-    override fun get(id: Int): CarteiraPendencia {
+    fun get(id: Int): CarteiraPendencia {
         val query = "SELECT * FROM $TABELA_ITEM_CARTEIRA WHERE $TABLE_ID = $id"
 
         val cursor = readableDatabase.rawQuery(query, null)
@@ -21,7 +22,7 @@ class CarteiraPendenciaDAO(context: Context) : Database<CarteiraPendencia>(conte
         return itemCarteira
     }
 
-    override fun getTodos(): List<CarteiraPendencia> {
+    fun getTodos(): List<CarteiraPendencia> {
         val listaItens = ArrayList<CarteiraPendencia>()
         val query = "SELECT * FROM $TABELA_ITEM_CARTEIRA ORDER BY $TABLE_ID DESC"
 
@@ -37,7 +38,7 @@ class CarteiraPendenciaDAO(context: Context) : Database<CarteiraPendencia>(conte
         return listaItens
     }
 
-    override fun inserir(objeto: CarteiraPendencia) {
+    fun inserir(objeto: CarteiraPendencia) {
         val insert = "INSERT INTO $TABELA_ITEM_CARTEIRA (" +
                 "$ITEM_CARTEIRA_DESCRICAO," +
                 "$ITEM_CARTEIRA_DATA," +
@@ -51,31 +52,27 @@ class CarteiraPendenciaDAO(context: Context) : Database<CarteiraPendencia>(conte
         writableDatabase.execSQL(insert)
     }
 
-    override fun alterar(objeto: CarteiraPendencia) {}
-
-    override fun excluir(objeto: CarteiraPendencia) {
+    fun excluir(objeto: CarteiraPendencia) {
         val query = "DELETE FROM $TABELA_ITEM_CARTEIRA WHERE $TABLE_ID = ${objeto.id}"
         writableDatabase.execSQL(query)
 
         objeto.registros.forEach { registroItemDAO.excluir(it) }
-
     }
-
 
     override fun bind(cursor: Cursor, objeto: CarteiraPendencia) {
         objeto.id = cursor.getInt(cursor.getColumnIndex(TABLE_ID))
         objeto.descricao = cursor.getString(cursor.getColumnIndex(ITEM_CARTEIRA_DESCRICAO))
         objeto.valor = cursor.getString(cursor.getColumnIndex(ITEM_CARTEIRA_VALOR)).toBigDecimal()
         objeto.data = cursor.getString(cursor.getColumnIndex(ITEM_CARTEIRA_DATA))
-        objeto.registros.addAll(registroItemDAO.getTodos().filter { it.carteiraPendencia?.id == objeto.id })
+        objeto.registros.addAll(registroItemDAO.getTodos(objeto.id!!))
     }
 
     companion object {
         private const val TABELA_ITEM_CARTEIRA = "Carteira"
 
-        private const val ITEM_CARTEIRA_DESCRICAO = "descricao"
+        private const val ITEM_CARTEIRA_DESCRICAO = "lblDescricao"
         private const val ITEM_CARTEIRA_DATA = "data"
-        private const val ITEM_CARTEIRA_VALOR = "valor"
+        private const val ITEM_CARTEIRA_VALOR = "lblValor"
 
         fun onCreate(db: SQLiteDatabase) {
             val create = "CREATE TABLE $TABELA_ITEM_CARTEIRA (" +

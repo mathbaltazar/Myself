@@ -1,7 +1,6 @@
 package com.baltazarstudio.regular.ui
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -10,8 +9,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.adapter.RegistroItemCarteiraAdapter
-import com.baltazarstudio.regular.database.CarteiraPendenciaDAO
-import com.baltazarstudio.regular.database.RegistroItemDAO
+import com.baltazarstudio.regular.database.dao.CarteiraPendenciaDAO
+import com.baltazarstudio.regular.database.dao.RegistroItemDAO
 import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.model.RegistroItem
 import com.baltazarstudio.regular.util.Utils
@@ -19,15 +18,17 @@ import kotlinx.android.synthetic.main.activity_detalhes_item_carteira.*
 import kotlinx.android.synthetic.main.dialog_add_element.view.*
 import java.math.BigDecimal
 
-class DetalhesItemCarteiraActivity : AppCompatActivity() {
+class DetalhesCarteiraPendenciaActivity : AppCompatActivity() {
 
     lateinit var item: CarteiraPendencia
+    private val registroItemDAO = RegistroItemDAO(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalhes_item_carteira)
-        supportActionBar?.title = getString(R.string.activity_title_detalhes_item_carteira)
+        supportActionBar?.title = getString(R.string.activity_title_detalhes_pendencia)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
 
         button_detalhes_item_carteira_novo_ajuste.setOnClickListener {
@@ -42,21 +43,21 @@ class DetalhesItemCarteiraActivity : AppCompatActivity() {
             createDialogExcluir(adapterView.adapter.getItem(position) as RegistroItem)
         }
 
-        initializeItemCarteira()
+        refreshDados()
     }
 
-    private fun initializeItemCarteira() {
+    private fun refreshDados() {
         item = CarteiraPendenciaDAO(this).get(intent.getIntExtra("id", 0))
 
-        tv_item_carteira_valor.text = Utils.formatCurrency(item.valor)
+        tv_item_pendencia_valor.text = Utils.formatCurrency(item.valor)
         tv_item_carteira_data.text = item.data
-        tv_item_carteira_descricao.text = item.descricao
+        tv_item_pendencia_descricao.text = item.descricao
 
         val valorPago = calcularValorPago(item.registros)
         tv_item_carteira_valor_pago.text = Utils.formatCurrency(valor = valorPago)
 
 
-        if (valorPago.compareTo(item.valor) > 0)
+        if (valorPago > item.valor)
             tv_aviso_valor_ultrapassado.visibility = View.VISIBLE
         else
             tv_aviso_valor_ultrapassado.visibility = View.GONE
@@ -85,12 +86,13 @@ class DetalhesItemCarteiraActivity : AppCompatActivity() {
     private fun createDialogNovoAjuste() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_element, null)
         val dialog = AlertDialog.Builder(this)
-                .setView(dialogView)
-                .create()
+            .setView(dialogView)
+            .create()
 
         dialogView.dialog_add_element_button_adicionar.setOnClickListener {
             if (dialogView.textinput_valor.text.toString() == ""
-                    || dialogView.textinput_descricao.text.toString() == "") {
+                || dialogView.textinput_descricao.text.toString() == ""
+            ) {
                 dialogView.textinput_error.visibility = View.VISIBLE
             } else {
                 val novoRegistro = RegistroItem()
@@ -98,12 +100,12 @@ class DetalhesItemCarteiraActivity : AppCompatActivity() {
                 novoRegistro.valor = BigDecimal(dialogView.textinput_valor.text.toString())
                 novoRegistro.carteiraPendencia = item
 
-                RegistroItemDAO(this).inserir(novoRegistro)
+                registroItemDAO.inserir(novoRegistro)
 
                 dialog.dismiss()
                 Toast.makeText(this, R.string.toast_detalhe_item_carteira_registro_adicionado, Toast.LENGTH_LONG).show()
 
-                initializeItemCarteira()
+                refreshDados()
             }
         }
 
@@ -112,17 +114,19 @@ class DetalhesItemCarteiraActivity : AppCompatActivity() {
 
     private fun createDialogExcluir(item: RegistroItem): Boolean {
         AlertDialog.Builder(this)
-                .setTitle(getString(R.string.all_dialog_title_excluir))
-                .setMessage(getString(R.string.all_dialog_message_excluir))
-                .setPositiveButton(R.string.all_string_sim, object : DialogInterface.OnClickListener {
-                    override fun onClick(p0: DialogInterface?, p1: Int) {
-                        RegistroItemDAO(this@DetalhesItemCarteiraActivity).excluir(item)
-                        Toast.makeText(this@DetalhesItemCarteiraActivity, R.string.toast_detalhe_item_carteira_registro_removido, Toast.LENGTH_SHORT).show()
-                        initializeItemCarteira()
-                    }
-                })
-                .setNegativeButton(R.string.all_string_nao, null)
-                .show()
+            .setTitle(getString(R.string.all_dialog_title_excluir))
+            .setMessage(getString(R.string.all_dialog_message_excluir))
+            .setPositiveButton(R.string.all_string_sim) { _, _ ->
+                registroItemDAO.excluir(item)
+                Toast.makeText(
+                    this@DetalhesCarteiraPendenciaActivity,
+                    R.string.toast_detalhe_item_carteira_registro_removido,
+                    Toast.LENGTH_SHORT
+                ).show()
+                refreshDados()
+            }
+            .setNegativeButton(R.string.all_string_nao, null)
+            .show()
         return true
     }
 

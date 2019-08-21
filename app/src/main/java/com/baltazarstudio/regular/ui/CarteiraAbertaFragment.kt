@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.adapter.CarteiraPendenciaAdapter
-import com.baltazarstudio.regular.database.CarteiraPendenciaDAO
+import com.baltazarstudio.regular.database.dao.CarteiraPendenciaDAO
 import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.dialog_add_element.view.*

@@ -16,9 +16,12 @@
     <string name="toast_nova_economia_adicionada">Economia adicionada</string>
 
     <string name="all_string_dialog_adicionar_campos_vazios">Todos os campos devem ser preenchidos</string>
-    <string name="activity_title_detalhes_item_carteira">Pendência</string>
+    <string name="activity_title_detalhes_pendencia">Pendência</string>
+    <string name="activity_title_detalhes_economia">Economia</string>
     <string name="toast_detalhe_item_carteira_registro_adicionado">Registro adicionado</string>
     <string name="all_string_detalhes_item_carteira_valor_ultrapassado">O valor pago ultrapassou o valor pendente*</string>
+    <string name="all_string_detalhes_poupanca_valor_ultrapassado">O valor da poupança já atingiu o valor da economia*</string>
+
     <string name="all_string_sim">Sim</string>
     <string name="all_string_nao">Não</string>
     <string name="toast_detalhe_item_carteira_registro_removido">Registro removido</string>

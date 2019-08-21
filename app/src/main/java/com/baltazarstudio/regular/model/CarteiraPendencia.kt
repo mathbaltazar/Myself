@@ -6,7 +6,7 @@ class CarteiraPendencia {
     var id: Int? = null
     var descricao: String? = null
     var data: String? = null
-    var valor: BigDecimal? = null
+    var valor: BigDecimal? = BigDecimal.ZERO
 
     val registros = ArrayList<RegistroItem>()
 }

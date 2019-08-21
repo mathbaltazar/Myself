@@ -1,20 +1,17 @@
-package com.baltazarstudio.regular.database
+package com.baltazarstudio.regular.database.dao
 
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.baltazarstudio.regular.database.Database
 import com.baltazarstudio.regular.model.CarteiraPendencia
 import com.baltazarstudio.regular.model.RegistroItem
 import java.math.BigDecimal
 
 class RegistroItemDAO(context: Context) : Database<RegistroItem>(context) {
 
-    override fun get(id: Int): RegistroItem {
-        TODO("not implemented")
-    }
-
-    override fun getTodos(): List<RegistroItem> {
-        val query = "SELECT * FROM $TABELA_REGISTRO_ITEM"
+    fun getTodos(id: Int): List<RegistroItem> {
+        val query = "SELECT * FROM $TABELA_REGISTRO_ITEM WHERE $REGISTRO_ITEM_FK_ITEM_CARTEIRA_TABLE_ID = $id"
 
         val listaRegistros = ArrayList<RegistroItem>()
 
@@ -30,7 +27,7 @@ class RegistroItemDAO(context: Context) : Database<RegistroItem>(context) {
 
     }
 
-    override fun inserir(objeto: RegistroItem) {
+    fun inserir(objeto: RegistroItem) {
         val query = "INSERT INTO $TABELA_REGISTRO_ITEM (" +
                 "$REGISTRO_ITEM_DESCRICAO," +
                 "$REGISTRO_ITEM_VALOR," +
@@ -44,9 +41,7 @@ class RegistroItemDAO(context: Context) : Database<RegistroItem>(context) {
         writableDatabase.execSQL(query)
     }
 
-    override fun alterar(objeto: RegistroItem) {}
-
-    override fun excluir(objeto: RegistroItem) {
+    fun excluir(objeto: RegistroItem) {
         val query = "DELETE FROM $TABELA_REGISTRO_ITEM " +
                 "WHERE $TABLE_ID = " + objeto.id
 
@@ -65,8 +60,8 @@ class RegistroItemDAO(context: Context) : Database<RegistroItem>(context) {
     companion object {
         private const val TABELA_REGISTRO_ITEM = "RegistroItem"
 
-        private const val REGISTRO_ITEM_DESCRICAO = "descricao"
-        private const val REGISTRO_ITEM_VALOR = "valor"
+        private const val REGISTRO_ITEM_DESCRICAO = "lblDescricao"
+        private const val REGISTRO_ITEM_VALOR = "lblValor"
 
         private const val REGISTRO_ITEM_FK_ITEM_CARTEIRA_TABLE_ID = "fk_id_item_carteira_aberta"
 
