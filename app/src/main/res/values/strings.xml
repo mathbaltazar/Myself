@@ -31,4 +31,11 @@
     <string name="activity_title_main">Controles</string>
     <string name="all_button_nova_pendencia">ADICIONAR NOVA PENDÊNCIA</string>
     <string name="all_button_novo_plano">ADICIONAR NOVO PLANO</string>
+    <string name="dialog_title_ajuste_poupanca">Poupança</string>
+    <string name="dialog_button_ajuste_poupanca_confirmar">Confirmar</string>
+    <string name="dialog_movimento_ajuste_poupanca_guardar">Guardar</string>
+    <string name="dialog_movimento_ajuste_poupanca_retirar">Retirar</string>
+    <string name="detalhes_economia_valor_poupanca_registrado">Registrado!</string>
+    <string name="dialog_ajuste_poupanca_valor_invalido">Valor inválido!</string>
+    <string name="dialog_ajuste_poupanca_maior_que_zero">Valor deve ser maior que zero</string>
 </resources>

@@ -21,8 +21,14 @@ class Utils {
 
         fun formatCurrency(valor: BigDecimal?): String {
             return NumberFormat.getCurrencyInstance(mLocale)
-                .format(valor)
-                .replace("R$", "R$ ")
+                    .format(valor)
+                    .replace("R$", "R$ ")
+        }
+
+        fun unformatBRCurrency(valor: String): String {
+            return valor.replace("R$,", "")
+                    .replace(",", ".")
+                    .trim()
         }
     }
 }

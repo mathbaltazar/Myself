@@ -66,6 +66,20 @@ class EconomiaDAO(context: Context) : Database<Economia>(context) {
         objeto.data = cursor.getString(cursor.getColumnIndex(ECONOMIA_DATA))
     }
 
+    fun adicionarValorPoupanca(item: Economia, valor: BigDecimal) {
+        val query = "UPDATE $TABELA_ECONOMIA" +
+                " SET $ECONOMIA_VALOR_POUPANCA = '${item.valorPoupanca.add(valor)}'" +
+                " WHERE $TABLE_ID = ${item.id}"
+        writableDatabase.execSQL(query)
+    }
+
+    fun retirarValorPoupanca(item: Economia, valor: BigDecimal) {
+        val query = "UPDATE $TABELA_ECONOMIA" +
+                " SET $ECONOMIA_VALOR_POUPANCA = '${item.valorPoupanca.subtract(valor)}'" +
+                " WHERE $TABLE_ID = ${item.id}"
+        writableDatabase.execSQL(query)
+    }
+
 
     companion object {
         private const val TABELA_ECONOMIA = "Economia"
