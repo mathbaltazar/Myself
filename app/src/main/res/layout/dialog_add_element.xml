@@ -2,21 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/all_default_layout_offset">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/all_default_layout_offset"
+        android:text="@string/all_string_adicionar"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/off_white" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="@dimen/all_default_layout_offset">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/all_default_layout_offset"
-            android:layout_marginBottom="@dimen/all_default_layout_offset"
-            android:text="@string/all_string_adicionar"
-            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/textinput_error"
@@ -28,19 +33,21 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/all_input_hint_descricao">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textinput_descricao"
-                android:inputType="textCapSentences"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/all_default_layout_offset"
@@ -57,11 +64,11 @@
 
     <Button
         android:id="@+id/dialog_add_element_button_adicionar"
+        style="@style/Widget.MaterialComponents.Button.NoInset"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/all_button_default_height"
-        android:background="@drawable/dialog_action_button_background"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/all_default_layout_offset"
         android:text="@string/all_string_adicionar"
-        android:textColor="@android:color/white"
         android:textSize="18sp" />
 
 </LinearLayout>

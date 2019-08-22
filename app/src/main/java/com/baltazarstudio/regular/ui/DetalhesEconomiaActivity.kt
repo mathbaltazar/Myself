@@ -20,9 +20,16 @@ class DetalhesEconomiaActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.activity_title_detalhes_economia)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        button_ajustar_poupanca.setOnClickListener {
+            createDialogAjustarPoupanca()
+        }
 
         refreshDados()
 
+    }
+
+    private fun createDialogAjustarPoupanca() {
+        
     }
 
     private fun refreshDados() {

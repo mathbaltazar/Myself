@@ -34,7 +34,7 @@
                 android:id="@+id/tv_detalhes_economia_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/all_border_background_grey"
+                android:background="@drawable/background_border_rounded_grey"
                 android:padding="@dimen/all_default_layout_offset"
                 android:text="460,00"
                 android:textColor="@color/colorPrimary"
@@ -61,7 +61,7 @@
                 android:id="@+id/tv_detalhes_economia_valor_poupanca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/all_border_background_grey"
+                android:background="@drawable/background_border_rounded_grey"
                 android:padding="@dimen/all_default_layout_offset"
                 android:text="200,00"
                 android:textSize="24sp"
@@ -88,26 +88,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset"
-        android:orientation="horizontal">
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Botão 1" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Botão 2" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/all_default_layout_offset"
         android:orientation="vertical">
 
         <TextView
@@ -119,8 +99,8 @@
         <TextView
             android:id="@+id/tv_detalhes_economia_descricao"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:background="@drawable/all_border_background_grey"
+            android:layout_height="144dp"
+            android:background="@drawable/background_border_rounded_grey"
             android:padding="@dimen/all_default_layout_offset"
             android:text="Parcelas do carro"
             android:textSize="16sp" />
@@ -147,5 +127,25 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/all_default_layout_offset"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_ajustar_poupanca"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ajustar Poupança" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Definir como Alcançada" />
+
+    </LinearLayout>
 </LinearLayout>
 

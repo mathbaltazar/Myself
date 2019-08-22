@@ -135,7 +135,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/all_border_background_grey">
+                android:background="@drawable/background_border_rounded_grey">
 
                 <TextView
                     android:id="@+id/tv_sem_registros_item"
@@ -168,7 +168,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/all_button_default_height"
             android:layout_margin="@dimen/all_default_layout_offset"
-            android:background="@drawable/all_button_border_background"
+            android:background="@drawable/background_border_rounded"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
@@ -181,7 +181,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/all_button_default_height"
             android:layout_margin="@dimen/all_default_layout_offset"
-            android:background="@drawable/all_button_background"
             android:text="Marcar como pago"
             android:textColor="@android:color/white" />
     </LinearLayout>
