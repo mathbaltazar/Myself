@@ -14,7 +14,7 @@
             android:theme="@style/AppTheme">
         <activity android:name=".ui.DetalhesEconomiaActivity">
         </activity>
-        <activity android:name=".ui.DetalhesCarteiraPendenciaActivity"/>
+        <activity android:name=".ui.DetalhesPendenciaActivity"/>
         <activity
                 android:name=".ui.MainActivity"
                 android:label="@string/app_name"

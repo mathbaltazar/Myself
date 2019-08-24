@@ -22,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset"
-        android:text="Valor máximo para retirada: R$ 65,00"
         android:textAlignment="textEnd"
         android:textColor="@color/colorHighlightPoupanca"
         android:textSize="@dimen/text_size_10" />
@@ -38,6 +37,7 @@
             android:id="@+id/textinput_ajuste_valor_poupanca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/all_input_currency_placeholder"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 

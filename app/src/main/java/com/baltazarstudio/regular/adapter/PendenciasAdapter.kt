@@ -9,14 +9,14 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.model.CarteiraPendencia
-import com.baltazarstudio.regular.ui.CarteiraAbertaFragment
-import com.baltazarstudio.regular.ui.DetalhesCarteiraPendenciaActivity
+import com.baltazarstudio.regular.model.Pendencia
+import com.baltazarstudio.regular.ui.DetalhesPendenciaActivity
+import com.baltazarstudio.regular.ui.PendenciasFragment
 import com.baltazarstudio.regular.util.Utils
-import kotlinx.android.synthetic.main.list_item_carteira_aberta_pendencia.view.*
+import kotlinx.android.synthetic.main.list_item_pendencia.view.*
 
-class CarteiraPendenciaAdapter(private var fragment: Fragment,
-                               private var itens: List<CarteiraPendencia>) : BaseAdapter() {
+class PendenciasAdapter(private var fragment: Fragment,
+                        private var itens: List<Pendencia>) : BaseAdapter() {
 
 
     private val context = fragment.context
@@ -26,7 +26,7 @@ class CarteiraPendenciaAdapter(private var fragment: Fragment,
         val holder: ViewHolder
         var view = convertView
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.list_item_carteira_aberta_pendencia, null)
+            view = LayoutInflater.from(context).inflate(R.layout.list_item_pendencia, null)
             holder = ViewHolder()
             holder.lblDescricao = view.tv_item_pendencia_descricao
             holder.lblValor = view.tv_item_pendencia_valor
@@ -43,12 +43,12 @@ class CarteiraPendenciaAdapter(private var fragment: Fragment,
         holder.lblValor!!.text = Utils.formatCurrency(pendencia.valor)
         holder.lblData!!.text = pendencia.data
         holder.frame!!.setOnClickListener {
-            val i = Intent(context, DetalhesCarteiraPendenciaActivity::class.java)
+            val i = Intent(context, DetalhesPendenciaActivity::class.java)
             i.putExtra("id", pendencia.id)
             context!!.startActivity(i)
         }
         holder.frame!!.setOnLongClickListener {
-            (fragment as CarteiraAbertaFragment).createDialogExcluir(pendencia)
+            (fragment as PendenciasFragment).createDialogExcluir(pendencia)
         }
 
         view!!.tag = holder

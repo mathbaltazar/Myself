@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.database.dao.EconomiaDAO
 import com.baltazarstudio.regular.model.Economia
+import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.activity_detalhes_economia.*
 import kotlinx.android.synthetic.main.dialog_ajuste_poupanca.view.*
@@ -30,7 +31,6 @@ class DetalhesEconomiaActivity : AppCompatActivity() {
         }
 
         refreshDados()
-
     }
 
     @SuppressLint("InflateParams")
@@ -40,21 +40,22 @@ class DetalhesEconomiaActivity : AppCompatActivity() {
                 .setView(dialogView)
                 .create()
 
-        dialogView.button_dialog_ajuste_poupanca_confirmar.setOnClickListener {
-            val valor = BigDecimal(Utils.unformatBRCurrency(dialogView.textinput_ajuste_valor_poupanca.text.toString()))
+        dialogView.textinput_ajuste_valor_poupanca.addTextChangedListener(
+                CurrencyMask(dialogView.textinput_ajuste_valor_poupanca)
+        )
 
-            if (valor > BigDecimal.ZERO) {
+        dialogView.button_dialog_ajuste_poupanca_confirmar.setOnClickListener {
+            val valor = dialogView.textinput_ajuste_valor_poupanca.text.toString()
+            val valorDecimal = Utils.unformatCurrency(valor).toBigDecimal()
+
+            if (valorDecimal > BigDecimal.ZERO) {
                 if (dialogView.tab_ajuste_poupanca_movimento.selectedTabPosition == 0) {
-                    economiaDAO.adicionarValorPoupanca(item, valor)
-                    Toast.makeText(this, R.string.detalhes_economia_valor_poupanca_registrado, Toast.LENGTH_SHORT).show()
+                    ajustarPoupanca(valorDecimal, false)
                     dialog.dismiss()
-                    refreshDados()
                 } else {
-                    if (valor <= item.valorPoupanca) {
-                        economiaDAO.retirarValorPoupanca(item, valor)
-                        Toast.makeText(this, R.string.detalhes_economia_valor_poupanca_registrado, Toast.LENGTH_SHORT).show()
+                    if (valorDecimal <= item.valorPoupanca) {
+                        ajustarPoupanca(valorDecimal, true)
                         dialog.dismiss()
-                        refreshDados()
                     } else {
                         Toast.makeText(this, R.string.dialog_ajuste_poupanca_valor_invalido, Toast.LENGTH_LONG).show()
                     }
@@ -64,7 +65,21 @@ class DetalhesEconomiaActivity : AppCompatActivity() {
             }
         }
 
+        dialogView.label_dialog_ajuste_poupanca_valor_maximo_retirada.text =
+                String.format("Valor máximo para retirada: %s", Utils.formatCurrency(item.valorPoupanca))
+
         dialog.show()
+    }
+
+    private fun ajustarPoupanca(valor: BigDecimal, retirada: Boolean) {
+        if (retirada) {
+            economiaDAO.retirarPoupanca(item, valor)
+        } else {
+            economiaDAO.adicionarPoupanca(item, valor)
+        }
+
+        Toast.makeText(this, R.string.detalhes_economia_valor_poupanca_registrado, Toast.LENGTH_SHORT).show()
+        refreshDados()
     }
 
     private fun refreshDados() {

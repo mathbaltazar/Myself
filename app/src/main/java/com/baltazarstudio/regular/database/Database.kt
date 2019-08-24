@@ -4,17 +4,14 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-import com.baltazarstudio.regular.database.dao.CarteiraPendenciaDAO
+import com.baltazarstudio.regular.database.dao.PendenciaDAO
 import com.baltazarstudio.regular.database.dao.EconomiaDAO
-import com.baltazarstudio.regular.database.dao.RegistroItemDAO
 
 abstract class Database<T>(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        CarteiraPendenciaDAO.onCreate(db)
-        RegistroItemDAO.onCreate(db)
+        PendenciaDAO.onCreate(db)
         EconomiaDAO.onCreate(db)
     }
 

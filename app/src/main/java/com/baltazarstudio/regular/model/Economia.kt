@@ -8,5 +8,7 @@ class Economia {
     var valor: BigDecimal = BigDecimal.ZERO
     var valorPoupanca: BigDecimal = BigDecimal.ZERO
     var data: String? = null
+    var conquistado: Boolean = false
+
 
 }

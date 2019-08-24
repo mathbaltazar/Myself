@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset"
-        android:text="@string/all_string_adicionar"
+        android:text="@string/dialog_add_pendencia_title"
         android:textSize="18sp" />
 
     <View
@@ -24,11 +24,11 @@
         android:padding="@dimen/all_default_layout_offset">
 
         <TextView
-            android:id="@+id/textinput_error"
+            android:id="@+id/label_dialog_add_pendencia_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/all_default_layout_offset"
-            android:text="@string/all_string_dialog_adicionar_campos_vazios"
+            android:text="@string/all_string_dialog_campos_vazios"
             android:textColor="@android:color/holo_red_light"
             android:visibility="gone" />
 
@@ -39,7 +39,7 @@
             android:hint="@string/all_input_hint_descricao">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textinput_descricao"
+                android:id="@+id/textinput_dialog_add_pendencia_descricao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences" />
@@ -54,16 +54,17 @@
             android:hint="@string/all_input_hint_valor">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textinput_valor"
+                android:id="@+id/textinput_dialog_add_pendencia_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/all_input_currency_placeholder"
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/dialog_add_element_button_adicionar"
+        android:id="@+id/button_dialog_add_pendencia_adicionar"
         style="@style/Widget.MaterialComponents.Button.NoInset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

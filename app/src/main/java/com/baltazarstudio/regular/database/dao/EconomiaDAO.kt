@@ -42,12 +42,14 @@ class EconomiaDAO(context: Context) : Database<Economia>(context) {
                 "$ECONOMIA_DESCRICAO," +
                 "$ECONOMIA_VALOR," +
                 "$ECONOMIA_VALOR_POUPANCA," +
-                "$ECONOMIA_DATA)" +
+                "$ECONOMIA_DATA," +
+                "$ECONOMIA_CONQUISTADO)" +
                 " VALUES (" +
                 "'${objeto.descricao}'," +
-                "'${objeto.valor.toString()}'," +
-                "'${objeto.valorPoupanca.toString()}'," +
-                "'${objeto.data}'" +
+                "'${objeto.valor}'," +
+                "'${objeto.valorPoupanca}'," +
+                "'${objeto.data}'," +
+                "'${if (objeto.conquistado) 1 else 0}'" +
                 ")"
 
         writableDatabase.execSQL(query)
@@ -64,16 +66,17 @@ class EconomiaDAO(context: Context) : Database<Economia>(context) {
         objeto.valor = BigDecimal(cursor.getString(cursor.getColumnIndex(ECONOMIA_VALOR)))
         objeto.valorPoupanca = BigDecimal(cursor.getString(cursor.getColumnIndex(ECONOMIA_VALOR_POUPANCA)))
         objeto.data = cursor.getString(cursor.getColumnIndex(ECONOMIA_DATA))
+        objeto.conquistado = cursor.getInt(cursor.getColumnIndex(ECONOMIA_CONQUISTADO)) == 1
     }
 
-    fun adicionarValorPoupanca(item: Economia, valor: BigDecimal) {
+    fun adicionarPoupanca(item: Economia, valor: BigDecimal) {
         val query = "UPDATE $TABELA_ECONOMIA" +
                 " SET $ECONOMIA_VALOR_POUPANCA = '${item.valorPoupanca.add(valor)}'" +
                 " WHERE $TABLE_ID = ${item.id}"
         writableDatabase.execSQL(query)
     }
 
-    fun retirarValorPoupanca(item: Economia, valor: BigDecimal) {
+    fun retirarPoupanca(item: Economia, valor: BigDecimal) {
         val query = "UPDATE $TABELA_ECONOMIA" +
                 " SET $ECONOMIA_VALOR_POUPANCA = '${item.valorPoupanca.subtract(valor)}'" +
                 " WHERE $TABLE_ID = ${item.id}"
@@ -88,6 +91,7 @@ class EconomiaDAO(context: Context) : Database<Economia>(context) {
         private const val ECONOMIA_VALOR = "valor"
         private const val ECONOMIA_VALOR_POUPANCA = "valor_poupanca"
         private const val ECONOMIA_DATA = "data"
+        private const val ECONOMIA_CONQUISTADO = "conquistado"
 
         fun onCreate(db: SQLiteDatabase) {
             val query = "CREATE TABLE $TABELA_ECONOMIA (" +
@@ -95,7 +99,8 @@ class EconomiaDAO(context: Context) : Database<Economia>(context) {
                     "$ECONOMIA_DESCRICAO TEXT," +
                     "$ECONOMIA_VALOR TEXT," +
                     "$ECONOMIA_VALOR_POUPANCA TEXT," +
-                    "$ECONOMIA_DATA TEXT" +
+                    "$ECONOMIA_DATA TEXT," +
+                    "$ECONOMIA_CONQUISTADO INTEGER" +
                     ")"
 
             db.execSQL(query)

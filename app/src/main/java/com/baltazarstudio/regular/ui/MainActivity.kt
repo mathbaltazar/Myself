@@ -8,7 +8,6 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.adapter.MainPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
-import kotlinx.android.synthetic.main.activity_main_content.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         tab_layout.setupWithViewPager(vp_content_main)
 
         val adapter = MainPagerAdapter(supportFragmentManager)
-        adapter.addFragment(CarteiraAbertaFragment(), getString(R.string.view_pager_fragment_title_carteira))
+        adapter.addFragment(PendenciasFragment(), getString(R.string.view_pager_fragment_title_pendencias))
         adapter.addFragment(EconomiasFragment(), getString(R.string.view_pager_fragment_title_economias))
         vp_content_main.adapter = adapter
 
