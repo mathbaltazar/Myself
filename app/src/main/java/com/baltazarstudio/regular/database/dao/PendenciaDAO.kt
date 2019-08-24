@@ -72,7 +72,7 @@ class PendenciaDAO(context: Context) : Database<Pendencia>(context) {
         objeto.descricao = cursor.getString(cursor.getColumnIndex(PENDENCIA_DESCRICAO))
         objeto.valor = cursor.getString(cursor.getColumnIndex(PENDENCIA_VALOR)).toBigDecimal()
         objeto.data = cursor.getString(cursor.getColumnIndex(PENDENCIA_DATA))
-        objeto.notas = Utils.parseList(cursor.getString(cursor.getColumnIndex(PENDENCIA_NOTAS)))
+        objeto.notas = Utils.parseListString(cursor.getString(cursor.getColumnIndex(PENDENCIA_NOTAS)))
         objeto.pago = cursor.getInt(cursor.getColumnIndex(PENDENCIA_PAGO)) == 1
     }
 

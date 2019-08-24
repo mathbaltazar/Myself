@@ -1,6 +1,9 @@
 package com.baltazarstudio.regular.util
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -27,11 +30,12 @@ class Utils {
 
         fun unformatCurrency(valor: String): String {
             return valor.replace("R$", "")
+                    .replace(".", "")
                     .replace(",", ".")
                     .trim()
         }
 
-        fun parseList(stringNotas: String?): ArrayList<String> {
+        fun parseListString(stringNotas: String?): ArrayList<String> {
             var notas = stringNotas
             val stringList = arrayListOf<String>()
             if (notas != null) {
@@ -58,6 +62,16 @@ class Utils {
                 stringBuilder.append(it)
             }
             return stringBuilder.toString()
+        }
+
+        fun showKeyboard(context: Context, view: View) {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(view, 0)
+        }
+
+        fun hideKeyboard(context: Context, view: View) {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 }

@@ -105,24 +105,59 @@
                 android:layout_height="1dp"
                 android:background="@color/off_white" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardview_add_nota"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxBackgroundColor="@color/off_white"
-                app:endIconMode="clear_text">
+                android:layout_margin="@dimen/all_default_layout_offset"
+                android:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine|number" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:orientation="horizontal"
+                    android:padding="@dimen/all_default_layout_offset"
+                    android:weightSum="10">
 
-            <LinearLayout
-                android:id="@+id/ll_detalhes_pendencia_notas"
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_event_note" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/textinput_add_nota"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:inputType="textCapSentences" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imagebutton_nota_cancelar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_cancel" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <ListView
+                android:id="@+id/listview_detalhes_pendencia_notas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:divider="@null" />
 
             <TextView
                 android:id="@+id/label_detalhes_pendecia_sem_notas"
