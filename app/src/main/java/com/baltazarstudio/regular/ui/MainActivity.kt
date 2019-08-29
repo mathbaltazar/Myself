@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity() {
         tab_layout.setupWithViewPager(vp_content_main)
 
         val adapter = MainPagerAdapter(supportFragmentManager)
-        adapter.addFragment(PendenciasFragment(), getString(R.string.view_pager_fragment_title_pendencias))
-        adapter.addFragment(EconomiasFragment(), getString(R.string.view_pager_fragment_title_economias))
+        adapter.addFragment(PendenciasFragment(this), getString(R.string.view_pager_fragment_title_pendencias))
+        adapter.addFragment(EconomiasFragment(this), getString(R.string.view_pager_fragment_title_economias))
         vp_content_main.adapter = adapter
 
     }

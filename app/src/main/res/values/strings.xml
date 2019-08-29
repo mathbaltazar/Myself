@@ -16,7 +16,7 @@
     <string name="toast_nova_economia_adicionada">Economia adicionada</string>
 
     <string name="all_string_dialog_campos_vazios">Todos os campos devem ser preenchidos</string>
-    <string name="activity_title_detalhes_pendencia">Pendência</string>
+    <string name="dialog_title_detalhes_pendencia">Pendência</string>
     <string name="activity_title_detalhes_economia">Economia</string>
     <string name="toast_detalhe_item_carteira_registro_adicionado">Registro adicionado</string>
     <string name="all_string_detalhes_item_carteira_valor_ultrapassado">O valor pago ultrapassou o valor pendente*</string>
@@ -48,5 +48,13 @@
     <string name="all_string_confirmar">Confirmar</string>
     <string name="dialog_mensagem_detalhe_pendencia_pago">Confirmar pendência atual como paga ?</string>
     <string name="all_input_currency_placeholder">R$ 0,00</string>
-    <string name="toast_detalhes_pendencia_nota_adicionada">Nota adicionada</string>
+    <string name="label_detalhes_economia_valor">Valor: (R$)</string>
+    <string name="label_detalhes_economia_poupanca">Poupança: (R$)</string>
+    <string name="label_detalhes_economia_descricao">Descrição:</string>
+    <string name="label_detalhes_economia_data">Iniciada em:</string>
+    <string name="button_detalhes_economia_ajustar_poupança">Ajustar Poupança</string>
+    <string name="button_detalhes_economia_conquistado">Definir como Conquistado</string>
+    <string name="label_detalhes_pendencia_valor">Valor:</string>
+    <string name="label_detalhes_pendencia_data">Iniciada em:</string>
+    <string name="label_detalhes_pendencia_descricao">Descrição</string>
 </resources>

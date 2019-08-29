@@ -23,7 +23,7 @@
         android:layout_margin="@dimen/all_default_layout_offset"
         android:text="@string/all_carteira_title_pendencias"
         android:textAlignment="textStart"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="bold|italic" />
 

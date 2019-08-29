@@ -37,8 +37,8 @@
             android:id="@+id/textinput_ajuste_valor_poupanca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/all_input_currency_placeholder"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="@string/all_input_currency_placeholder" />
     </com.google.android.material.textfield.TextInputLayout>
 
 

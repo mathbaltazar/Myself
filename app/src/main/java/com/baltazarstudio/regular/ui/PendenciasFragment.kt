@@ -1,6 +1,7 @@
 package com.baltazarstudio.regular.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +19,10 @@ import kotlinx.android.synthetic.main.dialog_add_pendencia.view.*
 import kotlinx.android.synthetic.main.fragment_pendecias.view.*
 
 
-class PendenciasFragment : Fragment() {
+class PendenciasFragment(context: Context) : Fragment() {
 
 
-    private lateinit var pendenciaDAO: PendenciaDAO
+    private val pendenciaDAO = PendenciaDAO(context)
     private lateinit var v: View
 
     override fun onCreateView(
@@ -30,20 +31,17 @@ class PendenciasFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_pendecias, container, false)
+        init()
         return v
     }
 
-
-    private fun startView() {
-        pendenciaDAO = PendenciaDAO(context!!)
-
+    private fun init() {
         v.button_add_pendencia.setOnClickListener {
             createDialogNovaPendencia()
         }
 
         refreshPendencias()
     }
-
 
     private fun refreshPendencias() {
         val listItensPendencias = pendenciaDAO.getTodasPendencias().filter { !it.pago }
@@ -103,11 +101,6 @@ class PendenciasFragment : Fragment() {
                 .setNegativeButton(R.string.all_string_nao, null)
                 .show()
         return true
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        startView()
     }
 
     override fun onResume() {

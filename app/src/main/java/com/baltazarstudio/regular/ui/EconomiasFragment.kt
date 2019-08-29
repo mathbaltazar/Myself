@@ -1,6 +1,7 @@
 package com.baltazarstudio.regular.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +18,9 @@ import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.dialog_add_economia.view.*
 import kotlinx.android.synthetic.main.fragment_economias.view.*
 
-class EconomiasFragment : Fragment() {
+class EconomiasFragment(context: Context) : Fragment() {
 
-    private lateinit var economiaDAO: EconomiaDAO
+    private val economiaDAO = EconomiaDAO(context)
     private lateinit var v: View
 
     override fun onCreateView(
@@ -28,12 +29,11 @@ class EconomiasFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_economias, container, false)
+        setup()
         return v
     }
 
-    private fun startView() {
-        economiaDAO = EconomiaDAO(context!!)
-
+    private fun setup() {
         v.button_add_economia.setOnClickListener {
             createDialoagNovaEconomia()
         }
@@ -101,11 +101,6 @@ class EconomiasFragment : Fragment() {
                 .setNegativeButton(R.string.all_string_nao, null)
                 .show()
         return true
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        startView()
     }
 
     override fun onResume() {

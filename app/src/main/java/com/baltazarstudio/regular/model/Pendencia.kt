@@ -8,6 +8,4 @@ class Pendencia {
     var data: String? = null
     var valor: BigDecimal = BigDecimal.ZERO
     var pago: Boolean = false
-
-    var notas = ArrayList<String>()
 }

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout_item_economia"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="?android:selectableItemBackground"
-              android:clickable="true"
-              android:focusable="true"
-              android:orientation="vertical"
-              android:padding="8dp">
+    android:id="@+id/layout_item_economia"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
-            android:id="@+id/tv_item_economia_descricao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        android:id="@+id/tv_item_economia_descricao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_item_economia_valor"
@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/tv_item_economia_valor_poupanca"
         android:layout_width="match_parent"
-        android:textStyle="italic"
+        android:layout_height="wrap_content"
         android:textColor="@color/colorHighlightPoupanca"
-        android:layout_height="wrap_content" />
+        android:textStyle="italic" />
 </LinearLayout>

@@ -5,7 +5,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.baltazarstudio.regular.database.Database
 import com.baltazarstudio.regular.model.Pendencia
-import com.baltazarstudio.regular.util.Utils
 import java.util.*
 
 class PendenciaDAO(context: Context) : Database<Pendencia>(context) {
@@ -59,20 +58,11 @@ class PendenciaDAO(context: Context) : Database<Pendencia>(context) {
         writableDatabase.execSQL(query)
     }
 
-    fun atualizarNotas(objeto: Pendencia) {
-        val update = "UPDATE $TABELA_PENDENCIA" +
-                " SET $PENDENCIA_NOTAS = '${Utils.stringify(objeto.notas)}'" +
-                " WHERE $TABLE_ID = ${objeto.id}"
-
-        writableDatabase.execSQL(update)
-    }
-
     override fun bind(cursor: Cursor, objeto: Pendencia) {
         objeto.id = cursor.getInt(cursor.getColumnIndex(TABLE_ID))
         objeto.descricao = cursor.getString(cursor.getColumnIndex(PENDENCIA_DESCRICAO))
         objeto.valor = cursor.getString(cursor.getColumnIndex(PENDENCIA_VALOR)).toBigDecimal()
         objeto.data = cursor.getString(cursor.getColumnIndex(PENDENCIA_DATA))
-        objeto.notas = Utils.parseListString(cursor.getString(cursor.getColumnIndex(PENDENCIA_NOTAS)))
         objeto.pago = cursor.getInt(cursor.getColumnIndex(PENDENCIA_PAGO)) == 1
     }
 
@@ -90,7 +80,6 @@ class PendenciaDAO(context: Context) : Database<Pendencia>(context) {
         private const val PENDENCIA_DESCRICAO = "descricao"
         private const val PENDENCIA_DATA = "data"
         private const val PENDENCIA_VALOR = "valor"
-        private const val PENDENCIA_NOTAS = "notas"
         private const val PENDENCIA_PAGO = "pago"
 
         fun onCreate(db: SQLiteDatabase) {
@@ -99,7 +88,6 @@ class PendenciaDAO(context: Context) : Database<Pendencia>(context) {
                     "$PENDENCIA_DESCRICAO TEXT," +
                     "$PENDENCIA_DATA TEXT," +
                     "$PENDENCIA_VALOR TEXT," +
-                    "$PENDENCIA_NOTAS TEXT," +
                     "$PENDENCIA_PAGO INTEGER" +
                     ")"
 
