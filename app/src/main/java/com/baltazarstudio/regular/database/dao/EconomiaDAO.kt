@@ -83,6 +83,14 @@ class EconomiaDAO(context: Context) : Database<Economia>(context) {
         writableDatabase.execSQL(query)
     }
 
+    fun definirEconomiaConquistada(item: Economia) {
+        val update = "UPDATE $TABELA_ECONOMIA" +
+                " SET $ECONOMIA_CONQUISTADO = 1" +
+                " WHERE $TABLE_ID = ${item.id}"
+
+        writableDatabase.execSQL(update)
+    }
+
 
     companion object {
         private const val TABELA_ECONOMIA = "Economia"

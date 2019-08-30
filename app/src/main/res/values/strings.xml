@@ -57,4 +57,5 @@
     <string name="label_detalhes_pendencia_valor">Valor:</string>
     <string name="label_detalhes_pendencia_data">Iniciada em:</string>
     <string name="label_detalhes_pendencia_descricao">Descrição</string>
+    <string name="toast_detalhes_economia_conquistada">Parabéns, seu plano foi alcançado! =)</string>
 </resources>

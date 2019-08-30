@@ -137,6 +137,7 @@
             android:text="@string/button_detalhes_economia_ajustar_poupança" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_detalhes_economia_conquistado"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

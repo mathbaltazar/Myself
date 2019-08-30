@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#6A1B9A</color>
+    <color name="colorPrimaryDark">#4A148C</color>
+    <color name="colorAccent">#A6C</color> <!-- SAME COLOR <color name="colorAccent">@android:color/holo_purple</color>-->
 
     <color name="off_white">#ECECEC</color>
     <color name="colorTextWarning">@android:color/holo_orange_dark</color>
-    <color name="colorHighlightPoupanca">@android:color/holo_blue_light</color>
+    <color name="colorHighlightPoupanca">@android:color/holo_blue_dark</color>
 </resources>

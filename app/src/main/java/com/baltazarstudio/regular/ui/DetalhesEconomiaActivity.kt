@@ -1,6 +1,7 @@
 package com.baltazarstudio.regular.ui
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -30,7 +31,26 @@ class DetalhesEconomiaActivity : AppCompatActivity() {
             createDialogAjustarPoupanca()
         }
 
+        button_detalhes_economia_conquistado.setOnClickListener {
+            definirEconomiaConquistada()
+        }
+
         refreshDados()
+    }
+
+    private fun refreshDados() {
+        item = economiaDAO.get(intent.getIntExtra("id", 0))
+
+        tv_detalhes_economia_descricao.text = item.descricao
+        tv_detalhes_economia_data.text = item.data
+        tv_detalhes_economia_valor.text = Utils.formatCurrency(item.valor).replace("R$", "").trim()
+        tv_detalhes_economia_valor_poupanca.text = Utils.formatCurrency(item.valorPoupanca).replace("R$", "").trim()
+
+        if (item.valorPoupanca < item.valor) {
+            tv_detalhes_economia_aviso_valor_atingido.visibility = View.GONE
+        } else {
+            tv_detalhes_economia_aviso_valor_atingido.visibility = View.VISIBLE
+        }
     }
 
     @SuppressLint("InflateParams")
@@ -82,19 +102,21 @@ class DetalhesEconomiaActivity : AppCompatActivity() {
         refreshDados()
     }
 
-    private fun refreshDados() {
-        item = economiaDAO.get(intent.getIntExtra("id", 0))
+    private fun definirEconomiaConquistada() {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.all_string_confirmar)
+                .setMessage(R.string.dialog_mensagem_detalhe_pendencia_pago)
+                .setPositiveButton(R.string.all_string_sim) { _: DialogInterface, _: Int ->
+                    economiaDAO.definirEconomiaConquistada(item)
+                    Toast.makeText(this@DetalhesEconomiaActivity,
+                            R.string.toast_detalhes_economia_conquistada,
+                            Toast.LENGTH_LONG).show()
+                    //finish()
+                }
+                .setNegativeButton(R.string.all_string_nao) { _: DialogInterface, _: Int -> }
+                .create()
+                .show()
 
-        tv_detalhes_economia_descricao.text = item.descricao
-        tv_detalhes_economia_data.text = item.data
-        tv_detalhes_economia_valor.text = Utils.formatCurrency(item.valor).replace("R$", "").trim()
-        tv_detalhes_economia_valor_poupanca.text = Utils.formatCurrency(item.valorPoupanca).replace("R$", "").trim()
-
-        if (item.valorPoupanca < item.valor) {
-            tv_detalhes_economia_aviso_valor_atingido.visibility = View.GONE
-        } else {
-            tv_detalhes_economia_aviso_valor_atingido.visibility = View.VISIBLE
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

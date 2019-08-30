@@ -21,7 +21,7 @@ class DetalhesPendenciaDialog(context: Context, private var item: Pendencia) : D
         setContentView(R.layout.dialog_detalhes_pendencia)
         toolbar_dialog_detalhes_pendencia.title = context.getString(R.string.dialog_title_detalhes_pendencia)
 
-        button_detalhes_item_carteira_marcar_como_pago.setOnClickListener {
+        button_detalhes_pendencia_marcar_como_pago.setOnClickListener {
             marcarComoPago()
         }
 

@@ -26,16 +26,16 @@ class PendenciasFragment(context: Context) : Fragment() {
     private lateinit var v: View
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_pendecias, container, false)
-        init()
+        setup()
         return v
     }
 
-    private fun init() {
+    private fun setup() {
         v.button_add_pendencia.setOnClickListener {
             createDialogNovaPendencia()
         }

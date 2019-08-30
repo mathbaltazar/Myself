@@ -8,7 +8,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -99,8 +99,8 @@
             android:layout_height="1dp"
             android:background="@color/off_white" />
 
-        <Button
-            android:id="@+id/button_detalhes_item_carteira_marcar_como_pago"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_detalhes_pendencia_marcar_como_pago"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
