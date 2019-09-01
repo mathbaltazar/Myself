@@ -60,4 +60,5 @@
     <string name="economias_resumo_poupanca">Poupança:</string>
     <string name="economias_resumo_total">Total Economia:</string>
     <string name="economias_resumo_planos">Planos:</string>
+    <string name="dialog_mensagem_detalhe_economia_conquistado">Confirmar plano como conquistado ?</string>
 </resources>

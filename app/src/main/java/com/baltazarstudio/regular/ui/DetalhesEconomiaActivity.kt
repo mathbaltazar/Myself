@@ -35,10 +35,10 @@ class DetalhesEconomiaActivity : AppCompatActivity() {
             definirEconomiaConquistada()
         }
 
-        refreshDados()
+        updateDados()
     }
 
-    private fun refreshDados() {
+    private fun updateDados() {
         item = economiaDAO.get(intent.getIntExtra("id", 0))
 
         tv_detalhes_economia_descricao.text = item.descricao
@@ -99,13 +99,13 @@ class DetalhesEconomiaActivity : AppCompatActivity() {
         }
 
         Toast.makeText(this, R.string.detalhes_economia_valor_poupanca_registrado, Toast.LENGTH_SHORT).show()
-        refreshDados()
+        updateDados()
     }
 
     private fun definirEconomiaConquistada() {
         AlertDialog.Builder(this)
                 .setTitle(R.string.all_string_confirmar)
-                .setMessage(R.string.dialog_mensagem_detalhe_pendencia_pago)
+                .setMessage(R.string.dialog_mensagem_detalhe_economia_conquistado)
                 .setPositiveButton(R.string.all_string_sim) { _: DialogInterface, _: Int ->
                     economiaDAO.definirEconomiaConquistada(item)
                     Toast.makeText(this@DetalhesEconomiaActivity,

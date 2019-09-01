@@ -77,10 +77,7 @@ class EconomiaDAO(context: Context) : Database<Economia>(context) {
     }
 
     fun retirarPoupanca(item: Economia, valor: BigDecimal) {
-        val query = "UPDATE $TABELA_ECONOMIA" +
-                " SET $ECONOMIA_VALOR_POUPANCA = '${item.valorPoupanca.subtract(valor)}'" +
-                " WHERE $TABLE_ID = ${item.id}"
-        writableDatabase.execSQL(query)
+        adicionarPoupanca(item, valor.negate())
     }
 
     fun definirEconomiaConquistada(item: Economia) {
