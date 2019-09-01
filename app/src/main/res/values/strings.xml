@@ -1,29 +1,28 @@
 <resources>
     <string name="app_name">Regular</string>
+    <string name="all_string_sim">Sim</string>
+    <string name="all_string_nao">Não</string>
     <string name="action_settings">Settings</string>
     <string name="view_pager_fragment_title_pendencias">Pendências</string>
     <string name="view_pager_fragment_title_economias">Economias</string>
     <string name="all_string_adicionar">Adicionar</string>
     <string name="all_input_hint_valor">Valor</string>
     <string name="all_input_hint_descricao">Descrição</string>
-    <string name="all_carteira_title_pendencias">Pendências</string>
-    <string name="all_carteira_title_economias">Economias</string>
+    <string name="fragment_pendencias_header_item">Pendências</string>
+    <string name="fragment_economias_hearder_item">Economias</string>
     <string name="all_label_sem_pendencias">Não há pendências registradas.</string>
     <string name="all_label_sem_economias">Não há economias registradas.</string>
+    <string name="all_string_dialog_campos_vazios">Todos os campos devem ser preenchidos</string>
+    <string name="all_string_detalhes_item_carteira_valor_ultrapassado">O valor pago ultrapassou o valor pendente*</string>
+    <string name="all_string_detalhes_poupanca_valor_ultrapassado">O valor da poupança já atingiu o valor da economia*</string>
+    <string name="toast_detalhe_item_carteira_registro_adicionado">Registro adicionado</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="toast_carteira_pendencia_adicionada">Pendência adicionada</string>
     <string name="toast_nova_economia_adicionada">Economia adicionada</string>
 
-    <string name="all_string_dialog_campos_vazios">Todos os campos devem ser preenchidos</string>
     <string name="dialog_title_detalhes_pendencia">Pendência</string>
     <string name="activity_title_detalhes_economia">Economia</string>
-    <string name="toast_detalhe_item_carteira_registro_adicionado">Registro adicionado</string>
-    <string name="all_string_detalhes_item_carteira_valor_ultrapassado">O valor pago ultrapassou o valor pendente*</string>
-    <string name="all_string_detalhes_poupanca_valor_ultrapassado">O valor da poupança já atingiu o valor da economia*</string>
 
-    <string name="all_string_sim">Sim</string>
-    <string name="all_string_nao">Não</string>
     <string name="toast_detalhe_item_carteira_registro_removido">Registro removido</string>
     <string name="all_dialog_title_excluir">Excluir</string>
     <string name="all_dialog_message_excluir">Confirma a exclusão?</string>
@@ -58,4 +57,7 @@
     <string name="label_detalhes_pendencia_data">Iniciada em:</string>
     <string name="label_detalhes_pendencia_descricao">Descrição</string>
     <string name="toast_detalhes_economia_conquistada">Parabéns, seu plano foi alcançado! =)</string>
+    <string name="economias_resumo_poupanca">Poupança:</string>
+    <string name="economias_resumo_total">Total Economia:</string>
+    <string name="economias_resumo_planos">Planos:</string>
 </resources>

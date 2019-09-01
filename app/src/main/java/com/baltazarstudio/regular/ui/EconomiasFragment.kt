@@ -17,6 +17,7 @@ import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.dialog_add_economia.view.*
 import kotlinx.android.synthetic.main.fragment_economias.view.*
+import java.math.BigDecimal
 
 class EconomiasFragment(context: Context) : Fragment() {
 
@@ -66,25 +67,13 @@ class EconomiasFragment(context: Context) : Fragment() {
                 economiaDAO.inserir(economia)
                 Toast.makeText(context, R.string.toast_nova_economia_adicionada, Toast.LENGTH_LONG).show()
 
-                refreshEconomiasAtivas()
+                updateDados()
 
                 dialog.dismiss()
             }
         }
 
         dialog.show()
-    }
-
-    private fun refreshEconomiasAtivas() {
-        val listaEconomiasAtivas = economiaDAO.getTodos().filter { !it.conquistado }
-        v.listview_carteira_economias.adapter = EconomiasAdapter(this, listaEconomiasAtivas)
-
-        if (listaEconomiasAtivas.isEmpty()) {
-            v.tv_sem_economias.visibility = View.VISIBLE
-        } else {
-            v.tv_sem_economias.visibility = View.GONE
-        }
-
     }
 
     fun createDialogExcluir(item: Economia): Boolean {
@@ -95,7 +84,7 @@ class EconomiasFragment(context: Context) : Fragment() {
                     EconomiaDAO(context!!).excluir(item)
                     Toast.makeText(context, R.string.toast_carteira_pendencia_removida, Toast.LENGTH_SHORT).show()
 
-                    refreshEconomiasAtivas()
+                    updateDados()
                 }
                 .setNegativeButton(R.string.all_string_nao, null)
                 .show()
@@ -104,6 +93,31 @@ class EconomiasFragment(context: Context) : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        refreshEconomiasAtivas()
+        updateDados()
+    }
+
+    private fun updateDados() {
+        val listaEconomiasAtivas = economiaDAO.getTodos().filter { !it.conquistado }
+
+        var totalEconomia = BigDecimal.ZERO
+        var totalPoupanca = BigDecimal.ZERO
+
+        for (economia in listaEconomiasAtivas) {
+            totalEconomia = totalEconomia.add(economia.valor)
+            totalPoupanca = totalPoupanca.add(economia.valorPoupanca)
+        }
+
+        v.label_economias_resumo_total.text = Utils.formatCurrency(totalEconomia)
+        v.label_economias_resumo_poupanca.text = Utils.formatCurrency(totalPoupanca)
+        v.label_economias_resumo_numero_de_planos.text = listaEconomiasAtivas.size.toString()
+
+
+        v.listview_carteira_economias.adapter = EconomiasAdapter(this, listaEconomiasAtivas)
+        if (listaEconomiasAtivas.isEmpty()) {
+            v.tv_sem_economias.visibility = View.VISIBLE
+        } else {
+            v.tv_sem_economias.visibility = View.GONE
+        }
+
     }
 }

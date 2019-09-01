@@ -5,6 +5,5 @@
     <color name="colorAccent">#A6C</color> <!-- SAME COLOR <color name="colorAccent">@android:color/holo_purple</color>-->
 
     <color name="off_white">#ECECEC</color>
-    <color name="colorTextWarning">@android:color/holo_orange_dark</color>
     <color name="colorHighlightPoupanca">@android:color/holo_blue_dark</color>
 </resources>

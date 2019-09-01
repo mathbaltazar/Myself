@@ -65,7 +65,7 @@
 
     </LinearLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_dialog_economia_adicionar"
         style="@style/Widget.MaterialComponents.Button.NoInset"
         android:layout_width="match_parent"
