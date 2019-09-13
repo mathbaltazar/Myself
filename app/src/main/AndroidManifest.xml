@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.DetalhesEconomiaActivity" />
+        <activity android:name=".ui.economia.DetalhesEconomiaActivity" />
 
         <activity
             android:name=".ui.MainActivity"

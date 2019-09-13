@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui
+package com.baltazarstudio.regular.ui.economia
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -82,7 +82,7 @@ class EconomiasFragment(context: Context) : Fragment() {
                 .setMessage(R.string.all_dialog_message_excluir)
                 .setPositiveButton(R.string.all_string_sim) { _, _ ->
                     EconomiaDAO(context!!).excluir(item)
-                    Toast.makeText(context, R.string.toast_carteira_pendencia_removida, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.toast_pendencia_removida, Toast.LENGTH_SHORT).show()
 
                     updateDados()
                 }

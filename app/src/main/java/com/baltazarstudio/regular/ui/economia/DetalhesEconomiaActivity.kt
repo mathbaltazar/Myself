@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui
+package com.baltazarstudio.regular.ui.economia
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface

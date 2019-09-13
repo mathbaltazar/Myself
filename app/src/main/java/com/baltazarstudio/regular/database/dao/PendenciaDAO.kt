@@ -74,6 +74,16 @@ class PendenciaDAO(context: Context) : Database<Pendencia>(context) {
         writableDatabase.execSQL(update)
     }
 
+    fun alterar(item: Pendencia) {
+        val update = "UPDATE $TABELA_PENDENCIA" +
+                " SET " +
+                "$PENDENCIA_DESCRICAO = '${item.descricao}'," +
+                "$PENDENCIA_VALOR = '${item.valor}" +
+                " WHERE $TABLE_ID = ${item.id}"
+
+        writableDatabase.execSQL(update)
+    }
+
     companion object {
         private const val TABELA_PENDENCIA = "Pendencia"
 

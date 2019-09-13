@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.Economia
-import com.baltazarstudio.regular.ui.DetalhesEconomiaActivity
-import com.baltazarstudio.regular.ui.EconomiasFragment
+import com.baltazarstudio.regular.ui.economia.DetalhesEconomiaActivity
+import com.baltazarstudio.regular.ui.economia.EconomiasFragment
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.list_item_economias.view.*
 

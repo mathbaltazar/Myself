@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui
+package com.baltazarstudio.regular.ui.pendencia
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,9 +13,6 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.adapter.PendenciasAdapter
 import com.baltazarstudio.regular.database.dao.PendenciaDAO
 import com.baltazarstudio.regular.model.Pendencia
-import com.baltazarstudio.regular.util.CurrencyMask
-import com.baltazarstudio.regular.util.Utils
-import kotlinx.android.synthetic.main.dialog_add_pendencia.view.*
 import kotlinx.android.synthetic.main.fragment_pendecias.view.*
 
 
@@ -56,45 +53,16 @@ class PendenciasFragment(context: Context) : Fragment() {
 
     @SuppressLint("InflateParams")
     private fun createDialogNovaPendencia() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_add_pendencia, null)
-        val dialog = AlertDialog.Builder(context!!)
-                .setView(dialogView)
-                .create()
-
-        val textinputValor = dialogView.textinput_dialog_add_pendencia_valor
-        textinputValor.addTextChangedListener(CurrencyMask(textinputValor))
-
-        dialogView.button_dialog_add_pendencia_adicionar.setOnClickListener {
-            if (dialogView.textinput_dialog_add_pendencia_descricao.text.toString() == ""
-                    || dialogView.textinput_dialog_add_pendencia_valor.text.toString() == "") {
-                dialogView.label_dialog_add_pendencia_error.visibility = View.VISIBLE
-            } else {
-                val descricao = dialogView.textinput_dialog_add_pendencia_descricao.text.toString()
-                val valor = dialogView.textinput_dialog_add_pendencia_valor.text.toString()
-
-                val item = Pendencia()
-                item.descricao = descricao
-                item.valor = Utils.unformatCurrency(valor).toBigDecimal()
-                item.data = Utils.currentDateFormatted()
-                pendenciaDAO.inserir(item)
-
-                Toast.makeText(context, R.string.toast_carteira_pendencia_adicionada, Toast.LENGTH_LONG).show()
-                dialog.dismiss()
-
-                refreshPendencias()
-            }
-        }
-
-        dialog.show()
+        PendenciaCreateDialog(context!!).show()
     }
 
-    fun createDialogExcluir(item: Pendencia): Boolean {
+    fun confirmDialogExcluir(item: Pendencia): Boolean {
         AlertDialog.Builder(context!!)
                 .setTitle(R.string.all_dialog_title_excluir)
                 .setMessage(R.string.all_dialog_message_excluir)
                 .setPositiveButton(R.string.all_string_sim) { _, _ ->
                     pendenciaDAO.excluir(item)
-                    Toast.makeText(context, R.string.toast_carteira_pendencia_removida, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.toast_pendencia_removida, Toast.LENGTH_SHORT).show()
 
                     refreshPendencias()
                 }

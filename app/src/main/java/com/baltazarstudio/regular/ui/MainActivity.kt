@@ -6,6 +6,8 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.adapter.MainPagerAdapter
+import com.baltazarstudio.regular.ui.economia.EconomiasFragment
+import com.baltazarstudio.regular.ui.pendencia.PendenciasFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
 

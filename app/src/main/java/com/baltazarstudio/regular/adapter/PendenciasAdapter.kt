@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.Pendencia
-import com.baltazarstudio.regular.ui.DetalhesPendenciaDialog
-import com.baltazarstudio.regular.ui.PendenciasFragment
+import com.baltazarstudio.regular.ui.pendencia.DetalhesPendenciaDialog
+import com.baltazarstudio.regular.ui.pendencia.PendenciasFragment
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.list_item_pendencia.view.*
 
@@ -44,7 +44,7 @@ class PendenciasAdapter(private var fragment: Fragment,
         }
 
         holder.layout.setOnLongClickListener {
-            (fragment as PendenciasFragment).createDialogExcluir(pendencia)
+            (fragment as PendenciasFragment).confirmDialogExcluir(pendencia)
         }
 
         view!!.tag = holder
