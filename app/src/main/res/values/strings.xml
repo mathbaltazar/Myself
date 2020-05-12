@@ -1,67 +1,6 @@
 <resources>
     <string name="app_name">Regular</string>
-    <string name="all_string_sim">Sim</string>
-    <string name="all_string_nao">Não</string>
     <string name="action_settings">Settings</string>
-    <string name="view_pager_fragment_title_pendencias">Pendências</string>
-    <string name="view_pager_fragment_title_economias">Economias</string>
-    <string name="all_string_adicionar">Adicionar</string>
-    <string name="all_input_hint_valor">Valor</string>
-    <string name="all_input_hint_descricao">Descrição</string>
-    <string name="fragment_pendencias_header_item">Pendências</string>
-    <string name="fragment_economias_hearder_item">Economias</string>
-    <string name="all_label_sem_pendencias">Não há pendências registradas.</string>
-    <string name="all_label_sem_economias">Não há economias registradas.</string>
-    <string name="all_string_dialog_campos_vazios">Todos os campos devem ser preenchidos</string>
-    <string name="all_string_detalhes_item_carteira_valor_ultrapassado">O valor pago ultrapassou o valor pendente*</string>
-    <string name="all_string_detalhes_poupanca_valor_ultrapassado">O valor da poupança já atingiu o valor da economia*</string>
-    <string name="toast_detalhe_item_carteira_registro_adicionado">Registro adicionado</string>
+    <string name="activity_title_main">Meus Registros</string>
 
-    <string name="toast_pendencia_adicionada">Pendência adicionada</string>
-    <string name="toast_nova_economia_adicionada">Economia adicionada</string>
-
-    <string name="dialog_title_detalhes_pendencia">Pendência</string>
-    <string name="activity_title_detalhes_economia">Economia</string>
-
-    <string name="toast_detalhe_item_carteira_registro_removido">Registro removido</string>
-    <string name="all_dialog_title_excluir">Excluir</string>
-    <string name="all_dialog_message_excluir">Confirma a exclusão?</string>
-    <string name="toast_pendencia_removida">Pendência removida</string>
-    <string name="activity_title_main">Controles</string>
-    <string name="all_button_nova_pendencia">ADICIONAR NOVA PENDÊNCIA</string>
-    <string name="all_button_novo_plano">ADICIONAR NOVO PLANO</string>
-    <string name="dialog_title_ajuste_poupanca">Poupança</string>
-    <string name="dialog_button_ajuste_poupanca_confirmar">Confirmar</string>
-    <string name="dialog_movimento_ajuste_poupanca_guardar">Guardar</string>
-    <string name="dialog_movimento_ajuste_poupanca_retirar">Retirar</string>
-    <string name="detalhes_economia_valor_poupanca_registrado">Registrado!</string>
-    <string name="dialog_ajuste_poupanca_valor_invalido">Valor inválido!</string>
-    <string name="dialog_ajuste_poupanca_maior_que_zero">Valor deve ser maior que zero</string>
-    <string name="dialog_add_economia_title">Adicionar Novo Plano</string>
-    <string name="dialog_add_pendencia_title">Adicionar Pendência</string>
-    <string name="detalhes_pendencia_button_add_nota">Nota</string>
-    <string name="detalhes_pendencia_marcar_como_pago">Marcar como pago</string>
-    <string name="detalhes_pendecias_nao_ha_notas">Não há notas.</string>
-    <string name="detalhes_pendencias_title_notas">Notas</string>
-    <string name="toast_detalhes_pendencia_pago">Que bom, Pendência paga!</string>
-    <string name="all_string_confirmar">Confirmar</string>
-    <string name="dialog_mensagem_detalhe_pendencia_pago">Confirmar pendência atual como paga ?</string>
-    <string name="all_input_currency_placeholder">R$ 0,00</string>
-    <string name="label_detalhes_economia_valor">Valor: (R$)</string>
-    <string name="label_detalhes_economia_poupanca">Poupança: (R$)</string>
-    <string name="label_detalhes_economia_descricao">Descrição:</string>
-    <string name="label_detalhes_economia_data">Iniciada em:</string>
-    <string name="button_detalhes_economia_ajustar_poupança">Ajustar Poupança</string>
-    <string name="button_detalhes_economia_conquistado">Definir como Conquistado</string>
-    <string name="label_detalhes_pendencia_valor">Valor:</string>
-    <string name="label_detalhes_pendencia_data">Iniciada em:</string>
-    <string name="label_detalhes_pendencia_descricao">Descrição</string>
-    <string name="toast_detalhes_economia_conquistada">Parabéns, seu plano foi alcançado! =)</string>
-    <string name="economias_resumo_poupanca">Poupança:</string>
-    <string name="economias_resumo_total">Total Economia:</string>
-    <string name="economias_resumo_planos">Planos:</string>
-    <string name="dialog_mensagem_detalhe_economia_conquistado">Confirmar plano como conquistado ?</string>
-    <string name="dialog_pendencia_menu_editar">Editar</string>
-    <string name="toast_pendencia_alterada">Pendência alterada</string>
-    <string name="dialog_pendencia_menu_excluir">Excluir</string>
 </resources>

@@ -5,9 +5,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.adapter.MainPagerAdapter
-import com.baltazarstudio.regular.ui.economia.EconomiasFragment
-import com.baltazarstudio.regular.ui.pendencia.PendenciasFragment
+import com.baltazarstudio.regular.adapter.PagerAdapter
+import com.baltazarstudio.regular.ui.pendencia.MovimentosFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
 
@@ -17,13 +16,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.activity_title_main)
 
         tab_layout.setupWithViewPager(vp_content_main)
 
-        val adapter = MainPagerAdapter(supportFragmentManager)
-        adapter.addFragment(PendenciasFragment(this), getString(R.string.view_pager_fragment_title_pendencias))
-        adapter.addFragment(EconomiasFragment(this), getString(R.string.view_pager_fragment_title_economias))
+        val adapter = PagerAdapter(supportFragmentManager)
+        adapter.addFragment(MovimentosFragment(), "Movimentos")
         vp_content_main.adapter = adapter
 
     }

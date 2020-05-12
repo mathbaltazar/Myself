@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset"
-        android:text="@string/dialog_add_pendencia_title"
+        android:text="Novo Movimento"
         android:textSize="18sp" />
 
     <View
@@ -27,10 +27,10 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/all_input_hint_descricao">
+            android:hint="Descrição">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textinput_dialog_add_pendencia_descricao"
+                android:id="@+id/textinput_dialog_novo_movimento_descricao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences" />
@@ -42,25 +42,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/all_default_layout_offset"
-            android:hint="@string/all_input_hint_valor">
+            android:hint="Valor">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textinput_dialog_add_pendencia_valor"
+                android:id="@+id/textinput_dialog_novo_movimento_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:text="@string/all_input_currency_placeholder" />
+                android:text="R$ 0,00" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/button_dialog_add_pendencia_adicionar"
+        android:id="@+id/button_dialog_novo_movimento_adicionar"
         style="@style/Widget.MaterialComponents.Button.NoInset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset"
-        android:text="@string/all_string_adicionar"
+        android:text="Adicionar"
         android:textSize="18sp" />
 
 </LinearLayout>

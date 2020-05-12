@@ -4,15 +4,13 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.baltazarstudio.regular.database.dao.PendenciaDAO
-import com.baltazarstudio.regular.database.dao.EconomiaDAO
+import com.baltazarstudio.regular.database.dao.MovimentoDAO
 
 abstract class Database<T>(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        PendenciaDAO.onCreate(db)
-        EconomiaDAO.onCreate(db)
+        MovimentoDAO.onCreate(db)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {

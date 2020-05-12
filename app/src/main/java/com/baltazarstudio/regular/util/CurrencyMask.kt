@@ -31,7 +31,6 @@ class CurrencyMask(private var editText: EditText) : TextWatcher {
                     campo = Utils.formatCurrency(BigDecimal("0.0$campo"))
                 } else {
                     campo = Utils.unformatCurrency(campo)
-                    campo = campo.replace(".", "")
                     campo = StringBuilder(campo).insert(campo.lastIndex - 1, ".").toString()
                     campo = Utils.formatCurrency(campo.toBigDecimal())
                 }
@@ -40,7 +39,7 @@ class CurrencyMask(private var editText: EditText) : TextWatcher {
             }
 
             formatado = true
-            editText.text = Editable.Factory.getInstance().newEditable(ultimoFormatado)
+            editText.setText(ultimoFormatado)
         }
     }
 }

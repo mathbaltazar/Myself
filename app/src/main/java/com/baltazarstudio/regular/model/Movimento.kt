@@ -2,13 +2,9 @@ package com.baltazarstudio.regular.model
 
 import java.math.BigDecimal
 
-class Economia {
+class Movimento {
     var id: Int? = null
     var descricao: String? = null
+    var data: Long? = null
     var valor: BigDecimal = BigDecimal.ZERO
-    var valorPoupanca: BigDecimal = BigDecimal.ZERO
-    var data: String? = null
-    var conquistado: Boolean = false
-
-
 }
