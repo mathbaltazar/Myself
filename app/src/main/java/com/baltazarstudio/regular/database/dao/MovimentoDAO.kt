@@ -82,7 +82,7 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     fun getAnosDisponiveis(): ArrayList<Int> {
         val anos = arrayListOf<Int>()
 
-        val sql = "SELECT DISTINCT $MOVIMENTO_ANO FROM $TABELA_MOVIMENTO"
+        val sql = "SELECT DISTINCT $MOVIMENTO_ANO FROM $TABELA_MOVIMENTO ORDER BY $MOVIMENTO_ANO DESC"
 
         val cursor = readableDatabase.rawQuery(sql, null)
 
@@ -97,7 +97,7 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     fun getMesDisponivelPorAno(ano: Int): ArrayList<Int> {
         val meses = arrayListOf<Int>()
 
-        val sql = "SELECT DISTINCT $MOVIMENTO_MES FROM $TABELA_MOVIMENTO WHERE $MOVIMENTO_ANO = $ano"
+        val sql = "SELECT DISTINCT $MOVIMENTO_MES FROM $TABELA_MOVIMENTO WHERE $MOVIMENTO_ANO = $ano ORDER BY $MOVIMENTO_MES DESC"
 
         val cursor = readableDatabase.rawQuery(sql, null)
 

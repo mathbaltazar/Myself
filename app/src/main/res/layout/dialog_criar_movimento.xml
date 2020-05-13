@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -10,10 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset_4"
         android:text="Novo Movimento"
-        android:textColor="@android:color/black"
         android:textAllCaps="true"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
@@ -55,6 +56,21 @@
                 android:text="R$ 0,00" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset_4"
+            android:hint="Data"
+            app:counterMaxLength="10">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textinput_dialog_novo_movimento_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="10" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <Button
