@@ -3,14 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/all_default_layout_offset">
+    android:padding="@dimen/all_default_layout_offset_4">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/all_default_layout_offset"
+        android:layout_margin="@dimen/all_default_layout_offset_4"
         android:text="Novo Movimento"
-        android:textSize="18sp" />
+        android:textColor="@android:color/black"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="16sp" />
 
     <View
         android:layout_width="match_parent"
@@ -21,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/all_default_layout_offset">
+        android:padding="@dimen/all_default_layout_offset_4">
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -41,7 +44,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/all_default_layout_offset"
+            android:layout_marginTop="@dimen/all_default_layout_offset_4"
             android:hint="Valor">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -59,7 +62,7 @@
         style="@style/Widget.MaterialComponents.Button.NoInset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/all_default_layout_offset"
+        android:layout_margin="@dimen/all_default_layout_offset_4"
         android:text="Adicionar"
         android:textSize="18sp" />
 

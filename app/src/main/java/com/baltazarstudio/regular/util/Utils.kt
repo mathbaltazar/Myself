@@ -13,11 +13,11 @@ class Utils {
         private val mLocale = Locale("pt", "BR")
         private val sdf = SimpleDateFormat("dd/MM/yyyy", mLocale)
 
-        fun Long?.formattedDate(): String {
-            return sdf.format(this)
+        fun Calendar.formattedDate(): String {
+            return sdf.format(this.time)
         }
 
-        fun formatCurrency(valor: BigDecimal?): String {
+        fun formatCurrency(valor: Double?): String {
             return NumberFormat.getCurrencyInstance(mLocale)
                 .format(valor)
                 .replace("R$", "R$ ")

@@ -28,11 +28,12 @@ class CurrencyMask(private var editText: EditText) : TextWatcher {
         if (!formatado) {
             if (editText.selectionStart == campo.length) {
                 if (count == 1 && start == 0) { // Campo vazio, primeiro caractere
-                    campo = Utils.formatCurrency(BigDecimal("0.0$campo"))
+                    campo = Utils.formatCurrency("0.0$campo".toDouble())
                 } else {
                     campo = Utils.unformatCurrency(campo)
+                    campo = campo.replace(".", "")
                     campo = StringBuilder(campo).insert(campo.lastIndex - 1, ".").toString()
-                    campo = Utils.formatCurrency(campo.toBigDecimal())
+                    campo = Utils.formatCurrency(campo.toDouble())
                 }
 
                 ultimoFormatado = campo

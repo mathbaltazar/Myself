@@ -1,13 +1,12 @@
 package com.baltazarstudio.regular.adapter
 
-import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-class PagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
-    val viewPages = ArrayList<Fragment>()
-    val viewPagesTitle = ArrayList<String>()
+class PagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    private val viewPages = ArrayList<Fragment>()
+    private val viewPagesTitle = ArrayList<String>()
 
     override fun getItem(position: Int): Fragment {
         return viewPages[position]

@@ -42,13 +42,16 @@ class CriarMovimentoDialog(context: Context) : Dialog(context) {
                 textinput_dialog_novo_movimento_valor.error = null
 
                 movimento.descricao = descricao
-                movimento.valor = Utils.unformatCurrency(valor).toBigDecimal()
+                movimento.valor = Utils.unformatCurrency(valor).toDouble()
 
                 if (edit) {
                     MovimentoDAO(context).alterar(movimento)
                     Toast.makeText(context, "Alterado!", Toast.LENGTH_LONG).show()
                 } else {
-                    movimento.data = Date().time
+                    val c = Calendar.getInstance()
+                    movimento.dia = c[Calendar.DAY_OF_MONTH]
+                    movimento.mes = c[Calendar.MONTH]
+                    movimento.ano = c[Calendar.YEAR]
                     MovimentoDAO(context).inserir(movimento)
                     Toast.makeText(context, "Movimento adicionado!", Toast.LENGTH_LONG).show()
                 }

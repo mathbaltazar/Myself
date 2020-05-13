@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.baltazarstudio.regular.database.Database
 import com.baltazarstudio.regular.model.Movimento
-import java.util.*
+import kotlin.collections.ArrayList
 
 class MovimentoDAO(context: Context) : Database<Movimento>(context) {
 
@@ -40,12 +40,16 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     fun inserir(objeto: Movimento) {
         val insert = "INSERT INTO $TABELA_MOVIMENTO (" +
                 "$MOVIMENTO_DESCRICAO," +
-                "$MOVIMENTO_DATA," +
-                "$MOVIMENTO_VALOR," +
+                "$MOVIMENTO_DIA," +
+                "$MOVIMENTO_MES," +
+                "$MOVIMENTO_ANO," +
+                "$MOVIMENTO_VALOR)" +
                 " VALUES (" +
                 "'${objeto.descricao}'," +
-                "'${objeto.data}'," +
-                "'${objeto.valor}'" +
+                "${objeto.dia}," +
+                "${objeto.mes}," +
+                "${objeto.ano}," +
+                "${objeto.valor}" +
                 ")"
 
         writableDatabase.execSQL(insert)
@@ -59,8 +63,10 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     override fun bind(cursor: Cursor, objeto: Movimento) {
         objeto.id = cursor.getInt(cursor.getColumnIndex(TABLE_ID))
         objeto.descricao = cursor.getString(cursor.getColumnIndex(MOVIMENTO_DESCRICAO))
-        objeto.valor = cursor.getString(cursor.getColumnIndex(MOVIMENTO_VALOR)).toBigDecimal()
-        objeto.data = cursor.getLong(cursor.getColumnIndex(MOVIMENTO_DATA))
+        objeto.dia = cursor.getInt(cursor.getColumnIndex(MOVIMENTO_DIA))
+        objeto.mes = cursor.getInt(cursor.getColumnIndex(MOVIMENTO_MES))
+        objeto.ano = cursor.getInt(cursor.getColumnIndex(MOVIMENTO_ANO))
+        objeto.valor = cursor.getDouble(cursor.getColumnIndex(MOVIMENTO_VALOR))
     }
 
     fun alterar(item: Movimento) {
@@ -73,19 +79,53 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         writableDatabase.execSQL(update)
     }
 
+    fun getAnosDisponiveis(): ArrayList<Int> {
+        val anos = arrayListOf<Int>()
+
+        val sql = "SELECT DISTINCT $MOVIMENTO_ANO FROM $TABELA_MOVIMENTO"
+
+        val cursor = readableDatabase.rawQuery(sql, null)
+
+        while (cursor.moveToNext()) {
+            anos.add(cursor.getInt(cursor.getColumnIndex(MOVIMENTO_ANO)))
+        }
+
+        cursor.close()
+        return anos
+    }
+
+    fun getMesDisponivelPorAno(ano: Int): ArrayList<Int> {
+        val meses = arrayListOf<Int>()
+
+        val sql = "SELECT DISTINCT $MOVIMENTO_MES FROM $TABELA_MOVIMENTO WHERE $MOVIMENTO_ANO = $ano"
+
+        val cursor = readableDatabase.rawQuery(sql, null)
+
+        while (cursor.moveToNext()) {
+            meses.add(cursor.getInt(cursor.getColumnIndex(MOVIMENTO_MES)))
+        }
+
+        cursor.close()
+        return meses
+    }
+
     companion object {
         private const val TABELA_MOVIMENTO = "Movimento"
 
         private const val MOVIMENTO_DESCRICAO = "descricao"
-        private const val MOVIMENTO_DATA = "data"
+        private const val MOVIMENTO_DIA = "dia"
+        private const val MOVIMENTO_MES = "mes"
+        private const val MOVIMENTO_ANO = "ano"
         private const val MOVIMENTO_VALOR = "valor"
 
         fun onCreate(db: SQLiteDatabase) {
             val create = "CREATE TABLE $TABELA_MOVIMENTO (" +
                     "$TABLE_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "$MOVIMENTO_DESCRICAO TEXT," +
-                    "$MOVIMENTO_DATA LONG," +
-                    "$MOVIMENTO_VALOR TEXT" +
+                    "$MOVIMENTO_DIA INTEGER," +
+                    "$MOVIMENTO_MES INTEGER," +
+                    "$MOVIMENTO_ANO INTEGER," +
+                    "$MOVIMENTO_VALOR DECIMAL(10, 2)" +
                     ")"
 
             db.execSQL(create)
