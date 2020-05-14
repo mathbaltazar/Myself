@@ -17,6 +17,14 @@ class Utils {
             return sdf.format(this.time)
         }
 
+        fun Long.formattedDate(): String {
+            return sdf.format(Date(this))
+        }
+
+        fun UTCInstanceCalendar(): Calendar {
+            return Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        }
+
         fun formatCurrency(valor: Double?): String {
             return NumberFormat.getCurrencyInstance(mLocale)
                 .format(valor)

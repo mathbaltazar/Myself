@@ -44,7 +44,7 @@ class MovimentosFragment : Fragment() {
     private fun setUpView() {
 
         v.button_add_movimento.setOnClickListener {
-            val dialog = CriarMovimentoDialog(v.context)
+            val dialog = CriarMovimentoDialog(v.context, childFragmentManager)
             dialog.setOnDismissListener {
                 setUpMovimentos()
             }
@@ -107,10 +107,6 @@ class MovimentosFragment : Fragment() {
                 }
             }
 
-            for (i in 0..10) {
-
-            }
-
         }
     }
 
@@ -136,7 +132,7 @@ class MovimentosFragment : Fragment() {
         super.onResume()
 
         if (arguments != null && arguments!!.getBoolean("")) {
-            CriarMovimentoDialog(v.context).show()
+            CriarMovimentoDialog(v.context, childFragmentManager).show()
         }
     }
 }
