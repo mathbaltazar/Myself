@@ -41,10 +41,9 @@ class Notification {
         fun notificar(context: Context) {
             val intent = Intent(context, MainActivity::class.java).apply {
                 setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                putExtra("fromNotification", true)
+                action = "abrir_adicionar_movimento"
             }
             val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-
 
             val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_icon)

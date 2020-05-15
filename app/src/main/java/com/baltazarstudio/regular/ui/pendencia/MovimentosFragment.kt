@@ -131,8 +131,7 @@ class MovimentosFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (arguments != null && arguments!!.getBoolean("")) {
+        if (activity?.intent?.action == "abrir_adicionar_movimento")
             CriarMovimentoDialog(v.context, childFragmentManager).show()
-        }
     }
 }

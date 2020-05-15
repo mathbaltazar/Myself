@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = PagerAdapter(supportFragmentManager)
         val fragment = MovimentosFragment()
-        fragment.arguments = intent.extras
         adapter.addFragment(fragment, "Movimentos")
         vp_content_main.adapter = adapter
 
