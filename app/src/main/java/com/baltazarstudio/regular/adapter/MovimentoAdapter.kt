@@ -10,34 +10,41 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
+import kotlinx.android.synthetic.main.layout_header_movimento.view.*
 import kotlinx.android.synthetic.main.layout_item_movimento.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class MovimentoAdapter(
-    private var context: Context,
+    context: Context,
+    private var pairMesAno: Pair<Int, Int>,
     private var itens: List<Movimento>,
     private var excluirMovimento: (Movimento) -> AlertDialog
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val layoutInflater = LayoutInflater.from(context)
+    private val HEADER_VIEW_TYPE = 100
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return MovimentoViewHolder(
-            layoutInflater.inflate(
-                R.layout.layout_item_movimento,
-                parent,
-                false
-            )
-        )
+        if (viewType == HEADER_VIEW_TYPE)
+            return HeaderViewHolder(layoutInflater.inflate(R.layout.layout_header_movimento, parent,false))
+        return MovimentoViewHolder(layoutInflater.inflate(R.layout.layout_item_movimento, parent,false))
     }
 
     override fun getItemCount(): Int {
-        return itens.size
+        return itens.size + 1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as MovimentoViewHolder).bindView(position)
+        if (holder is HeaderViewHolder)
+            holder.bindHeader()
+        else
+            (holder as MovimentoViewHolder).bindView(position - 1)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (position == 0)
+            return HEADER_VIEW_TYPE
+        return super.getItemViewType(position)
     }
 
     private inner class MovimentoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -58,6 +65,37 @@ class MovimentoAdapter(
                 excluirMovimento(movimento)
                 true
             }
+        }
+    }
+
+    private inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bindHeader() {
+            itemView.tv_header_movimento_title.text =
+                String.format("%s/%d", getMesString(pairMesAno.first), pairMesAno.second)
+
+            var total = 0.0
+            for (movimento in itens) {
+                total += movimento.valor
+            }
+            itemView.tv_header_movimento_total.text = Utils.formatCurrency(total)
+        }
+    }
+
+    private fun getMesString(mes: Int): String {
+        return when (mes) {
+            Calendar.JANUARY -> "JANEIRO"
+            Calendar.FEBRUARY -> "FEVEREIRO"
+            Calendar.MARCH -> "MARÇO"
+            Calendar.APRIL -> "ABRIL"
+            Calendar.MAY -> "MAIO"
+            Calendar.JUNE -> "JUNHO"
+            Calendar.JULY -> "JULHO"
+            Calendar.AUGUST -> "AGOSTO"
+            Calendar.SEPTEMBER -> "SETEMBRO"
+            Calendar.OCTOBER -> "OUTUBRO"
+            Calendar.NOVEMBER -> "NOVEMBRO"
+            Calendar.DECEMBER -> "DEZEMBRO"
+            else -> ""
         }
     }
 }

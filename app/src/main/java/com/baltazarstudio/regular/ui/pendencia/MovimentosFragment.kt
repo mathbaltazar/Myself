@@ -1,12 +1,9 @@
 package com.baltazarstudio.regular.ui.pendencia
 
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -18,8 +15,8 @@ import com.baltazarstudio.regular.adapter.MovimentoAdapter
 import com.baltazarstudio.regular.database.dao.MovimentoDAO
 import com.baltazarstudio.regular.model.Movimento
 import kotlinx.android.synthetic.main.fragment_movimentos.view.*
-import org.jetbrains.anko.*
-import java.util.*
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.wrapContent
 
 
 class MovimentosFragment : Fragment() {
@@ -42,15 +39,13 @@ class MovimentosFragment : Fragment() {
     }
 
     private fun setUpView() {
-
-        v.button_add_movimento.setOnClickListener {
+        v.fab_add_movimento.setOnClickListener {
             val dialog = CriarMovimentoDialog(v.context, childFragmentManager)
             dialog.setOnDismissListener {
                 setUpMovimentos()
             }
             dialog.show()
         }
-
     }
 
     private fun setUpMovimentos() {
@@ -69,63 +64,33 @@ class MovimentosFragment : Fragment() {
                 .show()
         }
 
-        v.apply {
-            ll_movimentos.removeAllViews()
+        v.ll_movimentos.removeAllViews()
+        val lp = ViewGroup.LayoutParams(matchParent, wrapContent)
 
-            val lp = ViewGroup.LayoutParams(matchParent, wrapContent)
+        for (ano in movimentoDAO.getAnosDisponiveis()) {
+            for (mes in movimentoDAO.getMesDisponivelPorAno(ano)) {
+                val itens = itensMovimentos.filter { it.mes == mes && it.ano == ano }
 
-            for (ano in movimentoDAO.getAnosDisponiveis()) {
-                for (mes in movimentoDAO.getMesDisponivelPorAno(ano)) {
+                val recyclerView = RecyclerView(v.context)
+                recyclerView.layoutParams = lp
 
-                    val header = TextView(context)
-                    header.layoutParams = lp
-                    header.padding = dip(8)
-                    header.text = String.format("%s/%d", getMesString(mes), ano)
-                    header.textColor = Color.BLACK
-                    header.typeface = Typeface.DEFAULT_BOLD
-                    header.backgroundColorResource = R.color.off_white
+                val adapter = MovimentoAdapter(v.context, Pair(mes, ano), itens, excluir)
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(context)
 
-                    val adapter = MovimentoAdapter(
+                recyclerView.isNestedScrollingEnabled = false
+                recyclerView.addItemDecoration(
+                    DividerItemDecoration(
                         context,
-                        itensMovimentos.filter { it.mes == mes && it.ano == ano },
-                        excluir
+                        DividerItemDecoration.VERTICAL
                     )
-                    val recyclerView = RecyclerView(context)
-                    recyclerView.layoutParams = lp
-                    recyclerView.adapter = adapter
-                    recyclerView.layoutManager = LinearLayoutManager(context)
-                    recyclerView.isNestedScrollingEnabled = false
-                    recyclerView.addItemDecoration(
-                        DividerItemDecoration(
-                            context,
-                            DividerItemDecoration.VERTICAL
-                        )
-                    )
+                )
 
-                    ll_movimentos.addView(header)
-                    ll_movimentos.addView(recyclerView)
-                }
+                v.ll_movimentos.addView(recyclerView)
             }
-
         }
-    }
 
-    private fun getMesString(mes: Int): String {
-        return when (mes) {
-            Calendar.JANUARY -> "JANEIRO"
-            Calendar.FEBRUARY -> "FEVEREIRO"
-            Calendar.MARCH -> "MARÇO"
-            Calendar.APRIL -> "ABRIL"
-            Calendar.MAY -> "MAIO"
-            Calendar.JUNE -> "JUNHO"
-            Calendar.JULY -> "JULHO"
-            Calendar.AUGUST -> "AGOSTO"
-            Calendar.SEPTEMBER -> "SETEMBRO"
-            Calendar.OCTOBER -> "OUTUBRO"
-            Calendar.NOVEMBER -> "NOVEMBRO"
-            Calendar.DECEMBER -> "DEZEMBRO"
-            else -> ""
-        }
+
     }
 
     override fun onResume() {
