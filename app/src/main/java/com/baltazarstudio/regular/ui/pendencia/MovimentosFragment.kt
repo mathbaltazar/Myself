@@ -76,12 +76,11 @@ class MovimentosFragment : Fragment() {
 
                 val adapter = MovimentoAdapter(v.context, Pair(mes, ano), itens, excluir)
                 recyclerView.adapter = adapter
-                recyclerView.layoutManager = LinearLayoutManager(context)
+                recyclerView.layoutManager = LinearLayoutManager(v.context)
 
-                recyclerView.isNestedScrollingEnabled = false
                 recyclerView.addItemDecoration(
                     DividerItemDecoration(
-                        context,
+                        v.context,
                         DividerItemDecoration.VERTICAL
                     )
                 )
