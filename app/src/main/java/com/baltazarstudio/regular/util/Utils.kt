@@ -3,8 +3,8 @@ package com.baltazarstudio.regular.util
 import android.content.Context
 import android.graphics.Point
 import android.view.WindowManager
-import java.math.BigDecimal
 import java.text.NumberFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,6 +36,30 @@ class Utils {
                 .replace(".", "")
                 .replace(",", ".")
                 .trim()
+        }
+
+        fun validarData(dateToValidate: String?): Boolean {
+
+            if (dateToValidate.isNullOrBlank() || dateToValidate.length < 10) {
+                return false
+            }
+
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+            sdf.isLenient = false
+
+            try {
+                val date = sdf.parse(dateToValidate)
+
+                if (date.after(Date())) {
+                    return false
+                }
+
+            } catch (e: ParseException) {
+                e.printStackTrace()
+                return false
+            }
+
+            return true
         }
 
         fun getScreenSize(context: Context): Point {

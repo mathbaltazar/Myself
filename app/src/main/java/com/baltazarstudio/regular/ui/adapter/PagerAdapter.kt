@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.adapter
+package com.baltazarstudio.regular.ui.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

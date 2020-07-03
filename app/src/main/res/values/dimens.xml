@@ -2,4 +2,6 @@
 <resources>
     <dimen name="all_default_layout_offset_4">4dp</dimen>
     <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
 </resources>

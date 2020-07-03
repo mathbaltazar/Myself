@@ -5,7 +5,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.baltazarstudio.regular.database.Database
 import com.baltazarstudio.regular.model.Movimento
-import kotlin.collections.ArrayList
 
 class MovimentoDAO(context: Context) : Database<Movimento>(context) {
 
@@ -82,7 +81,8 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     fun getAnosDisponiveis(): ArrayList<Int> {
         val anos = arrayListOf<Int>()
 
-        val sql = "SELECT DISTINCT $MOVIMENTO_ANO FROM $TABELA_MOVIMENTO ORDER BY $MOVIMENTO_ANO DESC"
+        val sql =
+            "SELECT DISTINCT $MOVIMENTO_ANO FROM $TABELA_MOVIMENTO ORDER BY $MOVIMENTO_ANO DESC"
 
         val cursor = readableDatabase.rawQuery(sql, null)
 
@@ -97,7 +97,8 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     fun getMesDisponivelPorAno(ano: Int): ArrayList<Int> {
         val meses = arrayListOf<Int>()
 
-        val sql = "SELECT DISTINCT $MOVIMENTO_MES FROM $TABELA_MOVIMENTO WHERE $MOVIMENTO_ANO = $ano ORDER BY $MOVIMENTO_MES DESC"
+        val sql =
+            "SELECT DISTINCT $MOVIMENTO_MES FROM $TABELA_MOVIMENTO WHERE $MOVIMENTO_ANO = $ano ORDER BY $MOVIMENTO_MES DESC"
 
         val cursor = readableDatabase.rawQuery(sql, null)
 
@@ -107,6 +108,41 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
 
         cursor.close()
         return meses
+    }
+
+    fun restoreData(movimentos: List<Movimento>?) {
+        val db = writableDatabase
+        db.beginTransaction()
+
+        db.execSQL("DELETE FROM $TABELA_MOVIMENTO")
+
+        if (!movimentos.isNullOrEmpty()) {
+            val sqlInsertStatement = "INSERT INTO $TABELA_MOVIMENTO (" +
+                    "$TABLE_ID," +
+                    "$MOVIMENTO_DESCRICAO," +
+                    "$MOVIMENTO_DIA," +
+                    "$MOVIMENTO_MES," +
+                    "$MOVIMENTO_ANO," +
+                    "$MOVIMENTO_VALOR)" +
+                    " VALUES (?, ?, ?, ?, ?, ?)"
+            val stmt = db.compileStatement(sqlInsertStatement)
+
+            movimentos.forEach {
+                stmt.bindLong(1, it.id!!.toLong())
+                stmt.bindString(2, it.descricao)
+                stmt.bindLong(3, it.dia.toLong())
+                stmt.bindLong(4, it.dia.toLong())
+                stmt.bindLong(5, it.dia.toLong())
+                stmt.bindDouble(6, it.valor)
+
+                stmt.executeInsert()
+                stmt.clearBindings()
+            }
+
+            db.setTransactionSuccessful()
+        }
+
+        db.endTransaction()
     }
 
     companion object {

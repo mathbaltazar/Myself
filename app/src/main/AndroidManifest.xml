@@ -11,6 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".ui.backup.DadosBackupActivity" />
+
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"

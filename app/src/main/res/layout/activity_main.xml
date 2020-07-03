@@ -18,7 +18,7 @@
             android:background="?attr/colorPrimary"
             app:logo="@drawable/ic_toolbar_logo"
             app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
-            app:title="@string/activity_title_main"
+            app:title="@string/activity_main_title"
             app:titleMarginStart="24dp" />
 
     </com.google.android.material.appbar.AppBarLayout>

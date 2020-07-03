@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.adapter.MovimentoAdapter
 import com.baltazarstudio.regular.database.dao.MovimentoDAO
 import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.ui.adapter.MovimentoAdapter
 import kotlinx.android.synthetic.main.fragment_movimentos.view.*
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.wrapContent
@@ -21,8 +21,9 @@ import org.jetbrains.anko.wrapContent
 
 class MovimentosFragment : Fragment() {
 
-    private lateinit var movimentoDAO: MovimentoDAO
     private lateinit var v: View
+    private lateinit var movimentoDAO: MovimentoDAO
+    private var firstUse: Boolean = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,7 +96,9 @@ class MovimentosFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (activity?.intent?.action == "abrir_adicionar_movimento")
-            CriarMovimentoDialog(v.context, childFragmentManager).show()
+        if (activity?.intent?.action == "abrir_adicionar_movimento" && firstUse) {
+            v.fab_add_movimento.performClick()
+        }
+        firstUse = false
     }
 }

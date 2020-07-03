@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.adapter
+package com.baltazarstudio.regular.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
