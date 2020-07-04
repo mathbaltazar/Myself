@@ -118,22 +118,23 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
 
         if (!movimentos.isNullOrEmpty()) {
             val sqlInsertStatement = "INSERT INTO $TABELA_MOVIMENTO (" +
-                    "$TABLE_ID," +
+                    //"$TABLE_ID," +
                     "$MOVIMENTO_DESCRICAO," +
                     "$MOVIMENTO_DIA," +
                     "$MOVIMENTO_MES," +
                     "$MOVIMENTO_ANO," +
                     "$MOVIMENTO_VALOR)" +
-                    " VALUES (?, ?, ?, ?, ?, ?)"
+                    //" VALUES (?, ?, ?, ?, ?, ?)"
+                    " VALUES (?, ?, ?, ?, ?)"
             val stmt = db.compileStatement(sqlInsertStatement)
 
             movimentos.forEach {
-                stmt.bindLong(1, it.id!!.toLong())
-                stmt.bindString(2, it.descricao)
-                stmt.bindLong(3, it.dia.toLong())
-                stmt.bindLong(4, it.dia.toLong())
-                stmt.bindLong(5, it.dia.toLong())
-                stmt.bindDouble(6, it.valor)
+                //stmt.bindLong(1, it.id!!.toLong())
+                stmt.bindString(1, it.descricao)
+                stmt.bindLong(2, it.dia.toLong())
+                stmt.bindLong(3, it.mes.toLong())
+                stmt.bindLong(4, it.ano.toLong())
+                stmt.bindDouble(5, it.valor)
 
                 stmt.executeInsert()
                 stmt.clearBindings()

@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.pendencia
+package com.baltazarstudio.regular.ui.movimentos
 
 import android.app.Dialog
 import android.content.Context

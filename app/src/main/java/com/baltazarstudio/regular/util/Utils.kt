@@ -38,13 +38,13 @@ class Utils {
                 .trim()
         }
 
-        fun validarData(dateToValidate: String?): Boolean {
+        fun isDataValida(dateToValidate: String?): Boolean {
 
             if (dateToValidate.isNullOrBlank() || dateToValidate.length < 10) {
                 return false
             }
 
-            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+            //val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
             sdf.isLenient = false
 
             try {

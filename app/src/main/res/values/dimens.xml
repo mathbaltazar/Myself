@@ -4,4 +4,7 @@
     <dimen name="text_size_10">10sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="all_default_layout_offset_8">8dp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
 </resources>
