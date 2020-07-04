@@ -67,13 +67,13 @@ class EntradaDAO(context: Context) : Database<Entrada>(context) {
         writableDatabase.execSQL(sql)
     }
 
-    fun restaurarEntradas(entradas: Iterable<Entrada>) {
+    fun restaurarEntradas(entradas: List<Entrada>?) {
         val db = writableDatabase
         db.beginTransaction()
 
         db.execSQL("DELETE FROM $TABELA_ENTRADA")
 
-        if (!entradas.none()) {
+        if (!entradas.isNullOrEmpty()) {
             val insertStatement = "INSERT INTO $TABELA_ENTRADA (" +
                     //"$TABLE_ID," +
                     "$ENTRADA_DESCRICAO," +

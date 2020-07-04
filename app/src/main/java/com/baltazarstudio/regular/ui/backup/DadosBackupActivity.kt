@@ -1,13 +1,12 @@
 package com.baltazarstudio.regular.ui.backup
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.database.dao.ConfiguracaoDAO
+import com.baltazarstudio.regular.database.dao.EntradaDAO
 import com.baltazarstudio.regular.database.dao.MovimentoDAO
 import com.baltazarstudio.regular.model.Configuracao
 import com.baltazarstudio.regular.service.BackupService
@@ -147,6 +146,7 @@ class DadosBackupActivity : AppCompatActivity() {
 
         val request = SincronizarDadosBackupDTO()
         request.movimentos = MovimentoDAO(this).getTodosMovimentos()
+        request.entradas = EntradaDAO(this).getTodasEntradas()
         request.configuracao = mConfiguracao
         request.configuracao!!.dataUltimaSincronizacao =
             SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).format(Date())
@@ -191,7 +191,8 @@ class DadosBackupActivity : AppCompatActivity() {
                 button_backup_sincronizar_dados.isEnabled = true
 
                 val dto = t.body()!!
-                MovimentoDAO(this).restoreData(dto.movimentos)
+                MovimentoDAO(this).restaurarMovimentos(dto.movimentos)
+                EntradaDAO(this).restaurarEntradas(dto.entradas)
                 ConfiguracaoDAO(this).salvarConfiguracao(dto.configuracao)
 
             }, { error ->

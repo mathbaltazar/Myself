@@ -110,7 +110,7 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         return meses
     }
 
-    fun restoreData(movimentos: List<Movimento>?) {
+    fun restaurarMovimentos(movimentos: List<Movimento>?) {
         val db = writableDatabase
         db.beginTransaction()
 
