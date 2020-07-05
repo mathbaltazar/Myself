@@ -2,6 +2,7 @@ package com.baltazarstudio.regular.util
 
 import android.content.Context
 import android.graphics.Point
+import android.view.View
 import android.view.WindowManager
 import java.text.NumberFormat
 import java.text.ParseException
@@ -60,6 +61,18 @@ class Utils {
             }
 
             return true
+        }
+
+        fun View.gone() {
+            this.visibility = View.GONE
+        }
+
+        fun View.visible() {
+            this.visibility = View.VISIBLE
+        }
+
+        fun View.invisible() {
+            this.visibility = View.INVISIBLE
         }
 
         fun getScreenSize(context: Context): Point {

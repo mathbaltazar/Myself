@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Regular</string>
-    <string name="activity_main_menu_dados_backup">Dados</string>
     <string name="activity_main_title">Meus Registros</string>
+    <string name="activity_main_menu_dados_backup">Dados</string>
+    <string name="activity_main_menu_pesquisar">Pesquisar</string>
 
 </resources>

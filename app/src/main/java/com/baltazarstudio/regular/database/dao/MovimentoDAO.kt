@@ -36,6 +36,24 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         return movimentos
     }
 
+    fun getTodosMovimentos(pesquisa: String): List<Movimento> {
+        val movimentos = ArrayList<Movimento>()
+        val query = "SELECT * FROM $TABELA_MOVIMENTO" +
+                " WHERE $MOVIMENTO_DESCRICAO LIKE '%$pesquisa%'" +
+                " ORDER BY $TABLE_ID DESC"
+
+        val cursor = readableDatabase.rawQuery(query, null)
+        while (cursor.moveToNext()) {
+            val item = Movimento()
+            bind(cursor, item)
+
+            movimentos.add(item)
+        }
+        cursor.close()
+
+        return movimentos
+    }
+
     fun inserir(objeto: Movimento) {
         val insert = "INSERT INTO $TABELA_MOVIMENTO (" +
                 "$MOVIMENTO_DESCRICAO," +

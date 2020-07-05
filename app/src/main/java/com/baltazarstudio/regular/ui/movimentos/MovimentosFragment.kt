@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.database.dao.MovimentoDAO
 import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.ui.MainActivity
 import com.baltazarstudio.regular.ui.adapter.MovimentoAdapter
+import com.baltazarstudio.regular.util.Utils.Companion.gone
+import com.baltazarstudio.regular.util.Utils.Companion.visible
 import kotlinx.android.synthetic.main.fragment_movimentos.view.*
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.wrapContent
@@ -34,7 +37,7 @@ class MovimentosFragment : Fragment() {
         movimentoDAO = MovimentoDAO(v.context)
 
         setUpView()
-        setUpMovimentos()
+        setUpMovimentos(null)
 
         return v
     }
@@ -43,14 +46,23 @@ class MovimentosFragment : Fragment() {
         v.fab_add_movimento.setOnClickListener {
             val dialog = CriarMovimentoDialog(v.context, childFragmentManager)
             dialog.setOnDismissListener {
-                setUpMovimentos()
+                setUpMovimentos(null)
             }
             dialog.show()
+
+            (activity as MainActivity).searchMenuItem.collapseActionView()
         }
     }
 
-    private fun setUpMovimentos() {
-        val itensMovimentos = movimentoDAO.getTodosMovimentos()
+    private fun setUpMovimentos(pesquisa: String?) {
+        val itensMovimentos: List<Movimento>
+        if (pesquisa.isNullOrBlank()) {
+            itensMovimentos = movimentoDAO.getTodosMovimentos()
+            v.fab_add_movimento.visible()
+        } else {
+            itensMovimentos = movimentoDAO.getTodosMovimentos(pesquisa)
+            v.fab_add_movimento.gone()
+        }
 
         val excluir = { item: Movimento ->
             AlertDialog.Builder(context!!)
@@ -59,38 +71,47 @@ class MovimentosFragment : Fragment() {
                 .setPositiveButton("Sim") { _, _ ->
                     movimentoDAO.excluir(item)
                     Toast.makeText(context, "Removido!", Toast.LENGTH_SHORT).show()
-                    setUpMovimentos()
+                    setUpMovimentos(pesquisa)
                 }
                 .setNegativeButton("Não", null)
                 .show()
         }
 
         v.ll_movimentos.removeAllViews()
-        val lp = ViewGroup.LayoutParams(matchParent, wrapContent)
 
-        for (ano in movimentoDAO.getAnosDisponiveis()) {
-            for (mes in movimentoDAO.getMesDisponivelPorAno(ano)) {
-                val itens = itensMovimentos.filter { it.mes == mes && it.ano == ano }
+        if (itensMovimentos.isNotEmpty()) {
+            val lp = ViewGroup.LayoutParams(matchParent, wrapContent)
 
-                val recyclerView = RecyclerView(v.context)
-                recyclerView.layoutParams = lp
+            for (ano in movimentoDAO.getAnosDisponiveis()) {
+                for (mes in movimentoDAO.getMesDisponivelPorAno(ano)) {
+                    val itens = itensMovimentos.filter { it.mes == mes && it.ano == ano }
 
-                val adapter = MovimentoAdapter(v.context, Pair(mes, ano), itens, excluir)
-                recyclerView.adapter = adapter
-                recyclerView.layoutManager = LinearLayoutManager(v.context)
+                    if (itens.isEmpty()) continue
 
-                recyclerView.addItemDecoration(
-                    DividerItemDecoration(
-                        v.context,
-                        DividerItemDecoration.VERTICAL
+                    val recyclerView = RecyclerView(v.context)
+                    recyclerView.layoutParams = lp
+
+                    val adapter = MovimentoAdapter(v.context, Pair(mes, ano), itens, excluir)
+                    recyclerView.adapter = adapter
+                    recyclerView.layoutManager = LinearLayoutManager(v.context)
+
+                    recyclerView.addItemDecoration(
+                        DividerItemDecoration(
+                            v.context,
+                            DividerItemDecoration.VERTICAL
+                        )
                     )
-                )
 
-                v.ll_movimentos.addView(recyclerView)
+                    v.ll_movimentos.addView(recyclerView)
+                }
             }
         }
 
 
+    }
+
+    fun filtrarDescricao(query: String?) {
+        setUpMovimentos(query)
     }
 
     override fun onResume() {
