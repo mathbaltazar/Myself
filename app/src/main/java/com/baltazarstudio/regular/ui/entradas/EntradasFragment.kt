@@ -51,8 +51,14 @@ class EntradasFragment : Fragment() {
         v.rv_entradas.layoutManager = LinearLayoutManager(v.context)
 
         v.button_entradas_add.setOnClickListener {
-            val dialog =
-                NovaEntradaDialog(v.context, entradaDAO, listaDonos.minusElement(TODOS))
+            val dialog = NovaEntradaDialog(v.context, entradaDAO, listaDonos.minusElement(TODOS))
+            dialog.setOnDismissListener {
+                if (dialog.isAdicionado) {
+                    val position = v.spinner_entradas_dono.selectedItemPosition
+                    v.rv_entradas.adapter =
+                        EntradasAdapter(v.context, entradaDAO, listaDonos[position])
+                }
+            }
             dialog.show()
         }
     }

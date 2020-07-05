@@ -22,6 +22,8 @@ class NovaEntradaDialog(
     private val donos: List<String>
 ) : Dialog(context) {
 
+    var isAdicionado: Boolean = false
+
     init {
         setContentView(R.layout.dialog_nova_entrada)
         setupView()
@@ -74,6 +76,7 @@ class NovaEntradaDialog(
                 dao.inserir(novaEntrada)
                 context.toast("Adicionado!")
 
+                isAdicionado = true
                 dismiss()
             }
 

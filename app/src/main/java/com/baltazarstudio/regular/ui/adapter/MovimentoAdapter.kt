@@ -26,8 +26,20 @@ class MovimentoAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == HEADER_VIEW_TYPE)
-            return HeaderViewHolder(layoutInflater.inflate(R.layout.layout_header_movimento, parent,false))
-        return MovimentoViewHolder(layoutInflater.inflate(R.layout.layout_item_movimento, parent,false))
+            return HeaderViewHolder(
+                layoutInflater.inflate(
+                    R.layout.layout_header_movimento,
+                    parent,
+                    false
+                )
+            )
+        return MovimentoViewHolder(
+            layoutInflater.inflate(
+                R.layout.layout_item_movimento,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -81,21 +93,23 @@ class MovimentoAdapter(
         }
     }
 
-    private fun getMesString(mes: Int): String {
-        return when (mes) {
-            Calendar.JANUARY -> "JANEIRO"
-            Calendar.FEBRUARY -> "FEVEREIRO"
-            Calendar.MARCH -> "MARÇO"
-            Calendar.APRIL -> "ABRIL"
-            Calendar.MAY -> "MAIO"
-            Calendar.JUNE -> "JUNHO"
-            Calendar.JULY -> "JULHO"
-            Calendar.AUGUST -> "AGOSTO"
-            Calendar.SEPTEMBER -> "SETEMBRO"
-            Calendar.OCTOBER -> "OUTUBRO"
-            Calendar.NOVEMBER -> "NOVEMBRO"
-            Calendar.DECEMBER -> "DEZEMBRO"
-            else -> ""
+    companion object {
+        private fun getMesString(mes: Int): String {
+            return when (mes) {
+                Calendar.JANUARY -> "JANEIRO"
+                Calendar.FEBRUARY -> "FEVEREIRO"
+                Calendar.MARCH -> "MARÇO"
+                Calendar.APRIL -> "ABRIL"
+                Calendar.MAY -> "MAIO"
+                Calendar.JUNE -> "JUNHO"
+                Calendar.JULY -> "JULHO"
+                Calendar.AUGUST -> "AGOSTO"
+                Calendar.SEPTEMBER -> "SETEMBRO"
+                Calendar.OCTOBER -> "OUTUBRO"
+                Calendar.NOVEMBER -> "NOVEMBRO"
+                Calendar.DECEMBER -> "DEZEMBRO"
+                else -> ""
+            }
         }
     }
 }
