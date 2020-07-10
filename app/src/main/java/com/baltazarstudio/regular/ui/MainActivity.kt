@@ -24,7 +24,7 @@ import org.jetbrains.anko.intentFor
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var movimentoFragment: MovimentosFragment
-    lateinit var searchMenuItem: MenuItem
+    var searchMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +49,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
             override fun onPageSelected(position: Int) {
                 if (position == 0) {
-                    searchMenuItem.isVisible = true
+                    searchMenuItem?.isVisible = true
                 } else {
-                    searchMenuItem.isVisible = false
-                    searchMenuItem.collapseActionView()
+                    searchMenuItem?.isVisible = false
+                    searchMenuItem?.collapseActionView()
                 }
             }
         })
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         menuInflater.inflate(R.menu.menu_main, menu)
         searchMenuItem = menu.findItem(R.id.action_pesquisar)
 
-        val searchView = searchMenuItem.actionView as SearchView
+        val searchView = searchMenuItem?.actionView as SearchView
         searchView.onActionViewCollapsed()
         searchView.queryHint = "Descrição..."
         searchView.setOnQueryTextListener(this)

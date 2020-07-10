@@ -50,7 +50,7 @@ class MovimentosFragment : Fragment() {
             }
             dialog.show()
 
-            (activity as MainActivity).searchMenuItem.collapseActionView()
+            (activity as MainActivity).searchMenuItem?.collapseActionView()
         }
     }
 
