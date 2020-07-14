@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.database.dao.EntradaDAO
@@ -12,10 +13,7 @@ import com.baltazarstudio.regular.ui.entradas.EntradasFragment
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.list_item_entradas.view.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.noButton
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.yesButton
 
 class EntradasAdapter(context: Context, private val dao: EntradaDAO, dono: String) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -23,7 +21,7 @@ class EntradasAdapter(context: Context, private val dao: EntradaDAO, dono: Strin
 
     private val layoutInflater: LayoutInflater
     private val entradas: ArrayList<Entrada>
-    private var expanded: Boolean = false
+    private var expanded = hashSetOf<Int>()
 
     init {
         this.layoutInflater = LayoutInflater.from(context)
@@ -51,27 +49,29 @@ class EntradasAdapter(context: Context, private val dao: EntradaDAO, dono: Strin
             val entrada = entradas[position]
 
             itemView.setOnClickListener {
-                expanded = !expanded
-                notifyItemChanged(adapterPosition)
+                if (expanded.contains(position))
+                    expanded.remove(position)
+                else
+                    expanded.add(position)
+                notifyItemChanged(position)
             }
 
             itemView.setOnLongClickListener {
-                itemView.context.alert {
-                    title = "Atenção"
-                    message = "Confirma a exclusão da entrada?"
-
-                    yesButton {
+                AlertDialog.Builder(itemView.context)
+                    .setTitle("Atenção")
+                    .setMessage("Confirma a exclusão da entrada?")
+                    .setPositiveButton("Sim") { _, _ ->
                         dao.remover(entrada)
                         itemView.context.toast("Excluído!")
                         entradas.remove(entrada)
                         notifyItemRemoved(adapterPosition)
                     }
-                    noButton { }
-                }.show()
+                    .setNegativeButton("Não", null)
+                    .show()
                 true
             }
 
-            if (expanded) {
+            if (expanded.contains(position)) {
                 itemView.ll_item_entradas_info.visibility = View.VISIBLE
                 itemView.iv_item_entradas_expand_arrow.setImageResource(R.drawable.ic_arrow_up)
             } else {
