@@ -7,6 +7,7 @@
     android:padding="@dimen/all_default_layout_offset_4">
 
     <TextView
+        android:id="@+id/tv_dialog_novo_movimento_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset_4"
@@ -57,17 +58,12 @@
         android:layout_height="wrap_content"
         android:hint="Data"
         android:padding="@dimen/all_default_layout_offset_4"
-        app:counterMaxLength="10"
-        app:endIconDrawable="@drawable/ic_edit"
-        app:endIconMode="custom">
+        app:counterMaxLength="10">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textinput_dialog_novo_movimento_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:inputType="number"
             android:maxLength="10" />
     </com.google.android.material.textfield.TextInputLayout>

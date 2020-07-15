@@ -17,19 +17,13 @@ abstract class Database<T>(context: Context) :
         EntradaDAO.onCreate(db)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion == 1 && newVersion == 2) {
-            ConfiguracaoDAO.onCreate(db)
-        } else if (oldVersion == 2 && newVersion == 3) {
-            EntradaDAO.onCreate(db)
-        }
-    }
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { }
 
-    abstract fun bind(cursor: Cursor, objeto: T)
+    abstract fun bind(cursor: Cursor, elemento: T)
 
     companion object {
         private const val DATABASE_NAME = "RegularDB"
-        private const val DATABASE_VERSION = 3
+        private const val DATABASE_VERSION = 1
         const val TABLE_ID = "id"
     }
 

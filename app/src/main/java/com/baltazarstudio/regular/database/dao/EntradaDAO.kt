@@ -8,12 +8,12 @@ import com.baltazarstudio.regular.model.Entrada
 
 class EntradaDAO(context: Context) : Database<Entrada>(context) {
 
-    override fun bind(cursor: Cursor, objeto: Entrada) {
-        objeto.id = cursor.getInt(cursor.getColumnIndex(TABLE_ID))
-        objeto.descricao = cursor.getString(cursor.getColumnIndex(ENTRADA_DESCRICAO))
-        objeto.valor = cursor.getDouble(cursor.getColumnIndex(ENTRADA_VALOR))
-        objeto.data = cursor.getLong(cursor.getColumnIndex(ENTRADA_DATA))
-        objeto.dono = cursor.getString(cursor.getColumnIndex(ENTRADA_DONO))
+    override fun bind(cursor: Cursor, elemento: Entrada) {
+        elemento.id = cursor.getInt(cursor.getColumnIndex(TABLE_ID))
+        elemento.descricao = cursor.getString(cursor.getColumnIndex(ENTRADA_DESCRICAO))
+        elemento.valor = cursor.getDouble(cursor.getColumnIndex(ENTRADA_VALOR))
+        elemento.data = cursor.getLong(cursor.getColumnIndex(ENTRADA_DATA))
+        elemento.dono = cursor.getString(cursor.getColumnIndex(ENTRADA_DONO))
     }
 
     fun getTodasEntradas(): ArrayList<Entrada> {

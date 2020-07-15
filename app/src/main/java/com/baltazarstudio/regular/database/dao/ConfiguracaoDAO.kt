@@ -8,10 +8,10 @@ import com.baltazarstudio.regular.model.Configuracao
 
 class ConfiguracaoDAO(context: Context) : Database<Configuracao>(context) {
 
-    override fun bind(cursor: Cursor, objeto: Configuracao) {
-        objeto.url = cursor.getString(cursor.getColumnIndex(CONFIGURACAO_URL))
-        objeto.porta = cursor.getString(cursor.getColumnIndex(CONFIGURACAO_PORTA))
-        objeto.dataUltimaSincronizacao =
+    override fun bind(cursor: Cursor, elemento: Configuracao) {
+        elemento.url = cursor.getString(cursor.getColumnIndex(CONFIGURACAO_URL))
+        elemento.porta = cursor.getString(cursor.getColumnIndex(CONFIGURACAO_PORTA))
+        elemento.dataUltimaSincronizacao =
             cursor.getString(cursor.getColumnIndex(CONFIGURACAO_DATA_ULTIMA_SINCRONIZACAO))
     }
 
