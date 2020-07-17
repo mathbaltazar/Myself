@@ -151,10 +151,10 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
             movimentos.forEach {
                 //stmt.bindLong(1, it.id!!.toLong())
                 stmt.bindString(1, it.descricao)
-                stmt.bindLong(2, it.mes.toLong())
-                stmt.bindLong(3, it.ano.toLong())
-                stmt.bindLong(4, it.data)
-                stmt.bindDouble(5, it.valor)
+                stmt.bindDouble(2, it.valor)
+                stmt.bindLong(3, it.mes.toLong())
+                stmt.bindLong(4, it.ano.toLong())
+                stmt.bindLong(5, it.data)
                 
                 stmt.executeInsert()
                 stmt.clearBindings()

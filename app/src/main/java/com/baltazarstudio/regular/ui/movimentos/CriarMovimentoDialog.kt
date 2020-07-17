@@ -63,7 +63,6 @@ class CriarMovimentoDialog(context: Context) : Dialog(context) {
                 movimento.valor = Utils.unformatCurrency(valor).toDouble()
                 movimento.data = SimpleDateFormat("dd/MM/yyyy").parse(data).time
                 
-                Log.w("DATA SALVA: ", movimento.data.formattedDate())
                 
                 data = data.replace("/", "")
                 //movimento.dia = data.substring(0, 2).toInt()
