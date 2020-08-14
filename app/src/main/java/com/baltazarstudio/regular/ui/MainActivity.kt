@@ -1,77 +1,101 @@
 package com.baltazarstudio.regular.ui
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentTransaction
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.notification.Notification
-import com.baltazarstudio.regular.ui.adapter.PagerAdapter
 import com.baltazarstudio.regular.ui.backup.DadosBackupActivity
 import com.baltazarstudio.regular.ui.entradas.EntradasFragment
 import com.baltazarstudio.regular.ui.movimentos.MovimentosFragment
-import com.baltazarstudio.regular.util.Utils.Companion.gone
-import com.baltazarstudio.regular.util.Utils.Companion.visible
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main_content.*
 import org.jetbrains.anko.intentFor
 
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
-
-    private lateinit var movimentoFragment: MovimentosFragment
+class MainActivity : AppCompatActivity() {
+    
+    private val movimentoFragment = MovimentosFragment()
+    private val entradasFragment = EntradasFragment()
+    
     var searchMenuItem: MenuItem? = null
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        tab_layout.setupWithViewPager(vp_content_main)
-
-        val adapter = PagerAdapter(supportFragmentManager)
-        movimentoFragment = MovimentosFragment()
-        adapter.addFragment(movimentoFragment, "Movimentos")
-        adapter.addFragment(EntradasFragment(), "Entradas")
-        vp_content_main.adapter = adapter
-
-        vp_content_main.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {}
-
-            override fun onPageSelected(position: Int) {
-                if (position == 0) {
+        
+        val toggle = DrawerToggle(
+            this,
+            drawer_layout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+        
+        drawer_navigation_view.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_drawer_movimentos -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, movimentoFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+                    
+                    toolbar.setTitle(R.string.activity_title_meus_registros)
                     searchMenuItem?.isVisible = true
-                } else {
+                }
+                R.id.menu_drawer_entradas -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, entradasFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+                    
+                    toolbar.setTitle(R.string.activity_title_entradas)
                     searchMenuItem?.isVisible = false
                     searchMenuItem?.collapseActionView()
                 }
             }
-        })
-
+            
+            menuItem.isChecked = true
+            drawer_layout.closeDrawer(GravityCompat.START)
+            true
+        }
+        
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, movimentoFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+        drawer_navigation_view.setCheckedItem(R.id.menu_drawer_movimentos)
+        
         Notification.createNotificationChannel(this)
     }
-
+    
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         searchMenuItem = menu.findItem(R.id.action_pesquisar)
-
-        val searchView = searchMenuItem?.actionView as SearchView
+        
+        val searchView = searchMenuItem!!.actionView as SearchView
         searchView.onActionViewCollapsed()
         searchView.queryHint = "Descrição..."
-        searchView.setOnQueryTextListener(this)
-
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+            
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
+        
         return true
     }
-
+    
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_dados_backup -> {
@@ -80,20 +104,37 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        return false
+    
+    override fun onBackPressed() {
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
+        }
     }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        movimentoFragment.filtrarDescricao(newText)
-        if (newText.isNullOrBlank()) tab_layout.visible()
-        else tab_layout.gone()
-        return true
-    }
-
+    
     override fun onResume() {
         super.onResume()
         Notification.notificar(this)
+    }
+    
+    private class DrawerToggle(
+        activity: Activity?,
+        private val drawerLayout: DrawerLayout?,
+        toolbar: Toolbar?,
+        openDrawerContentDescRes: Int,
+        closeDrawerContentDescRes: Int
+    ) : ActionBarDrawerToggle(
+        activity,
+        drawerLayout,
+        toolbar,
+        openDrawerContentDescRes,
+        closeDrawerContentDescRes
+    ) {
+    
+        override fun onDrawerOpened(drawerView: View) {
+            super.onDrawerOpened(drawerView)
+            drawerView.bringToFront()
+            drawerLayout?.requestLayout()
+        }
+        
     }
 }

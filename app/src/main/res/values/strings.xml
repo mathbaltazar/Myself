@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">Regular</string>
-    <string name="activity_main_title">Meus Registros</string>
+    <string name="activity_title_meus_registros">Meus Registros</string>
+    <string name="activity_title_entradas">Entradas</string>
     <string name="activity_main_menu_dados_backup">Dados</string>
     <string name="activity_main_menu_pesquisar">Pesquisar</string>
+
+    <string name="drawer_menu_movimentos">Movimentos</string>
+    <string name="drawer_menu_entradas">Entradas</string>
+
+    <string name="navigation_drawer_open">Open drawer</string>
+    <string name="navigation_drawer_close">Close drawer</string>
 
 </resources>

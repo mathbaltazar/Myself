@@ -9,8 +9,8 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
-import kotlinx.android.synthetic.main.layout_header_movimento.view.*
-import kotlinx.android.synthetic.main.layout_item_movimento.view.*
+import kotlinx.android.synthetic.main.layout_section_header_movimento.view.*
+import kotlinx.android.synthetic.main.layout_section_item_movimento.view.*
 
 class MovimentoAdapter(
     context: Context,
@@ -25,12 +25,12 @@ class MovimentoAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == HEADER_VIEW_TYPE) return HeaderViewHolder(
             layoutInflater.inflate(
-                R.layout.layout_header_movimento, parent, false
+                R.layout.layout_section_header_movimento, parent, false
             )
         )
         return ItemViewHolder(
             layoutInflater.inflate(
-                R.layout.layout_item_movimento, parent, false
+                R.layout.layout_section_item_movimento, parent, false
             )
         )
     }
