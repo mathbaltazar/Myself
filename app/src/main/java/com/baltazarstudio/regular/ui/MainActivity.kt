@@ -32,13 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         
-        val toggle = DrawerToggle(
-            this,
-            drawer_layout,
-            toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
+        val toggle = DrawerToggle(this, drawer_layout, toolbar)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         
@@ -109,6 +103,7 @@ class MainActivity : AppCompatActivity() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         }
+        super.onBackPressed()
     }
     
     override fun onResume() {
@@ -119,17 +114,12 @@ class MainActivity : AppCompatActivity() {
     private class DrawerToggle(
         activity: Activity?,
         private val drawerLayout: DrawerLayout?,
-        toolbar: Toolbar?,
-        openDrawerContentDescRes: Int,
-        closeDrawerContentDescRes: Int
+        toolbar: Toolbar?
     ) : ActionBarDrawerToggle(
-        activity,
-        drawerLayout,
-        toolbar,
-        openDrawerContentDescRes,
-        closeDrawerContentDescRes
+        activity, drawerLayout, toolbar, android.R.string.yes, android.R.string.cancel
     ) {
-    
+        
+        
         override fun onDrawerOpened(drawerView: View) {
             super.onDrawerOpened(drawerView)
             drawerView.bringToFront()
