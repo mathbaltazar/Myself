@@ -7,4 +7,6 @@
     <dimen name="text_size_24">24sp</dimen>
     <dimen name="all_default_layout_offset_8">8dp</dimen>
     <dimen name="text_size_18">18sp</dimen>
+    <dimen name="all_default_layout_offset_16">16dp</dimen>
+    <dimen name="text_size_36">36sp</dimen>
 </resources>

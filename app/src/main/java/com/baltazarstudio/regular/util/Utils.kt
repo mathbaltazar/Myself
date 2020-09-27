@@ -1,8 +1,8 @@
 package com.baltazarstudio.regular.util
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Point
-import android.view.View
 import android.view.WindowManager
 import java.text.NumberFormat
 import java.text.ParseException
@@ -20,6 +20,32 @@ class Utils {
 
         fun Long.formattedDate(): String {
             return sdf.format(Date(this))
+        }
+        
+        fun String.parseDate() : Date {
+            return  sdf.parse(this)
+        }
+        
+        fun Dialog.setUpDimensions(x: Float, y: Float) {
+            val lp = WindowManager.LayoutParams()
+            lp.copyFrom(window?.attributes)
+            
+            if (x > 1 || y > 1)
+                throw IllegalArgumentException("Values can't be higher than 1")
+    
+            if (x.toInt() != WindowManager.LayoutParams.MATCH_PARENT || x.toInt() != WindowManager.LayoutParams.WRAP_CONTENT) {
+                lp.width = (getScreenSize(context).y * x).toInt()
+            } else {
+                lp.width = x.toInt()
+            }
+    
+            if (y.toInt() != WindowManager.LayoutParams.MATCH_PARENT || y.toInt() != WindowManager.LayoutParams.WRAP_CONTENT) {
+                lp.height = (getScreenSize(context).y * y).toInt()
+            } else {
+                lp.height = y.toInt()
+            }
+            
+            window?.attributes = lp
         }
 
         fun UTCInstanceCalendar(): Calendar {
@@ -61,18 +87,6 @@ class Utils {
             }
 
             return true
-        }
-
-        fun View.gone() {
-            this.visibility = View.GONE
-        }
-
-        fun View.visible() {
-            this.visibility = View.VISIBLE
-        }
-
-        fun View.invisible() {
-            this.visibility = View.INVISIBLE
         }
 
         fun getScreenSize(context: Context): Point {

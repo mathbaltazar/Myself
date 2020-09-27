@@ -3,11 +3,12 @@ package com.baltazarstudio.regular.ui.backup
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.database.dao.ConfiguracaoDAO
 import com.baltazarstudio.regular.database.dao.EntradaDAO
-import com.baltazarstudio.regular.database.dao.MovimentoDAO
+import com.baltazarstudio.regular.database.dao.GastoDAO
 import com.baltazarstudio.regular.model.Configuracao
 import com.baltazarstudio.regular.service.BackupService
 import com.baltazarstudio.regular.service.ConnectionTestService
@@ -64,29 +65,21 @@ class DadosBackupActivity : AppCompatActivity() {
             )
 
         button_backup_sincronizar_dados.setOnClickListener {
-            alert {
-                title = "Sincronizar"
-                message =
-                    "Sincronizar todos os seus dados atuais? (Todos os dados do servidor serão substuidos por estes)"
-                yesButton {
-                    conectar(FUNCAO_SINCRONIZAR)
-                }
-                noButton { }
-            }.show()
+            AlertDialog.Builder(this).setTitle("Sincronizar")
+                .setMessage("Sincronizar todos os seus dados atuais? (Todos os dados do servidor serão substuidos por estes)")
+                .setPositiveButton("Sincronizar") { _, _ -> conectar(FUNCAO_SINCRONIZAR) }
+                .setNegativeButton("Cancelar") { _, _ -> }
+                .create()
+                .show()
         }
 
         button_backup_restaurar.setOnClickListener {
-            alert {
-                title = "Atenção"
-                message =
-                    "Restaurar dados do servidor? (Todos os dados do dispositivo serão apagados!)" +
-                            "" +
-                            ")"
-                yesButton {
-                    conectar(FUNCAO_RESTAURAR)
-                }
-                noButton { }
-            }.show()
+            AlertDialog.Builder(this).setTitle("Atenção")
+                .setMessage("Restaurar dados do servidor? (Todos os dados deste dispositivo serão apagados!)")
+                .setPositiveButton("Sincronizar") { _, _ -> conectar(FUNCAO_RESTAURAR) }
+                .setNegativeButton("Cancelar") { _, _ -> }
+                .create()
+                .show()
         }
     }
 
@@ -145,7 +138,7 @@ class DadosBackupActivity : AppCompatActivity() {
 
 
         val request = SincronizarDadosBackupDTO()
-        request.movimentos = MovimentoDAO(this).getTodosMovimentos()
+        request.gastos = GastoDAO(this).getTodosGastos()
         request.entradas = EntradaDAO(this).getTodasEntradas()
         request.configuracao = mConfiguracao
         request.configuracao!!.dataUltimaSincronizacao =
@@ -191,7 +184,7 @@ class DadosBackupActivity : AppCompatActivity() {
                 button_backup_sincronizar_dados.isEnabled = true
 
                 val dto = t.body()!!
-                MovimentoDAO(this).restaurarMovimentos(dto.movimentos)
+                GastoDAO(this).restaurarGastos(dto.gastos)
                 EntradaDAO(this).restaurarEntradas(dto.entradas)
                 ConfiguracaoDAO(this).salvarConfiguracao(dto.configuracao)
 

@@ -4,131 +4,97 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.database.dao.MovimentoDAO
-import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.controller.DespesasController
+import com.baltazarstudio.regular.controller.GastosController
 import com.baltazarstudio.regular.ui.MainActivity
-import com.baltazarstudio.regular.ui.adapter.MovimentoAdapter
-import com.baltazarstudio.regular.util.Utils.Companion.gone
-import com.baltazarstudio.regular.util.Utils.Companion.visible
-import kotlinx.android.synthetic.main.fragment_movimentos.view.*
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.wrapContent
+import kotlinx.android.synthetic.main.fragment_movimentos.*
+import java.lang.IndexOutOfBoundsException
 
 
 class MovimentosFragment : Fragment() {
     
-    private lateinit var v: View
-    private lateinit var movimentoDAO: MovimentoDAO
+    private lateinit var gastoController: GastosController
+    private lateinit var despesasController: DespesasController
     private var firstUse: Boolean = true
     
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        v = inflater.inflate(R.layout.fragment_movimentos, container, false)
-        
-        movimentoDAO = MovimentoDAO(v.context)
-        
+        return inflater.inflate(R.layout.fragment_movimentos, container, false)
+    }
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpView()
-        setUpMovimentos(null)
-        
-        return v
     }
     
     private fun setUpView() {
-        v.fab_add_movimento.setOnClickListener {
-            val dialog = CriarMovimentoDialog(v.context)
-            dialog.setOnDismissListener {
-                setUpMovimentos(null)
+        
+        vp_movimentos.adapter = object : PagerAdapter() {
+            override fun isViewFromObject(view: View, `object`: Any): Boolean {
+                return view == `object`
             }
-            dialog.show()
             
-            (activity as MainActivity).searchMenuItem?.collapseActionView()
+            override fun getCount(): Int {
+                return 2
+            }
+            
+            override fun instantiateItem(container: ViewGroup, position: Int): Any {
+                return initializeControllers(container, position)
+            }
+            
+            override fun getPageTitle(position: Int): CharSequence? {
+                return if (position == 0) "Gastos" else "Despesas"
+            }
+            
         }
+        tablayout_movimentos.setupWithViewPager(vp_movimentos)
+        tablayout_movimentos.getTabAt(0)!!.setIcon(R.drawable.ic_gastos)
+        tablayout_movimentos.getTabAt(1)!!.setIcon(R.drawable.ic_despesas)
+        
+        vp_movimentos.addOnPageChangeListener(object :
+        ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {}
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            override fun onPageSelected(position: Int) {
+                (requireActivity() as MainActivity).searchMenuItem?.isVisible = position == 0
+            }
+        })
     }
     
-    private fun setUpMovimentos(pesquisa: String?) {
-        val itensMovimentos: List<Movimento>
-        if (pesquisa.isNullOrBlank()) {
-            itensMovimentos = movimentoDAO.getTodosMovimentos()
-            v.fab_add_movimento.visible()
-        } else {
-            itensMovimentos = movimentoDAO.getTodosMovimentos(pesquisa.trim())
-            v.fab_add_movimento.gone()
-        }
-    
-    
-        val listener = object : MovimentoAdapter.ItemActionListener {
-            override fun click(item: Movimento, adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>, position: Int) {
-            
-                val dialog = CriarMovimentoDialog(v.context).edit(item)
-                dialog.setOnDismissListener {
-                    adapter.notifyItemChanged(position)
-                    setUpMovimentos(pesquisa)
-                }
-                dialog.show()
-                
-            }
-    
-            override fun longClick(item: Movimento, adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>, position: Int) {
-                
-                AlertDialog.Builder(context!!)
-                        .setTitle("Excluir")
-                        .setMessage("Confirmar exclusão")
-                        .setPositiveButton("Sim") { _, _ ->
-                            movimentoDAO.excluir(item)
-                            Toast.makeText(context, "Removido!", Toast.LENGTH_SHORT).show()
-                            setUpMovimentos(pesquisa)
-                        }
-                        .setNegativeButton("Não", null)
-                        .show()
-            }
+    private fun initializeControllers(container: ViewGroup, position: Int): View {
+        var view: View? = null
+        if (position == 0) {
+            view = layoutInflater.inflate(R.layout.layout_page_movimentos_gastos, container, false)
+            gastoController = GastosController(view)
+            gastoController.init()
+        } else if (position == 1) {
+            view = layoutInflater.inflate(R.layout.layout_page_movimentos_despesas, container, false)
+            despesasController = DespesasController(view, gastoController)
+            despesasController.init()
         }
         
-        
-        v.ll_movimentos.removeAllViews()
-        
-        if (itensMovimentos.isNotEmpty()) {
-            val lp = ViewGroup.LayoutParams(matchParent, wrapContent)
-            
-            for (ano in movimentoDAO.getAnosDisponiveis()) {
-                for (mes in movimentoDAO.getMesDisponivelPorAno(ano)) {
-                    val itens = itensMovimentos.filter { it.mes == mes && it.ano == ano }
-                    
-                    if (itens.isEmpty()) continue
-                    
-                    val recyclerView = RecyclerView(v.context)
-                    recyclerView.layoutParams = lp
-                    
-                    val adapter = MovimentoAdapter(v.context, Pair(mes, ano), itens, listener)
-                    recyclerView.adapter = adapter
-                    recyclerView.layoutManager = LinearLayoutManager(v.context)
-                    
-                    recyclerView.addItemDecoration(DividerItemDecoration(v.context, DividerItemDecoration.VERTICAL))
-                    
-                    v.ll_movimentos.addView(recyclerView)
-                }
-            }
+        if (view != null) {
+            container.addView(view)
+            return view
         }
-        
-        
+        throw IndexOutOfBoundsException("MovimentosFragment#initializeControllers: There are no view left")
     }
     
     fun filtrarDescricao(query: String?) {
-        setUpMovimentos(query)
+        gastoController.carregarGastos(query)
     }
     
     override fun onResume() {
         super.onResume()
         
-        if (activity?.intent?.action == "abrir_adicionar_movimento" && firstUse) {
-            v.fab_add_movimento.performClick()
+        if (activity?.intent?.action == "abrir_adicionar_gasto" && firstUse) {
+            gastoController.adicionarGasto()
+            (requireActivity() as MainActivity).searchMenuItem?.collapseActionView()
         }
         firstUse = false
     }

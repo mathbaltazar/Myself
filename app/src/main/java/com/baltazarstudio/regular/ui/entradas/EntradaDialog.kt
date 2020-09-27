@@ -16,7 +16,7 @@ import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NovaEntradaDialog(
+class EntradaDialog(
     context: Context,
     private val dao: EntradaDAO,
     private val donos: List<String>
@@ -35,20 +35,12 @@ class NovaEntradaDialog(
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner_dialog_nova_entrada_dono.adapter = adapter
 
-
-
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
         textinput_dialog_nova_entrada_data.setText(sdf.format(Date()))
         textinput_dialog_nova_entrada_data.apply { addTextChangedListener(DateMask(this)) }
 
         textinput_dialog_nova_entrada_valor.apply { addTextChangedListener(CurrencyMask(this)) }
-
-
-
-
-
-
-
+        
         button_dialog_nova_entrada_adicionar.setOnClickListener {
 
             val valor = textinput_dialog_nova_entrada_valor.text.toString()

@@ -41,7 +41,7 @@ class Notification {
         fun notificar(context: Context) {
             val intent = Intent(context, MainActivity::class.java).apply {
                 setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                action = "abrir_adicionar_movimento"
+                action = "abrir_adicionar_gasto"
             }
             val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 

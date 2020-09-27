@@ -27,9 +27,35 @@ class MainActivity : AppCompatActivity() {
     
     var searchMenuItem: MenuItem? = null
     
+    /*override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        val db = object : SQLiteOpenHelper(this, "RegularDB", null, 1) {
+            override fun onCreate(db: SQLiteDatabase?) {
+            }
+    
+            override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+            }
+        }
+
+        DespesaDAO.onCreate(db.writableDatabase)
+        
+        val renameTable = "ALTER TABLE Movimento RENAME TO Gasto"
+        db.writableDatabase.execSQL(renameTable)
+        
+        val addColunasref = "ALTER TABLE Gasto ADD COLUMN referencia_despesa INTEGER"
+        db.writableDatabase.execSQL(addColunasref)
+        
+        val addColunasmargem = "ALTER TABLE Gasto ADD COLUMN margem_despesa DECIMAL(10,2)"
+        db.writableDatabase.execSQL(addColunasmargem)
+        
+    }*/
+
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        toolbar.setTitle(R.string.activity_title_meus_registros)
         setSupportActionBar(toolbar)
         
         val toggle = DrawerToggle(this, drawer_layout, toolbar)
@@ -83,6 +109,7 @@ class MainActivity : AppCompatActivity() {
             }
             
             override fun onQueryTextChange(newText: String?): Boolean {
+                movimentoFragment.filtrarDescricao(newText)
                 return true
             }
         })
@@ -102,8 +129,9 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
-        super.onBackPressed()
     }
     
     override fun onResume() {
