@@ -20,6 +20,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_dados_backup.*
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.jetbrains.anko.contentView
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -37,8 +40,9 @@ class DadosBackupActivity : AppCompatActivity() {
         private const val FUNCAO_SINCRONIZAR = "funcao_sincronizar"
         private const val FUNCAO_RESTAURAR = "funcao_restaurar"
     }
-
+    
     private lateinit var mConfiguracao: Configuracao
+    private lateinit var httpClient: OkHttpClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +89,13 @@ class DadosBackupActivity : AppCompatActivity() {
                 .create()
                 .show()
         }
+        
+        val mInterceptor = HttpLoggingInterceptor()
+        mInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        
+        httpClient = OkHttpClient().newBuilder()
+            .addInterceptor(mInterceptor)
+            .build()
     }
 
     private fun conectar(funcao: String) {
@@ -209,6 +220,7 @@ class DadosBackupActivity : AppCompatActivity() {
             .baseUrl(url) // Versão Futura: LOCALIZAR IP DO SERVIDOR
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(httpClient)
             .build()
 
         return retrofit.create(BackupService::class.java)
