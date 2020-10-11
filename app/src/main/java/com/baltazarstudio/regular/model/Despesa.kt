@@ -1,9 +1,7 @@
 package com.baltazarstudio.regular.model
 
 class Despesa {
+    var codigo: Int? = null
     var nome: String? = null
-    /** Not serialized */
-    var ultimoRegistro: Long = 0L
     var valor: Double = 0.0
-    var referencia: Int? = null
 }

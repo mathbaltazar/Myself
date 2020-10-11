@@ -12,7 +12,7 @@ class ConfiguracaoDAO(context: Context) : Database<Configuracao>(context) {
         elemento.url = cursor.getString(cursor.getColumnIndex(CONFIGURACAO_URL))
         elemento.porta = cursor.getString(cursor.getColumnIndex(CONFIGURACAO_PORTA))
         elemento.dataUltimaSincronizacao =
-            cursor.getString(cursor.getColumnIndex(CONFIGURACAO_DATA_ULTIMA_SINCRONIZACAO))
+            cursor.getLong(cursor.getColumnIndex(CONFIGURACAO_DATA_ULTIMA_SINCRONIZACAO))
     }
 
     fun getUltimaConfiguracao(): Configuracao {
@@ -43,7 +43,7 @@ class ConfiguracaoDAO(context: Context) : Database<Configuracao>(context) {
             stmt.bindString(1, configuracao.url)
             stmt.bindString(2, configuracao.porta)
             if (configuracao.dataUltimaSincronizacao == null) stmt.bindNull(3)
-            else stmt.bindString(3, configuracao.dataUltimaSincronizacao)
+            else stmt.bindLong(3, configuracao.dataUltimaSincronizacao!!)
 
 
             stmt.executeInsert()

@@ -1,12 +1,13 @@
-package com.baltazarstudio.regular.ui.movimentos
+package com.baltazarstudio.regular.ui.registros.movimentos
 
 import android.app.Dialog
 import android.content.Context
 import android.view.WindowManager
-import android.widget.Toast
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.controller.GastosController
-import com.baltazarstudio.regular.model.Gasto
+import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.observer.Trigger
+import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.DateMask
 import com.baltazarstudio.regular.util.Utils
@@ -14,13 +15,13 @@ import com.baltazarstudio.regular.util.Utils.Companion.UTCInstanceCalendar
 import com.baltazarstudio.regular.util.Utils.Companion.formatCurrency
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import com.baltazarstudio.regular.util.Utils.Companion.isDataValida
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_criar_movimento.*
+import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 
-class GastoDialog(
-    context: Context, private val controller: GastosController
-) : Dialog(context) {
+class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
     
     private var edit: Boolean = false
     private var id: Int? = null
@@ -42,7 +43,7 @@ class GastoDialog(
             
             val descricao = textinput_dialog_novo_movimento_descricao.text.toString()
             val valor = textinput_dialog_novo_movimento_valor.text.toString()
-            var data = textinput_dialog_novo_movimento_data.text.toString()
+            val data = textinput_dialog_novo_movimento_data.text.toString()
             
             if (descricao.isBlank()) {
                 textinput_dialog_novo_movimento_descricao.error =
@@ -57,29 +58,29 @@ class GastoDialog(
                 textinput_dialog_novo_movimento_data.error = null
                 
                 
-                val gasto = Gasto()
-                gasto.descricao = descricao
-                gasto.valor = Utils.unformatCurrency(valor).toDouble()
-                gasto.data = SimpleDateFormat("dd/MM/yyyy").parse(data).time
-                
-                
-                data = data.replace("/", "")
-                gasto.mes = data.substring(2, 4).toInt()
-                gasto.ano = data.substring(4).toInt()
+                val movimento = Movimento()
+                movimento.descricao = descricao
+                movimento.valor = Utils.unformatCurrency(valor).toDouble()
+                movimento.data = SimpleDateFormat("dd/MM/yyyy").parse(data).time
                 
                 
                 if (edit) {
-                    gasto.id = id
-                    controller.alterar(gasto)
-                    Toast.makeText(context, "Alterado!", Toast.LENGTH_LONG).show()
+                    movimento.id = id
+                    MovimentoContext.getDAO(context).alterar(movimento)
+                    Trigger.launch(TriggerEvent.Toast("Alterado!"))
                 } else {
-                    controller.inserir(gasto)
-                    Toast.makeText(context, "Movimento adicionado!", Toast.LENGTH_LONG).show()
+                    MovimentoContext.getDAO(context).inserir(movimento)
+                    Trigger.launch(TriggerEvent.Toast("Movimento adicionado!"))
                 }
-                
-                controller.carregarGastos()
+    
+                Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+    
                 cancel()
             }
+        }
+        
+        textinput_dialog_novo_movimento_valor.onFocusChange { v, hasFocus ->
+            if (hasFocus) (v as TextInputEditText).setSelection(v.length())
         }
     }
     
@@ -94,17 +95,15 @@ class GastoDialog(
         window?.attributes = lp
     }
     
-    fun edit(gasto: Gasto): Dialog {
+    fun edit(movimento: Movimento) {
         edit = true
-        id = gasto.id
+        id = movimento.id
         
-        textinput_dialog_novo_movimento_descricao.setText(gasto.descricao)
-        textinput_dialog_novo_movimento_valor.setText(formatCurrency(gasto.valor))
-        textinput_dialog_novo_movimento_data.setText(gasto.data.formattedDate())
+        textinput_dialog_novo_movimento_descricao.setText(movimento.descricao)
+        textinput_dialog_novo_movimento_valor.setText(formatCurrency(movimento.valor))
+        textinput_dialog_novo_movimento_data.setText(movimento.data?.formattedDate())
         button_dialog_novo_movimento_adicionar.text = "Alterar"
         tv_dialog_novo_movimento_title.text = "Alterar Movimento"
-        
-        return this
     }
     
     private fun isValorValido(valor: String): Boolean {

@@ -1,18 +1,22 @@
-package com.baltazarstudio.regular.ui.despesa
+package com.baltazarstudio.regular.ui.registros.despesa
 
 import android.app.Dialog
 import android.content.Context
 import android.view.WindowManager
 import android.widget.Toast
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.controller.DespesasController
+import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.model.Despesa
+import com.baltazarstudio.regular.observer.Trigger
+import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.Utils
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_despesa.*
+import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import java.math.BigDecimal
 
-class DespesasDialog(context: Context, private val controller: DespesasController) : Dialog(context) {
+class CriarDespesaDialog(context: Context) : Dialog(context) {
     
     init {
         setUpView()
@@ -23,6 +27,8 @@ class DespesasDialog(context: Context, private val controller: DespesasControlle
         setContentView(R.layout.dialog_despesa)
         
         et_dialog_despesa_valor.apply { addTextChangedListener(CurrencyMask(this)) }
+        et_dialog_despesa_valor.onFocusChange { v, hasFocus ->
+            if (hasFocus) (v as TextInputEditText).setSelection(v.length()) }
         
         button_dialog_despesa_cadastrar.setOnClickListener {
             val nome = et_dialog_despesa_nome.text.toString()
@@ -38,14 +44,13 @@ class DespesasDialog(context: Context, private val controller: DespesasControlle
                 despesa.nome = nome
                 despesa.valor = Utils.unformatCurrency(valor).toDouble()
                 
-                controller.inserirDespesa(despesa)
+                DespesaContext.getDAO(context).inserir(despesa)
                 Toast.makeText(context, "Despesa adicionada!", Toast.LENGTH_SHORT).show()
+                
+                Trigger.launch(TriggerEvent.UpdateTelaDespesa())
+                
                 cancel()
             }
-        }
-        
-        setOnDismissListener {
-            controller.carregarDespesas()
         }
     }
     

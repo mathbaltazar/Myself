@@ -1,42 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.entradas.EntradasFragment">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/all_default_layout_offset_8"
-        android:background="@drawable/spinner_container_background">
-
-        <Spinner
-            android:id="@+id/spinner_entradas_dono"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/all_default_layout_offset_4"
-            android:background="@drawable/spinner_background"
-            android:dropDownWidth="match_parent"
-            android:padding="@dimen/all_default_layout_offset_8"
-            android:spinnerMode="dropdown" />
-    </FrameLayout>
+    tools:context=".ui.registros.entradas.EntradasFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_entradas"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
         android:padding="@dimen/all_default_layout_offset_4" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/button_entradas_add"
+    <TextView
+        android:id="@+id/tv_entradas_empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/all_default_layout_offset_16"
-        android:layout_marginVertical="@dimen/all_default_layout_offset_8"
-        android:text="Adicionar Entrada"
-        android:textAlignment="center" />
+        android:layout_marginTop="@dimen/text_size_16"
+        android:text="Não há entradas registradas!"
+        android:textAlignment="center"
+        android:textStyle="italic" />
 
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_entradas_add"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/off_primary"
+        android:layout_marginEnd="@dimen/all_default_layout_offset_16"
+        android:layout_marginBottom="@dimen/all_default_layout_offset_16"
+        android:src="@drawable/ic_add" />
+
+</RelativeLayout>

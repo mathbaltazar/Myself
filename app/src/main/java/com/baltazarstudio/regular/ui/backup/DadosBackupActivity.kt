@@ -6,9 +6,11 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.baltazarstudio.regular.R
+import com.baltazarstudio.regular.context.ConfigContext
+import com.baltazarstudio.regular.context.DespesaContext
+import com.baltazarstudio.regular.context.EntradaContext
+import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.database.dao.ConfiguracaoDAO
-import com.baltazarstudio.regular.database.dao.EntradaDAO
-import com.baltazarstudio.regular.database.dao.GastoDAO
 import com.baltazarstudio.regular.model.Configuracao
 import com.baltazarstudio.regular.service.BackupService
 import com.baltazarstudio.regular.service.ConnectionTestService
@@ -18,10 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_dados_backup.*
 import okhttp3.HttpUrl
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.contentView
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.yesButton
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -58,11 +57,16 @@ class DadosBackupActivity : AppCompatActivity() {
             conectar("")
         }
 
-        tv_backup_teste_ultima_sincronizacao.text =
-            String.format(
-                "Última sincronização: %s",
-                mConfiguracao.dataUltimaSincronizacao ?: "Não Disponível"
-            )
+        
+        val lastSync = mConfiguracao.dataUltimaSincronizacao
+        if (lastSync != null && lastSync != 0L) {
+            val data = Date(lastSync)
+            tv_backup_teste_ultima_sincronizacao.text =
+                SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)
+        } else {
+            tv_backup_teste_ultima_sincronizacao.text = "Não Disponível"
+        }
+        
 
         button_backup_sincronizar_dados.setOnClickListener {
             AlertDialog.Builder(this).setTitle("Sincronizar")
@@ -75,7 +79,7 @@ class DadosBackupActivity : AppCompatActivity() {
 
         button_backup_restaurar.setOnClickListener {
             AlertDialog.Builder(this).setTitle("Atenção")
-                .setMessage("Restaurar dados do servidor? (Todos os dados deste dispositivo serão apagados!)")
+                .setMessage("Restaurar dados do servidor?")
                 .setPositiveButton("Sincronizar") { _, _ -> conectar(FUNCAO_RESTAURAR) }
                 .setNegativeButton("Cancelar") { _, _ -> }
                 .create()
@@ -85,8 +89,7 @@ class DadosBackupActivity : AppCompatActivity() {
 
     private fun conectar(funcao: String) {
         if (!isUrlValida()) return
-
-
+        
         tv_backup_teste_conexao_mensagem.visibility = View.GONE
         progress_backup_loading.visibility = View.VISIBLE
         button_backup_testar_conexao.isEnabled = false
@@ -138,11 +141,11 @@ class DadosBackupActivity : AppCompatActivity() {
 
 
         val request = SincronizarDadosBackupDTO()
-        request.gastos = GastoDAO(this).getTodosGastos()
-        request.entradas = EntradaDAO(this).getTodasEntradas()
+        request.movimentos = MovimentoContext.getDAO(this).getTodosMovimentos()
+        request.despesas = DespesaContext.getDAO(this).getTodasDespesas()
+        request.entradas = EntradaContext.getDAO(this).getTodasEntradas()
         request.configuracao = mConfiguracao
-        request.configuracao!!.dataUltimaSincronizacao =
-            SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).format(Date())
+        request.configuracao!!.dataUltimaSincronizacao = Calendar.getInstance().timeInMillis
 
         val service = createBackupService()
         service.sincronizarDados(request).subscribeOn(Schedulers.io())
@@ -155,17 +158,19 @@ class DadosBackupActivity : AppCompatActivity() {
                 Snackbar.make(contentView!!, "Os dados foram salvos!", Snackbar.LENGTH_LONG)
                     .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
                     .show()
-
-                tv_backup_teste_ultima_sincronizacao.text =
-                    String.format(
-                        "Última sincronização: %s",
-                        mConfiguracao.dataUltimaSincronizacao ?: "Não Disponível"
-                    )
+    
+                val lastSync = mConfiguracao.dataUltimaSincronizacao
+                if (lastSync != null && lastSync != 0L) {
+                    val data = Date(lastSync)
+                    tv_backup_teste_ultima_sincronizacao.text =
+                        SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)
+                } else {
+                    tv_backup_teste_ultima_sincronizacao.text = "Não Disponível"
+                }
 
             }, { error ->
                 error.printStackTrace()
                 erroResponse("Erro ao sincronizar dados")
-
             }).apply { }
     }
 
@@ -184,9 +189,10 @@ class DadosBackupActivity : AppCompatActivity() {
                 button_backup_sincronizar_dados.isEnabled = true
 
                 val dto = t.body()!!
-                GastoDAO(this).restaurarGastos(dto.gastos)
-                EntradaDAO(this).restaurarEntradas(dto.entradas)
-                ConfiguracaoDAO(this).salvarConfiguracao(dto.configuracao)
+                MovimentoContext.getDAO(this).restaurarMovimentos(dto.movimentos)
+                DespesaContext.getDAO(this).restaurarDespesas(dto.despesas)
+                EntradaContext.getDAO(this).restaurarEntradas(dto.entradas)
+                ConfigContext.getDAO(this).salvarConfiguracao(dto.configuracao)
 
             }, { error ->
                 error.printStackTrace()
@@ -227,8 +233,7 @@ class DadosBackupActivity : AppCompatActivity() {
 
         return true
     }
-
-
+    
     private fun erroResponse(mensagem: String) {
 
         tv_backup_teste_conexao_mensagem.text = mensagem

@@ -7,26 +7,21 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.database.dao.EntradaDAO
+import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.model.Entrada
-import com.baltazarstudio.regular.ui.entradas.EntradasFragment
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.list_item_entradas.view.*
 import org.jetbrains.anko.toast
 
-class EntradasAdapter(context: Context, private val dao: EntradaDAO, dono: String) :
+class EntradasAdapter(context: Context, private val entradas: ArrayList<Entrada>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
-    
-    private val layoutInflater: LayoutInflater
-    private val entradas: ArrayList<Entrada>
-    private var expanded = hashSetOf<Int>()
+    private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
+    private var entradaImpl: EntradaInterface? = null
     
     init {
-        this.layoutInflater = LayoutInflater.from(context)
-        if (dono.equals(EntradasFragment.TODOS)) this.entradas = dao.getTodasEntradas()
-        else this.entradas = dao.getTodasEntradas(dono)
+        entradas.sortByDescending { it.data }
     }
     
     override fun getItemCount(): Int {
@@ -41,58 +36,49 @@ class EntradasAdapter(context: Context, private val dao: EntradaDAO, dono: Strin
         (holder as ItemViewHolder).bindView(position)
     }
     
+    fun addEntrada(entrada: Entrada): Int {
+        entradas.add(entrada)
+        entradas.sortBy { it.data }
+        
+        val position = entradas.indexOf(entrada)
+        
+        notifyItemInserted(position)
+        entradaImpl?.onAdded(entrada)
+        return position
+    }
+    
     private inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         
         fun bindView(position: Int) {
             val entrada = entradas[position]
             
-            itemView.setOnClickListener {
-                if (expanded.contains(adapterPosition)) expanded.remove(adapterPosition)
-                else expanded.add(adapterPosition)
-                notifyItemChanged(adapterPosition)
-            }
-            
             itemView.setOnLongClickListener {
                 AlertDialog.Builder(itemView.context).setTitle("Atenção")
                     .setMessage("Confirma a exclusão da entrada?")
                     .setPositiveButton("Sim") { _, _ ->
-                        dao.remover(entrada)
+                        EntradaContext.getDAO(itemView.context).deletar(entrada)
                         itemView.context.toast("Excluído!")
                         entradas.remove(entrada)
                         notifyItemRemoved(adapterPosition)
-                        reassignExpanded(adapterPosition)
+                        entradaImpl?.onExcluded(entrada)
                     }.setNegativeButton("Não", null).show()
                 true
             }
             
-            if (expanded.contains(adapterPosition)) {
-                itemView.ll_item_entradas_info.visibility = View.VISIBLE
-                itemView.iv_item_entradas_expand_arrow.setImageResource(R.drawable.ic_arrow_up)
-            } else {
-                itemView.ll_item_entradas_info.visibility = View.GONE
-                itemView.iv_item_entradas_expand_arrow.setImageResource(R.drawable.ic_arrow_down)
-            }
-            
             itemView.tv_item_entradas_valor.text = Utils.formatCurrency(entrada.valor)
-            itemView.tv_item_entradas_dono.text = entrada.dono
             itemView.tv_item_entradas_descricao.text = entrada.descricao
             itemView.tv_item_entradas_data.text = entrada.data?.formattedDate()
             
         }
-        
-        private fun reassignExpanded(position: Int) {
-            
-            val newExpaded = hashSetOf<Int>()
-            val iterator = expanded.iterator()
-            while (iterator.hasNext()) {
-                val expand = iterator.next()
-                if (expand > position) {
-                    newExpaded.add(expand - 1)
-                    iterator.remove()
-                }
-            }
-            if (newExpaded.isNotEmpty())
-                expanded.addAll(newExpaded)
-        }
+    
+    }
+    
+    interface EntradaInterface {
+        fun onAdded(entrada: Entrada)
+        fun onExcluded(entrada: Entrada)
+    }
+    
+    fun setEntradaInterface(mInterface: EntradaInterface) {
+        entradaImpl = mInterface
     }
 }

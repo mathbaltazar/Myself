@@ -9,4 +9,5 @@
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="all_default_layout_offset_16">16dp</dimen>
     <dimen name="text_size_36">36sp</dimen>
+    <dimen name="text_size_30">30sp</dimen>
 </resources>

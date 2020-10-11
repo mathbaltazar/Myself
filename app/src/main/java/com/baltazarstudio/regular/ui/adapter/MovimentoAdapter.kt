@@ -8,43 +8,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.controller.GastosController
-import com.baltazarstudio.regular.model.Gasto
+import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.ui.registros.movimentos.RegistrarMovimentoDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_section_header_movimento.view.*
 import kotlinx.android.synthetic.main.layout_section_item_movimento.view.*
 
-class GastoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class MovimentoAdapter(
+    context: Context,
+    private val itens: List<Movimento>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
-    private val pairMesAno: Pair<Int, Int>?
-    private val itens: List<Gasto>
-    private val controller: GastosController?
+    private val layoutInflater = LayoutInflater.from(context)
+    private val pairMesAno: Pair<Int, Int>? = null
     
-    constructor(
-        context: Context,
-        pairMesAno: Pair<Int, Int>,
-        itens: List<Gasto>,
-        controller: GastosController
-    ) : super() {
-        this.pairMesAno = pairMesAno
-        this.itens = itens
-        this.controller = controller
-        this.layoutInflater = LayoutInflater.from(context)
-    }
-    
-    constructor(context: Context, itens: List<Gasto>) : super() {
-        this.pairMesAno = null
-        this.itens = itens
-        this.controller = null
-        this.layoutInflater = LayoutInflater.from(context)
-    }
     
     companion object {
         private const val HEADER_VIEW_TYPE = 100
     }
-    
-    private val layoutInflater: LayoutInflater
     
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -77,28 +59,30 @@ class GastoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         
         fun bindView(position: Int) {
+            val movimento = itens[position]
             
-            // TODO Elaborar view para despesas
+            itemView.tv_movimento_descricao.text = movimento.descricao
+            itemView.tv_movimento_valor.text = Utils.formatCurrency(movimento.valor)
+            itemView.tv_movimento_data.text = movimento.data!!.formattedDate()
             
-            val gasto = itens[position]
-            itemView.tv_movimento_descricao.text = gasto.descricao
-            itemView.tv_movimento_valor.text = Utils.formatCurrency(gasto.valor)
-            itemView.tv_movimento_data.text = gasto.data.formattedDate()
-            
-            if (controller != null) {
-                itemView.setOnClickListener {
-                    controller.editarGasto(gasto)
-                }
-                itemView.setOnLongClickListener {
-                    AlertDialog.Builder(itemView.context).setTitle("Excluir")
-                        .setMessage("Confirmar exclusão").setPositiveButton("Sim") { _, _ ->
-                            controller.excluir(gasto)
-                            Toast.makeText(itemView.context, "Removido!", Toast.LENGTH_SHORT).show()
-                            controller.carregarGastos()
-                        }.setNegativeButton("Não", null).show()
-                    true
-                }
+            itemView.setOnClickListener {
+                val dialog =
+                    RegistrarMovimentoDialog(
+                        itemView.context
+                    )
+                dialog.edit(movimento)
+                dialog.show()
             }
+
+            /*itemView.setOnLongClickListener {
+                AlertDialog.Builder(itemView.context).setTitle("Excluir")
+                    .setMessage("Confirmar exclusão").setPositiveButton("Sim") { _, _ ->
+                        manageModelImpl.excluir(movimento)
+                        Toast.makeText(itemView.context, "Removido!", Toast.LENGTH_SHORT).show()
+                        manageModelImpl.loadAll()
+                    }.setNegativeButton("Não", null).show()
+                true
+            }*/
         }
     }
     

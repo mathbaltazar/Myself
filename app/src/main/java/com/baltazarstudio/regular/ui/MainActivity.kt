@@ -14,43 +14,23 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.notification.Notification
+import com.baltazarstudio.regular.observer.Trigger
+import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.ui.backup.DadosBackupActivity
-import com.baltazarstudio.regular.ui.entradas.EntradasFragment
-import com.baltazarstudio.regular.ui.movimentos.MovimentosFragment
+import com.baltazarstudio.regular.ui.registros.entradas.EntradasFragment
+import com.baltazarstudio.regular.ui.registros.RegistrosFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
     
-    private val movimentoFragment = MovimentosFragment()
+    private val movimentoFragment = RegistrosFragment()
     private val entradasFragment = EntradasFragment()
     
     var searchMenuItem: MenuItem? = null
-    
-    /*override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        val db = object : SQLiteOpenHelper(this, "RegularDB", null, 1) {
-            override fun onCreate(db: SQLiteDatabase?) {
-            }
-    
-            override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-            }
-        }
-
-        DespesaDAO.onCreate(db.writableDatabase)
-        
-        val renameTable = "ALTER TABLE Movimento RENAME TO Gasto"
-        db.writableDatabase.execSQL(renameTable)
-        
-        val addColunasref = "ALTER TABLE Gasto ADD COLUMN referencia_despesa INTEGER"
-        db.writableDatabase.execSQL(addColunasref)
-        
-        val addColunasmargem = "ALTER TABLE Gasto ADD COLUMN margem_despesa DECIMAL(10,2)"
-        db.writableDatabase.execSQL(addColunasmargem)
-        
-    }*/
-
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +74,13 @@ class MainActivity : AppCompatActivity() {
         drawer_navigation_view.setCheckedItem(R.id.menu_drawer_movimentos)
         
         Notification.createNotificationChannel(this)
+        
+        Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe { t ->
+                if (t is TriggerEvent.Toast) {
+                    toast(t.message)
+                }
+            }.apply {  }
     }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
