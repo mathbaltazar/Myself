@@ -12,6 +12,8 @@ import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.database.dao.ConfiguracaoDAO
 import com.baltazarstudio.regular.model.Configuracao
+import com.baltazarstudio.regular.observer.Trigger
+import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.service.BackupService
 import com.baltazarstudio.regular.service.ConnectionTestService
 import com.baltazarstudio.regular.service.dto.SincronizarDadosBackupDTO
@@ -19,11 +21,11 @@ import com.google.android.material.snackbar.Snackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_dados_backup.*
-import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.jetbrains.anko.contentView
+import org.jetbrains.anko.toast
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -66,9 +68,9 @@ class DadosBackupActivity : AppCompatActivity() {
         if (lastSync != null && lastSync != 0L) {
             val data = Date(lastSync)
             tv_backup_teste_ultima_sincronizacao.text =
-                SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)
+                "Última sincornização: ${SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)}"
         } else {
-            tv_backup_teste_ultima_sincronizacao.text = "Não Disponível"
+            tv_backup_teste_ultima_sincronizacao.text = "Última sincornização: Não Disponível"
         }
         
 
@@ -176,9 +178,9 @@ class DadosBackupActivity : AppCompatActivity() {
                 if (lastSync != null && lastSync != 0L) {
                     val data = Date(lastSync)
                     tv_backup_teste_ultima_sincronizacao.text =
-                        SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)
+                        "Última sincornização: ${SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)}"
                 } else {
-                    tv_backup_teste_ultima_sincronizacao.text = "Não Disponível"
+                    tv_backup_teste_ultima_sincronizacao.text = "Última sincornização: Não Disponível"
                 }
 
             }, { error ->
@@ -208,6 +210,11 @@ class DadosBackupActivity : AppCompatActivity() {
                 DespesaContext.getDAO(this).restaurarDespesas(dto.despesas)
                 EntradaContext.getDAO(this).restaurarEntradas(dto.entradas)
                 ConfigContext.getDAO(this).salvarConfiguracao(dto.configuracao)
+                
+                toast("Os dados do servidor foram restaurados!")
+                
+                Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+                Trigger.launch(TriggerEvent.UpdateTelaDespesa())
 
             }, { error ->
                 error.printStackTrace()
@@ -221,7 +228,7 @@ class DadosBackupActivity : AppCompatActivity() {
         val url = "http://${textinput_backup_url.text}:${textinput_backup_porta.text}/"
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(url) // Versão Futura: LOCALIZAR IP DO SERVIDOR
+            .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(httpClient)
