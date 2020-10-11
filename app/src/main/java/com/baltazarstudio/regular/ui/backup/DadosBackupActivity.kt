@@ -149,6 +149,7 @@ class DadosBackupActivity : AppCompatActivity() {
         progress_backup_loading.visibility = View.VISIBLE
         button_backup_testar_conexao.isEnabled = false
         button_backup_sincronizar_dados.isEnabled = false
+        button_backup_restaurar.isEnabled = false
 
 
         val request = SincronizarDadosBackupDTO()
@@ -165,6 +166,7 @@ class DadosBackupActivity : AppCompatActivity() {
                 progress_backup_loading.visibility = View.GONE
                 button_backup_testar_conexao.isEnabled = true
                 button_backup_sincronizar_dados.isEnabled = true
+                button_backup_restaurar.isEnabled = true
 
                 Snackbar.make(contentView!!, "Os dados foram salvos!", Snackbar.LENGTH_LONG)
                     .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
@@ -189,6 +191,7 @@ class DadosBackupActivity : AppCompatActivity() {
         progress_backup_loading.visibility = View.VISIBLE
         button_backup_testar_conexao.isEnabled = false
         button_backup_sincronizar_dados.isEnabled = false
+        button_backup_restaurar.isEnabled = false
 
 
         val service = createBackupService()
@@ -198,6 +201,7 @@ class DadosBackupActivity : AppCompatActivity() {
                 progress_backup_loading.visibility = View.GONE
                 button_backup_testar_conexao.isEnabled = true
                 button_backup_sincronizar_dados.isEnabled = true
+                button_backup_restaurar.isEnabled = true
 
                 val dto = t.body()!!
                 MovimentoContext.getDAO(this).restaurarMovimentos(dto.movimentos)
@@ -230,7 +234,7 @@ class DadosBackupActivity : AppCompatActivity() {
         val url = "http://${textinput_backup_url.text}:${textinput_backup_porta.text}"
 
         try {
-            HttpUrl.get(url)
+            url.toHttpUrl()
         } catch (ex: IllegalArgumentException) {
             tv_backup_teste_conexao_mensagem.visibility = View.VISIBLE
             tv_backup_teste_conexao_mensagem.text = "IP ou Porta inválidos!"
