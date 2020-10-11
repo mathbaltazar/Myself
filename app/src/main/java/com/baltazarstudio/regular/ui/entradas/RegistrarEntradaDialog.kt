@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.registros.entradas
+package com.baltazarstudio.regular.ui.entradas
 
 import android.app.Dialog
 import android.content.Context
