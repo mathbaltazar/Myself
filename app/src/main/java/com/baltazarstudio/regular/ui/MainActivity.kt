@@ -17,7 +17,7 @@ import com.baltazarstudio.regular.notification.Notification
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.ui.backup.DadosBackupActivity
-import com.baltazarstudio.regular.ui.registros.entradas.EntradasFragment
+import com.baltazarstudio.regular.ui.entradas.EntradasFragment
 import com.baltazarstudio.regular.ui.registros.RegistrosFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

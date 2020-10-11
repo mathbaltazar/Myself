@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.registros.entradas.EntradasFragment">
+    tools:context=".ui.entradas.EntradasFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_entradas"
