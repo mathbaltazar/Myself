@@ -70,12 +70,12 @@ class MovimentosSectionAdapter(
             
             itemView.setOnLongClickListener {
                 AlertDialog.Builder(itemView.context).setTitle("Excluir")
-                    .setMessage("Confirmar exclusão")
-                    .setPositiveButton("Sim") { _, _ ->
+                    .setMessage("Deseja realmente excluir este registro?")
+                    .setPositiveButton("Excluir") { _, _ ->
                         MovimentoContext.getDAO(itemView.context).excluir(movimento)
                         Toast.makeText(itemView.context, "Removido!", Toast.LENGTH_SHORT).show()
                         Trigger.launch(TriggerEvent.UpdateTelaMovimento())
-                    }.setNegativeButton("Não", null)
+                    }.setNegativeButton("Cancelar", null)
                     .show()
                 true
             }

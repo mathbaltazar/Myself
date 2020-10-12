@@ -16,7 +16,7 @@ import com.baltazarstudio.regular.util.Utils.Companion.formatCurrency
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import com.baltazarstudio.regular.util.Utils.Companion.isDataValida
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.dialog_criar_movimento.*
+import kotlinx.android.synthetic.main.dialog_registrar_movimento.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
@@ -32,7 +32,7 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
     }
     
     private fun setUpView() {
-        setContentView(R.layout.dialog_criar_movimento)
+        setContentView(R.layout.dialog_registrar_movimento)
         
         textinput_dialog_novo_movimento_valor.apply { addTextChangedListener(CurrencyMask(this)) }
         

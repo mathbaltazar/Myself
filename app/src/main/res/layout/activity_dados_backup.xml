@@ -18,7 +18,7 @@
             android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
             android:layout_marginVertical="@dimen/all_default_layout_offset_4"
             android:text="ENDEREÇO DO SERVIDOR"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_16"
             android:textStyle="bold" />
 
@@ -115,7 +115,7 @@
             android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
             android:layout_marginVertical="@dimen/all_default_layout_offset_4"
             android:text="BACKUP DE DADOS"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_16"
             android:textStyle="bold" />
 

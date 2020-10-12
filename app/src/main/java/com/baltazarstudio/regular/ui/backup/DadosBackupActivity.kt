@@ -86,7 +86,7 @@ class DadosBackupActivity : AppCompatActivity() {
         button_backup_restaurar.setOnClickListener {
             AlertDialog.Builder(this).setTitle("Atenção")
                 .setMessage("Restaurar dados do servidor?")
-                .setPositiveButton("Sincronizar") { _, _ -> conectar(FUNCAO_RESTAURAR) }
+                .setPositiveButton("Restaurar") { _, _ -> conectar(FUNCAO_RESTAURAR) }
                 .setNegativeButton("Cancelar") { _, _ -> }
                 .create()
                 .show()

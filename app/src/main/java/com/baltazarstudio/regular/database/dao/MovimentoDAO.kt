@@ -151,6 +151,7 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
             }
             
             db.setTransactionSuccessful()
+            MovimentoContext.useCache = false
         }
         
         db.endTransaction()

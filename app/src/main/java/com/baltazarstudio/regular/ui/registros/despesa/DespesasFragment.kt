@@ -52,6 +52,12 @@ class DespesasFragment : Fragment() {
     fun carregarDespesas() {
         val despesas = DespesaContext.getDAO(mView.context).getTodasDespesas()
         
+        if (despesas.isEmpty()) {
+            mView.tv_despesas_sem_depesas.visibility = View.VISIBLE
+        } else {
+            mView.tv_despesas_sem_depesas.visibility = View.GONE
+        }
+        
         mView.rv_despesas.layoutManager = LinearLayoutManager(mView.context)
         mView.rv_despesas.adapter = DespesasAdapter(mView.context, despesas)
         mView.rv_despesas.addItemDecoration(

@@ -12,7 +12,7 @@ import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.Utils
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.dialog_despesa.*
+import kotlinx.android.synthetic.main.dialog_criar_despesa.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import java.math.BigDecimal
 
@@ -24,7 +24,7 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
     }
     
     private fun setUpView() {
-        setContentView(R.layout.dialog_despesa)
+        setContentView(R.layout.dialog_criar_despesa)
         
         et_dialog_despesa_valor.apply { addTextChangedListener(CurrencyMask(this)) }
         et_dialog_despesa_valor.onFocusChange { v, hasFocus ->

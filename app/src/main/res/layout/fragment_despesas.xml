@@ -43,6 +43,7 @@
             android:padding="@dimen/all_default_layout_offset_4"
             android:text="Não há despesas registradas."
             android:textAlignment="center"
+            tools:visibility="visible"
             android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView

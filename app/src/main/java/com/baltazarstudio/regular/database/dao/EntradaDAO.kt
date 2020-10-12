@@ -19,7 +19,7 @@ class EntradaDAO(context: Context) : Database<Entrada>(context) {
     fun getTodasEntradas(): ArrayList<Entrada> {
         val entradas = arrayListOf<Entrada>()
         
-        val sql = "SELECT * FROM $TABELA"
+        val sql = "SELECT * FROM $TABELA ORDER BY $DATA DESC, $TABLE_ID DESC"
         val cursor = readableDatabase.rawQuery(sql, null)
         
         while (cursor.moveToNext()) {

@@ -56,8 +56,9 @@
     <Button
         android:id="@+id/button_dialog_despesa_cadastrar"
         android:layout_width="match_parent"
+        android:textColor="@android:color/black"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-        android:layout_marginTop="@dimen/all_default_layout_offset_4"
+        android:layout_margin="@dimen/all_default_layout_offset_8"
+        android:backgroundTint="@color/off_primary"
         android:text="Cadastrar Despesa" />
 </LinearLayout>

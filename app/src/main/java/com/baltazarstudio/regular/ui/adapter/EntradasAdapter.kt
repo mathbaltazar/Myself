@@ -53,15 +53,15 @@ class EntradasAdapter(context: Context, private val entradas: ArrayList<Entrada>
             val entrada = entradas[position]
             
             itemView.setOnLongClickListener {
-                AlertDialog.Builder(itemView.context).setTitle("Atenção")
-                    .setMessage("Confirma a exclusão da entrada?")
-                    .setPositiveButton("Sim") { _, _ ->
+                AlertDialog.Builder(itemView.context).setTitle("Excluir")
+                    .setMessage("Deseja realmente excluir a entrada?")
+                    .setPositiveButton("Excluir") { _, _ ->
                         EntradaContext.getDAO(itemView.context).deletar(entrada)
                         itemView.context.toast("Excluído!")
                         entradas.remove(entrada)
                         notifyItemRemoved(adapterPosition)
                         entradaImpl?.onExcluded(entrada)
-                    }.setNegativeButton("Não", null).show()
+                    }.setNegativeButton("Cancelar", null).show()
                 true
             }
             

@@ -34,7 +34,8 @@ class MovimentosFragment : Fragment() {
         carregarMovimentos()
     
         mView.fab_add_movimento.setOnClickListener {
-            adicionarMovimento()
+            val dialog = RegistrarMovimentoDialog(mView.context)
+            dialog.show()
         }
     }
     
@@ -98,11 +99,4 @@ class MovimentosFragment : Fragment() {
         
     }
     
-    fun adicionarMovimento() {
-        val dialog =
-            RegistrarMovimentoDialog(
-                mView.context
-            )
-        dialog.show()
-    }
 }

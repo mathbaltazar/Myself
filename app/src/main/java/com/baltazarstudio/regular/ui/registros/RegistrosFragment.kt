@@ -14,6 +14,7 @@ import com.baltazarstudio.regular.ui.MainActivity
 import com.baltazarstudio.regular.ui.adapter.FragmentTabAdapter
 import com.baltazarstudio.regular.ui.registros.despesa.DespesasFragment
 import com.baltazarstudio.regular.ui.registros.movimentos.MovimentosFragment
+import com.baltazarstudio.regular.ui.registros.movimentos.RegistrarMovimentoDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -80,7 +81,10 @@ class RegistrosFragment : Fragment() {
         super.onResume()
         
         if (activity?.intent?.action == "abrir_adicionar_gasto" && firstUse) {
-            movimentosFragment.adicionarMovimento()
+    
+            val dialog = RegistrarMovimentoDialog(context!!)
+            dialog.show()
+            
             (requireActivity() as MainActivity).searchMenuItem?.collapseActionView()
         }
         firstUse = false

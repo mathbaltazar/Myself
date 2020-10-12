@@ -12,6 +12,8 @@ import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.observer.Trigger
+import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.ui.registros.despesa.RegistrarDespesaDialog
 import com.baltazarstudio.regular.ui.registros.despesa.MovimentosDespesasDialog
 import com.baltazarstudio.regular.util.Utils
@@ -107,8 +109,9 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
                         DespesaContext.getDAO(itemView.context).deletar(despesa)
                         Toast.makeText(itemView.context, "Removido!", Toast.LENGTH_SHORT).show()
                         despesas.remove(despesa)
-                        notifyItemRemoved(position)
-                        reassignExpadedItem(position)
+                        /*notifyItemRemoved(position)
+                        reassignExpadedItem(position)*/
+                        Trigger.launch(TriggerEvent.UpdateTelaDespesa())
                     }.setNegativeButton("Cancelar", null)
                     .show()
                 true
@@ -125,12 +128,12 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             return registrosDespesas.sortedByDescending { it.data }.first().data
         }
     
-        private fun reassignExpadedItem(excludedPosition: Int) {
+        /*private fun reassignExpadedItem(excludedPosition: Int) {
             if (excludedPosition == expandedItemPosition)
                 expandedItemPosition = -1
             else if (excludedPosition < expandedItemPosition)
                 expandedItemPosition--
-        }
+        }*/
     
     }
 }
