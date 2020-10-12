@@ -27,6 +27,22 @@ import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
     
+    
+    /**
+     *
+     * Próximas Atividades do APP
+     *
+     * - SELEÇÃO MÚLTIPLA DOS MOVIMENTOS
+     * - IMPLEMENTAÇÃO DE NOTAS DE LEMBRETES
+     * - INTEGRAÇÃO COM FIREBASE
+     *
+     *
+      */
+    
+
+
+
+
     private val movimentoFragment = RegistrosFragment()
     private val entradasFragment = EntradasFragment()
     
