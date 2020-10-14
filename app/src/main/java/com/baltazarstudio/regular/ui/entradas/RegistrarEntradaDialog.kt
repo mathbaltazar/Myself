@@ -6,6 +6,8 @@ import android.view.WindowManager
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.model.Entrada
+import com.baltazarstudio.regular.observer.Trigger
+import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.DateMask
 import com.baltazarstudio.regular.util.Utils
@@ -58,7 +60,7 @@ class RegistrarEntradaDialog(context: Context) : Dialog(context) {
                 EntradaContext.getDAO(context).inserir(novaEntrada)
                 context.toast("Adicionado!")
 
-                entradaImpl?.onEntradaAdicionada(novaEntrada)
+                Trigger.launch(TriggerEvent.UpdateTelaEntradas())
                 dismiss()
             }
 
@@ -87,9 +89,5 @@ class RegistrarEntradaDialog(context: Context) : Dialog(context) {
 
     interface EntradaInterface {
         fun onEntradaAdicionada(entrada: Entrada)
-    }
-    
-    fun setEntradaInterface(entradaImpl: EntradaInterface) {
-        this.entradaImpl = entradaImpl
     }
 }

@@ -6,4 +6,5 @@ object TriggerEvent {
     
     class UpdateTelaMovimento
     class UpdateTelaDespesa
+    class UpdateTelaEntradas
 }
