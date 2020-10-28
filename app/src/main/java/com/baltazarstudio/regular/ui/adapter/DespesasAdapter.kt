@@ -88,6 +88,10 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             // REGISTRAR
             itemView.button_section_item_despesas_registrar.setOnClickListener {
                 val dialog = RegistrarDespesaDialog(itemView.context, despesa)
+                dialog.setOnDespesaRegistrada {
+                    Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+                    notifyItemChanged(position)
+                }
                 dialog.show()
             }
             

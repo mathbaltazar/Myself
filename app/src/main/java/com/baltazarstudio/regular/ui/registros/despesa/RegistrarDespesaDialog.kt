@@ -24,6 +24,8 @@ import java.math.BigDecimal
 
 class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : Dialog(context) {
     
+    private var onDespesaRegistrada: () -> Unit? = {}
+    
     init {
         setUpView()
     }
@@ -105,7 +107,7 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
     
             MovimentoContext.getDAO(context).inserir(movimento)
             Trigger.launch(TriggerEvent.Toast("Registrado!"))
-            Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+            onDespesaRegistrada.invoke()
             
             cancel()
         }
@@ -113,6 +115,10 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
     
     private fun isValorValido(valor: String): Boolean {
         return valor.isNotBlank() && Utils.unformatCurrency(valor).toBigDecimal() > BigDecimal.ZERO
+    }
+    
+    fun setOnDespesaRegistrada(function: () -> Unit) {
+        this.onDespesaRegistrada = function
     }
     
     companion object {
