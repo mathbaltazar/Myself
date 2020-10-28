@@ -2,6 +2,7 @@ package com.baltazarstudio.regular.ui
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,6 +20,8 @@ import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.ui.backup.DadosBackupActivity
 import com.baltazarstudio.regular.ui.entradas.EntradasFragment
 import com.baltazarstudio.regular.ui.registros.RegistrosFragment
+import com.baltazarstudio.regular.util.Utils
+import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -35,6 +38,7 @@ class MainActivity : AppCompatActivity() {
      * - SELEÇÃO MÚLTIPLA DOS MOVIMENTOS
      * - IMPLEMENTAÇÃO DE NOTAS DE LEMBRETES
      * - INTEGRAÇÃO COM FIREBASE
+     * - CRIAR/COPIAR REGISTRO A PARTIR DE OUTRO
      *
      *
       */
@@ -89,14 +93,6 @@ class MainActivity : AppCompatActivity() {
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
         drawer_navigation_view.setCheckedItem(R.id.menu_drawer_movimentos)
         
-        Notification.createNotificationChannel(this)
-        
-        Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe { t ->
-                if (t is TriggerEvent.Toast) {
-                    toast(t.message)
-                }
-            }.apply {  }
     }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -129,12 +125,39 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
     
+    private fun setupFirebaseMessaging() {
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    return@addOnCompleteListener
+                }
+            
+                Log.w("FCM Token Registration", task.result)
+            }
+    }
+    
+    private fun registerToastNotification() {
+        Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe { t ->
+                if (t is TriggerEvent.Toast) {
+                    toast(t.message)
+                }
+            }.apply {  }
+    }
+    
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
+    }
+    
+    override fun onStart() {
+        super.onStart()
+    
+        setupFirebaseMessaging()
+        registerToastNotification()
     }
     
     override fun onResume() {
