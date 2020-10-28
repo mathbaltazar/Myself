@@ -68,9 +68,9 @@ class DadosBackupActivity : AppCompatActivity() {
         if (lastSync != null && lastSync != 0L) {
             val data = Date(lastSync)
             tv_backup_teste_ultima_sincronizacao.text =
-                "Última sincornização: ${SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)}"
+                "Última sincronização: ${SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)}"
         } else {
-            tv_backup_teste_ultima_sincronizacao.text = "Última sincornização: Não Disponível"
+            tv_backup_teste_ultima_sincronizacao.text = "Última sincronização: Não Disponível"
         }
         
 
@@ -178,9 +178,9 @@ class DadosBackupActivity : AppCompatActivity() {
                 if (lastSync != null && lastSync != 0L) {
                     val data = Date(lastSync)
                     tv_backup_teste_ultima_sincronizacao.text =
-                        "Última sincornização: ${SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)}"
+                        "Última sincronização: ${SimpleDateFormat("dd/MM/yyyy HH:mm").format(data)}"
                 } else {
-                    tv_backup_teste_ultima_sincronizacao.text = "Última sincornização: Não Disponível"
+                    tv_backup_teste_ultima_sincronizacao.text = "Última sincronização: Não Disponível"
                 }
 
             }, { error ->
