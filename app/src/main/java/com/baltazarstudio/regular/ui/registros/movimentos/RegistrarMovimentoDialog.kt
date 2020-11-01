@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat
 
 class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
     
+    private lateinit var onEditedListener: (Movimento) -> Unit
     private var edit: Boolean = false
     private var id: Int? = null
     
@@ -69,6 +70,8 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
                     movimento.id = id
                     MovimentoContext.getDAO(context).alterar(movimento)
                     Trigger.launch(TriggerEvent.Toast("Alterado!"))
+                    
+                    onEditedListener(movimento)
                 } else {
                     MovimentoContext.getDAO(context).inserir(movimento)
                     Trigger.launch(TriggerEvent.Toast("Movimento adicionado!"))
@@ -96,10 +99,10 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
         window?.attributes = lp
     }
     
-    fun edit(movimento: Movimento) {
+    fun edit(movimento: Movimento, onEditedListener: (Movimento) -> Unit) {
         edit = true
         id = movimento.id
-        
+        this.onEditedListener = onEditedListener
         textinput_dialog_novo_movimento_descricao.setText(movimento.descricao)
         textinput_dialog_novo_movimento_valor.setText(formatCurrency(movimento.valor))
         textinput_dialog_novo_movimento_data.setText(movimento.data?.formattedDate())

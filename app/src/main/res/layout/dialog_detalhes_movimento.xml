@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/all_default_layout_offset_8">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/all_default_layout_offset_8"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+            android:text="DETALHES"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginVertical="@dimen/all_default_layout_offset_8"
+            android:background="@color/off_white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+            android:text="DESCRIÇÃO: "
+            android:textSize="@dimen/text_size_16" />
+
+        <TextView
+            android:id="@+id/tv_detalhes_movimento_descricao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset_8"
+            android:text="Pensão Alimenticia"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+            android:text="VALOR: "
+            android:textSize="@dimen/text_size_16" />
+
+        <TextView
+            android:id="@+id/tv_detalhes_movimento_valor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset_8"
+            android:text="R$ 250,00"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+            android:text="DATA: "
+            android:textSize="@dimen/text_size_16" />
+
+        <TextView
+            android:id="@+id/tv_detalhes_movimento_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset_8"
+            android:text="25/10/2020"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold|italic" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_detalhes_movimento_alterar"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+            android:layout_marginTop="@dimen/all_default_layout_offset_8"
+            android:text="Alterar"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_16"
+            app:strokeColor="@color/colorAccent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_detalhes_movimento_excluir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Excluir"
+            android:textSize="@dimen/text_size_16" />
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

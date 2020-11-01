@@ -20,7 +20,7 @@ import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.ui.backup.DadosBackupActivity
 import com.baltazarstudio.regular.ui.entradas.EntradasFragment
 import com.baltazarstudio.regular.ui.registros.RegistrosFragment
-import com.baltazarstudio.regular.util.Utils
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     
     
     /**
@@ -37,8 +37,9 @@ class MainActivity : AppCompatActivity() {
      *
      * - SELEÇÃO MÚLTIPLA DOS MOVIMENTOS
      * - IMPLEMENTAÇÃO DE NOTAS DE LEMBRETES
-     * - INTEGRAÇÃO COM FIREBASE
-     * - CRIAR/COPIAR REGISTRO A PARTIR DE OUTRO
+     * - VISUALIZAÇÃO EM GRADE/LISTA DAS NOTAS
+     * - LIVE SCROLL ?
+     * - FILTROS VARIADOS
      *
      *
       */
@@ -46,9 +47,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-    private val movimentoFragment = RegistrosFragment()
-    private val entradasFragment = EntradasFragment()
+    private val registrosFragment = RegistrosFragment()
     
     var searchMenuItem: MenuItem? = null
     
@@ -62,37 +61,39 @@ class MainActivity : AppCompatActivity() {
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         
-        drawer_navigation_view.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.menu_drawer_movimentos -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, movimentoFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
-                    
-                    toolbar.setTitle(R.string.activity_title_meus_registros)
-                    searchMenuItem?.isVisible = true
-                }
-                R.id.menu_drawer_entradas -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, entradasFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
-                    
-                    toolbar.setTitle(R.string.activity_title_entradas)
-                    searchMenuItem?.isVisible = false
-                    searchMenuItem?.collapseActionView()
-                }
-            }
-            
-            menuItem.isChecked = true
-            drawer_layout.closeDrawer(GravityCompat.START)
-            true
-        }
+        drawer_navigation_view.setNavigationItemSelectedListener(this)
         
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, movimentoFragment)
+            .replace(R.id.fragment_container, registrosFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
         drawer_navigation_view.setCheckedItem(R.id.menu_drawer_movimentos)
         
+    }
+    
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_drawer_movimentos -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, registrosFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+            
+                toolbar.setTitle(R.string.activity_title_meus_registros)
+                searchMenuItem?.isVisible = true
+            }
+            R.id.menu_drawer_entradas -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, EntradasFragment())
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+            
+                toolbar.setTitle(R.string.activity_title_entradas)
+                searchMenuItem?.isVisible = false
+                searchMenuItem?.collapseActionView()
+            }
+        }
+    
+        item.isChecked = true
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
     }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -108,7 +109,7 @@ class MainActivity : AppCompatActivity() {
             }
             
             override fun onQueryTextChange(newText: String?): Boolean {
-                movimentoFragment.filtrarDescricao(newText)
+                Trigger.launch(TriggerEvent.FiltrarMovimentosPelaDescricao(newText))
                 return true
             }
         })
@@ -136,7 +137,7 @@ class MainActivity : AppCompatActivity() {
             }
     }
     
-    private fun registerToastNotification() {
+    private fun registerGlobalToast() {
         Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe { t ->
                 if (t is TriggerEvent.Toast) {
@@ -157,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
     
         setupFirebaseMessaging()
-        registerToastNotification()
+        registerGlobalToast()
     }
     
     override fun onResume() {

@@ -89,8 +89,8 @@ class Utils {
             return true
         }
     
-        fun getMesString(mes: Int): String {
-            return when (mes) {
+        fun getMesString(mes: Int, ano: Int): String {
+            val mesExtense = when (mes) {
                 1 -> "JANEIRO"
                 2 -> "FEVEREIRO"
                 3 -> "MARÇO"
@@ -105,6 +105,8 @@ class Utils {
                 12 -> "DEZEMBRO"
                 else -> ""
             }
+            
+            return "$mesExtense/$ano"
         }
         
         fun getScreenSize(context: Context): Point {

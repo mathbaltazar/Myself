@@ -41,7 +41,9 @@ class MovimentoSimpleAdapter(context: Context, private val movimentos: List<Movi
             
             itemView.setOnClickListener {
                 val dialog = RegistrarMovimentoDialog(itemView.context)
-                dialog.edit(movimento)
+                dialog.edit(movimento) {
+    
+                }
                 dialog.show()
             }
         }

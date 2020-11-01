@@ -12,26 +12,56 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset_16"
         android:text="Não há registros."
+        android:visibility="gone"
         android:textAlignment="center"
         android:textSize="@dimen/text_size_16" />
+
+    <LinearLayout
+        android:id="@+id/toolbar_movimentos_multi_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/button_movimentos_multi_select_cancelar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/all_default_layout_offset_8"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/tv_movimentos_multi_select_quantidade"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:padding="@dimen/all_default_layout_offset_4"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold|italic"
+            tools:text="4 Selecionados" />
+
+        <ImageView
+            android:id="@+id/button_movimentos_multi_select_excluir"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/all_default_layout_offset_8"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movimentos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/all_default_layout_offset_8" />
-    <!--<androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:id="@+id/ll_movimentos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-            android:orientation="vertical" />
-    </androidx.core.widget.NestedScrollView>-->
+        android:layout_below="@id/toolbar_movimentos_multi_select"
+        android:layout_margin="@dimen/all_default_layout_offset_8"
+        tools:itemCount="3"
+        tools:listitem="@layout/layout_section_item_movimento" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_movimento"

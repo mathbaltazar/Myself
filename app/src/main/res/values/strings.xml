@@ -9,5 +9,6 @@
     <string name="drawer_menu_entradas">Entradas</string>
 
     <string name="layout_movimentos_despesas_info">Estas são as suas despesas. Considere atribuir como aluguel, internet, Netflix, planos de operadora de celular, mensalidades do carro ou da casa, pensão alimentícia etc…</string>
+    <string name="action_mode_fragment_registros_excluir_movimentos">Excluir</string>
 
 </resources>

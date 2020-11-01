@@ -2,9 +2,7 @@ package com.baltazarstudio.regular.ui.registros
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.baltazarstudio.regular.R
@@ -47,6 +45,8 @@ class RegistrosFragment : Fragment() {
                 when (t) {
                     is TriggerEvent.UpdateTelaMovimento -> movimentosFragment.carregarMovimentos()
                     is TriggerEvent.UpdateTelaDespesa -> despesasFragment.carregarDespesas()
+                    is TriggerEvent.FiltrarMovimentosPelaDescricao -> movimentosFragment.carregarMovimentos(t.newText)
+                    is TriggerEvent.PrepareMultiChoiceRegistrosLayout -> prepareMultiSelectLayout(t.show)
                 }
         })
     }
@@ -70,22 +70,25 @@ class RegistrosFragment : Fragment() {
             }
         })
         
-        
     }
     
-    fun filtrarDescricao(query: String?) {
-        movimentosFragment.carregarMovimentos(query)
+    private fun prepareMultiSelectLayout(showLayout: Boolean) {
+        if (showLayout) {
+            tablayout_movimentos.visibility = View.VISIBLE
+        } else {
+            tablayout_movimentos.visibility = View.GONE
+        }
+    
+        (requireActivity() as MainActivity).searchMenuItem?.isVisible = showLayout
+        vp_movimentos.locked = !showLayout
     }
     
     override fun onResume() {
         super.onResume()
         
         if (activity?.intent?.action == "abrir_adicionar_gasto" && firstUse) {
-    
             val dialog = RegistrarMovimentoDialog(context!!)
             dialog.show()
-            
-            (requireActivity() as MainActivity).searchMenuItem?.collapseActionView()
         }
         firstUse = false
     }
