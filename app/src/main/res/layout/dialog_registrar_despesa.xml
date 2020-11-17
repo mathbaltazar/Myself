@@ -22,7 +22,7 @@
         android:id="@+id/tv_dialog_registrar_despesa_nome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pensão Alimentícia"
+        tools:text="Pensão Alimentícia"
         android:textColor="@android:color/black"
         android:textSize="@dimen/text_size_24" />
 
@@ -30,7 +30,7 @@
         android:id="@+id/tv_dialog_registrar_despesa_valor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="R$ 44,00"
+        tools:text="R$ 44,00"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/text_size_24"
         android:textStyle="bold" />
@@ -88,13 +88,13 @@
         tools:visibility="visible"
         android:visibility="gone">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_dialog_registrar_despesa_data"
+        <com.baltazarstudio.regular.components.DateInputText
+            android:id="@+id/dateinput_dialog_registrar_despesa_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Data"
             android:inputType="number"
-            android:text="12/12/2012"
+            tools:text="12/12/2012"
             android:textSize="@dimen/text_size_18" />
     </com.google.android.material.textfield.TextInputLayout>
 

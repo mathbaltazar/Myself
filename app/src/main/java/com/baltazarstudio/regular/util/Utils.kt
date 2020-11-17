@@ -1,6 +1,5 @@
 package com.baltazarstudio.regular.util
 
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Point
 import android.view.WindowManager
@@ -21,34 +20,8 @@ class Utils {
         fun Long.formattedDate(): String {
             return sdf.format(Date(this))
         }
-        
-        fun String.parseDate() : Date {
-            return  sdf.parse(this)
-        }
-        
-        fun Dialog.setUpDimensions(x: Float, y: Float) {
-            val lp = WindowManager.LayoutParams()
-            lp.copyFrom(window?.attributes)
-            
-            if (x > 1 || y > 1)
-                throw IllegalArgumentException("Values can't be higher than 1")
     
-            if (x.toInt() != WindowManager.LayoutParams.MATCH_PARENT || x.toInt() != WindowManager.LayoutParams.WRAP_CONTENT) {
-                lp.width = (getScreenSize(context).y * x).toInt()
-            } else {
-                lp.width = x.toInt()
-            }
-    
-            if (y.toInt() != WindowManager.LayoutParams.MATCH_PARENT || y.toInt() != WindowManager.LayoutParams.WRAP_CONTENT) {
-                lp.height = (getScreenSize(context).y * y).toInt()
-            } else {
-                lp.height = y.toInt()
-            }
-            
-            window?.attributes = lp
-        }
-
-        fun UTCInstanceCalendar(): Calendar {
+        fun getUTCCalendar(): Calendar {
             return Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         }
 
@@ -70,14 +43,19 @@ class Utils {
             if (dateToValidate.isNullOrBlank() || dateToValidate.length < 10) {
                 return false
             }
-
+            
+            val ano = dateToValidate.substring(dateToValidate.length - 4)
+            if (ano.toInt() < 1970) {
+                return false
+            }
+    
             //val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
             sdf.isLenient = false
 
             try {
                 val date = sdf.parse(dateToValidate)
 
-                if (date.after(Date())) {
+                if (date!!.after(Date())) {
                     return false
                 }
 

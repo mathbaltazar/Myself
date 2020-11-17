@@ -9,17 +9,13 @@ import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.util.CurrencyMask
-import com.baltazarstudio.regular.util.DateMask
 import com.baltazarstudio.regular.util.Utils
-import com.baltazarstudio.regular.util.Utils.Companion.UTCInstanceCalendar
+import com.baltazarstudio.regular.util.Utils.Companion.getUTCCalendar
 import com.baltazarstudio.regular.util.Utils.Companion.formatCurrency
-import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
-import com.baltazarstudio.regular.util.Utils.Companion.isDataValida
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_registrar_movimento.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
 
 class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
     
@@ -36,33 +32,32 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
         setContentView(R.layout.dialog_registrar_movimento)
         
         textinput_dialog_novo_movimento_valor.apply { addTextChangedListener(CurrencyMask(this)) }
-        
-        textinput_dialog_novo_movimento_data.setText(UTCInstanceCalendar().formattedDate())
-        textinput_dialog_novo_movimento_data.apply { addTextChangedListener(DateMask(this)) }
+        dateinput_dialog_novo_movimento_data.setDate(getUTCCalendar())
         
         button_dialog_novo_movimento_adicionar.setOnClickListener {
             
             val descricao = textinput_dialog_novo_movimento_descricao.text.toString()
             val valor = textinput_dialog_novo_movimento_valor.text.toString()
-            val data = textinput_dialog_novo_movimento_data.text.toString()
+            val data = dateinput_dialog_novo_movimento_data.text.toString()
             
             if (descricao.isBlank()) {
                 textinput_dialog_novo_movimento_descricao.error =
                     "Descrição não pode ficar em branco"
             } else if (!isValorValido(valor)) {
                 textinput_dialog_novo_movimento_valor.error = "O valor deve ser maior que zero"
-            } else if (!isDataValida(data)) {
-                textinput_dialog_novo_movimento_data.error = "Data inválida"
+            } else if (!Utils.isDataValida(data)) {
+                dateinput_dialog_novo_movimento_data.error = "Data inválida"
             } else {
                 textinput_dialog_novo_movimento_descricao.error = null
                 textinput_dialog_novo_movimento_valor.error = null
-                textinput_dialog_novo_movimento_data.error = null
+                dateinput_dialog_novo_movimento_data.error = null
                 
                 
                 val movimento = Movimento()
                 movimento.descricao = descricao
                 movimento.valor = Utils.unformatCurrency(valor).toDouble()
-                movimento.data = SimpleDateFormat("dd/MM/yyyy").parse(data).time
+                //movimento.data = SimpleDateFormat("dd/MM/yyyy").parse(data).time
+                movimento.data = dateinput_dialog_novo_movimento_data.getTime()
                 movimento.tipoMovimento = Movimento.GASTO
                 
                 
@@ -105,7 +100,7 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
         this.onEditedListener = onEditedListener
         textinput_dialog_novo_movimento_descricao.setText(movimento.descricao)
         textinput_dialog_novo_movimento_valor.setText(formatCurrency(movimento.valor))
-        textinput_dialog_novo_movimento_data.setText(movimento.data?.formattedDate())
+        dateinput_dialog_novo_movimento_data.setDate(movimento.data!!)
         button_dialog_novo_movimento_adicionar.text = "Alterar"
         tv_dialog_novo_movimento_title.text = "Alterar Movimento"
     }

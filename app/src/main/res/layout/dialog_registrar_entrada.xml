@@ -57,8 +57,8 @@
         android:padding="@dimen/all_default_layout_offset_4"
         app:counterMaxLength="10">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textinput_dialog_nova_entrada_data"
+        <com.baltazarstudio.regular.components.DateInputText
+            android:id="@+id/dateinput_dialog_nova_entrada_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"

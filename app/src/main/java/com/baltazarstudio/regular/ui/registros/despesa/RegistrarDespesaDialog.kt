@@ -3,7 +3,6 @@ package com.baltazarstudio.regular.ui.registros.despesa
 import android.app.Dialog
 import android.content.Context
 import android.view.View
-import android.widget.Toast
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Despesa
@@ -11,15 +10,10 @@ import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.util.CurrencyMask
-import com.baltazarstudio.regular.util.DateMask
 import com.baltazarstudio.regular.util.Utils
-import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
-import com.baltazarstudio.regular.util.Utils.Companion.parseDate
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_registrar_despesa.*
-import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
-import org.jetbrains.anko.toast
 import java.math.BigDecimal
 
 class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : Dialog(context) {
@@ -36,10 +30,7 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
         tv_dialog_registrar_despesa_nome.text = despesa.nome
         tv_dialog_registrar_despesa_valor.text = Utils.formatCurrency(despesa.valor)
         
-        et_dialog_registrar_despesa_data.setText(Utils.UTCInstanceCalendar().formattedDate())
-        et_dialog_registrar_despesa_data.apply { addTextChangedListener(DateMask(this)) }
-        et_dialog_registrar_despesa_data.onFocusChange { v, hasFocus ->
-            if (hasFocus) (v as TextInputEditText).setSelection(v.length()) }
+        dateinput_dialog_registrar_despesa_data.setDate(Utils.getUTCCalendar())
         
         et_dialog_registrar_despesa_valor.setText(Utils.formatCurrency(despesa.valor))
         et_dialog_registrar_despesa_valor.apply { addTextChangedListener(CurrencyMask(this)) }
@@ -56,7 +47,7 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
                 }
                 CHIP_HOJE -> {
                     til_dialog_registrar_despesa_data.visibility = View.GONE
-                    et_dialog_registrar_despesa_data.setText(Utils.UTCInstanceCalendar().formattedDate())
+                    dateinput_dialog_registrar_despesa_data.setDate(Utils.getUTCCalendar())
                 }
             }
         }
@@ -81,7 +72,7 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
         button_dialog_registrar_despesa_registrar.setOnClickListener {
             
             if (chip_dialog_registrar_despesa_outra_data.isChecked) {
-                if (!Utils.isDataValida(et_dialog_registrar_despesa_data.text.toString())) {
+                if (!Utils.isDataValida(dateinput_dialog_registrar_despesa_data.text.toString())) {
                     til_dialog_registrar_despesa_data.error = "Data inválida"
                     return@setOnClickListener
                 }
@@ -99,8 +90,7 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
             movimento.descricao = despesa.nome
             movimento.valor = Utils.unformatCurrency(valor).toDouble()
             
-            val data = et_dialog_registrar_despesa_data.text.toString().parseDate()
-            movimento.data = data.time
+            movimento.data = dateinput_dialog_registrar_despesa_data.getTime()
             
             movimento.referenciaDespesa = despesa.codigo
             movimento.tipoMovimento = Movimento.DESPESA
