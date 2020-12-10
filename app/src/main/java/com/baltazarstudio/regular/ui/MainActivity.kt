@@ -35,14 +35,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      *
      * Próximas Atividades do APP
      *
-     * - SELEÇÃO MÚLTIPLA DOS MOVIMENTOS
+     * - (PARTIALLY DONE!) SELEÇÃO MÚLTIPLA DOS MOVIMENTOS
      * - IMPLEMENTAÇÃO DE NOTAS DE LEMBRETES
      * - VISUALIZAÇÃO EM GRADE/LISTA DAS NOTAS
-     * - LIVE SCROLL ?
+     * - LIVE SCROLL ? (IDEIA !!!!!!!)
      * - FILTROS VARIADOS
+     * - (DONE!) FORMA MAIS VIÁVEL/PRÁTICA DE CAPTURAR DATA
      *
      *
-      */
+     */
     
 
 
