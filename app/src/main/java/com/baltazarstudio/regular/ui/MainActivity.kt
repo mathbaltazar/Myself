@@ -1,6 +1,7 @@
 package com.baltazarstudio.regular.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) FORMA MAIS VIÁVEL/PRÁTICA DE CAPTURAR DATA
      * - (DONE) APONTAR NO POPUP DOS REGISTROS SE PERTENCE A ALGUMA DESPESA
      * - RESUMO DE TODOS OS DADOS
+     * - PIN de acesso regular
      *
      */
     
@@ -123,6 +125,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.action_dados_backup -> {
                 startActivity(intentFor<DadosBackupActivity>())
+                registrosFragment.disableMultiSelectLayout()
             }
         }
         return super.onOptionsItemSelected(item)

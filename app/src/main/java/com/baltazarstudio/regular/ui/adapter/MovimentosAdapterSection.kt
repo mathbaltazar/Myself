@@ -8,7 +8,6 @@ import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.ui.registros.movimentos.DetalhesMovimentoDialog
-import com.baltazarstudio.regular.ui.registros.movimentos.RegistrarMovimentoDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
@@ -17,35 +16,29 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
 import kotlinx.android.synthetic.main.layout_section_header_movimento.view.*
 import kotlinx.android.synthetic.main.layout_section_item_movimento.view.*
 
-class MovimentosAdapterSection(private val adapter: SectionedRecyclerViewAdapter,
-                               private val ano: Int, private val mes: Int, private val movimentos: List<Movimento>
-) : Section(SectionParameters.builder()
-        .headerResourceId(R.layout.layout_section_header_movimento)
-        .itemResourceId(R.layout.layout_section_item_movimento)
-        .build()) {
+class MovimentosAdapterSection(
+    private val adapter: SectionedRecyclerViewAdapter,
+    private val ano: Int,
+    private val mes: Int,
+    private val movimentos: List<Movimento>
+) : Section(
+    SectionParameters.builder().headerResourceId(R.layout.layout_section_header_movimento)
+        .itemResourceId(R.layout.layout_section_item_movimento).build()
+) {
     
     
-    private var mCheckableModeActiveListener: () -> Unit = {}
-    private var mOnCheckableModeItemClickedListener: () -> Unit = {}
+    private var mCheckableModeActiveListener: (Int) -> Unit = {}
+    private var mOnCheckableModeItemSelectedListener: (Int) -> Unit = {}
     
     var checkableMode: Boolean = false
-        set(checkable) {
-            field = checkable
-            adapter.notifyAllItemsChangedInSection(this)
-    
-            if (!checkable) {
-                MovimentoContext.movimentosParaExcluir.clear()
-            }
-            
-        }
     
     
-    fun setOnCheckableModeActiveListener(listener: () -> Unit) {
+    fun setOnMultiSelectModeEnabledListener(listener: (Int) -> Unit) {
         mCheckableModeActiveListener = listener
     }
     
-    fun setOnCheckableModeItemClickedListener(listener: () -> Unit) {
-        mOnCheckableModeItemClickedListener = listener
+    fun setOnCheckableModeItemSelectedListener(listener: (Int) -> Unit) {
+        mOnCheckableModeItemSelectedListener = listener
     }
     
     override fun getContentItemsTotal(): Int {
@@ -84,43 +77,47 @@ class MovimentosAdapterSection(private val adapter: SectionedRecyclerViewAdapter
             itemView.tv_movimento_descricao.text = movimento.descricao
             itemView.tv_movimento_valor.text = Utils.formatCurrency(movimento.valor)
             itemView.tv_movimento_data.text = movimento.data!!.formattedDate()
-            
-            itemView.checkbox_movimento.setOnCheckedChangeListener { _, isChecked ->
-                if (checkableMode) {
-                    if (isChecked) {
-                        MovimentoContext.movimentosParaExcluir.add(movimento)
-                    } else {
-                        MovimentoContext.movimentosParaExcluir.remove(movimento)
-                    }
-                    mOnCheckableModeItemClickedListener()
-                }
-            }
-            
-            if (checkableMode) {
-                itemView.checkbox_movimento.visibility = View.VISIBLE
-            } else {
-                itemView.checkbox_movimento.visibility = View.GONE
+    
+    
+            if (!checkableMode) {
+                unselectItem(movimento)
             }
             
             itemView.setOnClickListener {
                 if (!checkableMode) {
                     DetalhesMovimentoDialog(itemView.context, movimento)
                 } else {
-                    itemView.checkbox_movimento.isChecked = !itemView.checkbox_movimento.isChecked
+                    if (!MovimentoContext.movimentosParaExcluir.contains(movimento)) {
+                        selectItem(movimento)
+                    } else {
+                        unselectItem(movimento)
+                    }
+                    
+                    mOnCheckableModeItemSelectedListener(MovimentoContext.movimentosParaExcluir.size)
                 }
             }
             
             itemView.setOnLongClickListener {
                 if (!checkableMode) {
-                    itemView.checkbox_movimento.isChecked = true
+                    selectItem(movimento)
                     checkableMode = true
                     Trigger.launch(TriggerEvent.PrepareMultiChoiceRegistrosLayout(false))
-                    mCheckableModeActiveListener()
+                    mCheckableModeActiveListener(adapterPosition)
                 }
                 
                 return@setOnLongClickListener checkableMode
             }
             
+        }
+    
+        private fun selectItem(movimento: Movimento) {
+            itemView.setBackgroundResource(R.drawable.ripple_selectable_item_unselect)
+            MovimentoContext.movimentosParaExcluir.add(movimento)
+        }
+    
+         private fun unselectItem(movimento: Movimento) {
+            itemView.setBackgroundResource(R.drawable.ripple_selectable_item_select)
+            MovimentoContext.movimentosParaExcluir.remove(movimento)
         }
     }
     

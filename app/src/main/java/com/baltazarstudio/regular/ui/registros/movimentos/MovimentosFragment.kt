@@ -71,7 +71,7 @@ class MovimentosFragment : Fragment() {
                     val section = MovimentosAdapterSection(adapter, ano, mes, itens)
                     adapter.addSection(section)
                     
-                    section.setOnCheckableModeActiveListener {
+                    section.setOnMultiSelectModeEnabledListener {
                         mView.toolbar_movimentos_multi_select.visibility = View.VISIBLE
     
                         for (count in 0 until adapter.sectionCount) {
@@ -79,18 +79,11 @@ class MovimentosFragment : Fragment() {
                             sec.checkableMode = true
                         }
     
-                        mView.tv_movimentos_multi_select_quantidade.text = "Nenhum Selecionado"
+                        atualizarQuantidadeSelecionados(1)
                     }
                     
-                    section.setOnCheckableModeItemClickedListener {
-                        val qtd = MovimentoContext.movimentosParaExcluir.size
-                        
-                        mView.tv_movimentos_multi_select_quantidade.text =
-                            when (qtd) {
-                                0 -> "Nenhum Selecionado"
-                                1 -> "1 Selecionado"
-                                else -> "$qtd Selecionados"
-                            }
+                    section.setOnCheckableModeItemSelectedListener { count ->
+                        atualizarQuantidadeSelecionados(count)
                     }
                 }
             }
@@ -128,7 +121,7 @@ class MovimentosFragment : Fragment() {
     
     private fun prepareMultiSelectActions() {
         mView.button_movimentos_multi_select_cancelar.setOnClickListener {
-            disableMultiSelectMode()
+            desabilitarModoSelecao()
         }
         
         mView.button_movimentos_multi_select_excluir.setOnClickListener {
@@ -139,7 +132,7 @@ class MovimentosFragment : Fragment() {
                     .setMessage("Confirma a exclusão dos itens selecionados?")
                     .setPositiveButton("Excluir") { _, _ ->
                         MovimentoContext.excluirMovimentos(mView.context)
-                        disableMultiSelectMode()
+                        desabilitarModoSelecao()
             
                         Trigger.launch(TriggerEvent.Toast("Registros Removidos!!"))
                         Trigger.launch(TriggerEvent.UpdateTelaMovimento())
@@ -147,16 +140,30 @@ class MovimentosFragment : Fragment() {
                     }.setNegativeButton("Cancelar", null).show()
             }
         }
+        
     }
     
-    private fun disableMultiSelectMode() {
+    fun habilitarModoSelecao() {
+        
+        mView.fab_add_movimento.visibility = View.GONE
+    }
+    
+    fun desabilitarModoSelecao() {
         val adapter = rv_movimentos.adapter as SectionedRecyclerViewAdapter
         for (count in 0 until adapter.sectionCount) {
             val sec = (adapter.getSection(count) as MovimentosAdapterSection)
             sec.checkableMode = false
         }
+        
+        MovimentoContext.movimentosParaExcluir.clear()
+        adapter.notifyDataSetChanged()
     
         mView.toolbar_movimentos_multi_select.visibility = View.GONE
+        mView.fab_add_movimento.visibility = View.VISIBLE
         Trigger.launch(TriggerEvent.PrepareMultiChoiceRegistrosLayout(true))
+    }
+    
+    private fun atualizarQuantidadeSelecionados(count: Int) {
+        mView.tv_movimentos_multi_select_quantidade.text = "$count Selecionados"
     }
 }

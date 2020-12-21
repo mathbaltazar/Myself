@@ -77,10 +77,15 @@ class RegistrosFragment : Fragment() {
             tablayout_movimentos.visibility = View.VISIBLE
         } else {
             tablayout_movimentos.visibility = View.GONE
+            movimentosFragment.habilitarModoSelecao()
         }
     
         (requireActivity() as MainActivity).searchMenuItem?.isVisible = showLayout
         vp_movimentos.locked = !showLayout
+    }
+    
+    fun disableMultiSelectLayout() {
+        movimentosFragment.desabilitarModoSelecao()
     }
     
     override fun onResume() {
