@@ -2,9 +2,11 @@ package com.baltazarstudio.regular.ui.registros.movimentos
 
 import android.app.Dialog
 import android.content.Context
+import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AlertDialog
 import com.baltazarstudio.regular.R
+import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
@@ -55,5 +57,15 @@ class DetalhesMovimentoDialog(
         tv_detalhes_movimento_descricao.text = movimento.descricao
         tv_detalhes_movimento_data.text = movimento.data?.formattedDate()
         tv_detalhes_movimento_valor.text = Utils.formatCurrency(movimento.valor)
+        
+        if (movimento.referenciaDespesa != null && movimento.referenciaDespesa != 0) {
+            if (verificarSeDepesaAindaExiste(movimento.referenciaDespesa!!))
+                tv_detalhes_movimento_referencia_despesa.visibility = View.VISIBLE
+        }
+    }
+    
+    private fun verificarSeDepesaAindaExiste(codigo: Int): Boolean {
+        val despesa = DespesaContext.getDAO(context).getDespesaPorCodigo(codigo)
+        return despesa != null
     }
 }

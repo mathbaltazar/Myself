@@ -74,6 +74,22 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
         writableDatabase.execSQL(sql)
     }
     
+    fun getDespesaPorCodigo(codigo: Int): Despesa? {
+        val query = "SELECT * FROM $TABELA WHERE $CODIGO = $codigo"
+        
+        val cursor = readableDatabase.rawQuery(query, null)
+        
+        if (cursor.moveToNext()) {
+            val despesa = Despesa()
+            bind(cursor, despesa)
+            cursor.close()
+            return despesa
+        }
+        
+        cursor.close()
+        return null
+    }
+    
     companion object {
         const val TABELA = "Despesa"
         
