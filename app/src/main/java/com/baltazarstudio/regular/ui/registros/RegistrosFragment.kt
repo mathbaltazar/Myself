@@ -17,6 +17,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_registros.*
+import kotlinx.android.synthetic.main.fragment_registros.view.*
 
 
 class RegistrosFragment : Fragment() {
@@ -46,7 +47,14 @@ class RegistrosFragment : Fragment() {
                     is TriggerEvent.UpdateTelaMovimento -> movimentosFragment.carregarMovimentos()
                     is TriggerEvent.UpdateTelaDespesa -> despesasFragment.carregarDespesas()
                     is TriggerEvent.FiltrarMovimentosPelaDescricao -> movimentosFragment.carregarMovimentos(t.newText)
-                    is TriggerEvent.PrepareMultiChoiceRegistrosLayout -> prepareMultiSelectLayout(t.show)
+                    is TriggerEvent.HabilitarModoMultiSelecao -> {
+                        view.vp_movimentos.locked = true
+                        tablayout_movimentos.visibility = View.GONE
+                    }
+                    is TriggerEvent.DesabilitarModoMultiSelecao -> {
+                        view.vp_movimentos.locked = false
+                        tablayout_movimentos.visibility = View.VISIBLE
+                    }
                 }
         })
     }
@@ -70,22 +78,6 @@ class RegistrosFragment : Fragment() {
             }
         })
         
-    }
-    
-    private fun prepareMultiSelectLayout(showLayout: Boolean) {
-        if (showLayout) {
-            tablayout_movimentos.visibility = View.VISIBLE
-        } else {
-            tablayout_movimentos.visibility = View.GONE
-            movimentosFragment.habilitarModoSelecao()
-        }
-    
-        (requireActivity() as MainActivity).searchMenuItem?.isVisible = showLayout
-        vp_movimentos.locked = !showLayout
-    }
-    
-    fun disableMultiSelectLayout() {
-        movimentosFragment.desabilitarModoSelecao()
     }
     
     override fun onResume() {

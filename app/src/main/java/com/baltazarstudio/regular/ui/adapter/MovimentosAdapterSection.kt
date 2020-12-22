@@ -27,15 +27,9 @@ class MovimentosAdapterSection(
 ) {
     
     
-    private var mCheckableModeActiveListener: (Int) -> Unit = {}
     private var mOnCheckableModeItemSelectedListener: (Int) -> Unit = {}
-    
     var checkableMode: Boolean = false
     
-    
-    fun setOnMultiSelectModeEnabledListener(listener: (Int) -> Unit) {
-        mCheckableModeActiveListener = listener
-    }
     
     fun setOnCheckableModeItemSelectedListener(listener: (Int) -> Unit) {
         mOnCheckableModeItemSelectedListener = listener
@@ -101,8 +95,7 @@ class MovimentosAdapterSection(
                 if (!checkableMode) {
                     selectItem(movimento)
                     checkableMode = true
-                    Trigger.launch(TriggerEvent.PrepareMultiChoiceRegistrosLayout(false))
-                    mCheckableModeActiveListener(adapterPosition)
+                    Trigger.launch(TriggerEvent.HabilitarModoMultiSelecao())
                 }
                 
                 return@setOnLongClickListener checkableMode

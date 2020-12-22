@@ -1,7 +1,6 @@
 package com.baltazarstudio.regular.ui
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -22,6 +21,7 @@ import com.baltazarstudio.regular.ui.backup.DadosBackupActivity
 import com.baltazarstudio.regular.ui.entradas.EntradasFragment
 import com.baltazarstudio.regular.ui.registros.RegistrosFragment
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      *
      * Próximas Atividades do APP
      *
-     * - (PARTIALLY DONE) SELEÇÃO MÚLTIPLA DOS MOVIMENTOS
+     * - (DONE) SELEÇÃO MÚLTIPLA DOS MOVIMENTOS
      * - IMPLEMENTAÇÃO DE NOTAS DE LEMBRETES
      * - VISUALIZAÇÃO EM GRADE/LISTA DAS NOTAS
      * - LIVE SCROLL ? (IDEIA !!!!!!!)
@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         toolbar.setTitle(R.string.activity_title_meus_registros)
         setSupportActionBar(toolbar)
+        
         
         val toggle = DrawerToggle(this, drawer_layout, toolbar)
         drawer_layout.addDrawerListener(toggle)
@@ -125,7 +126,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.action_dados_backup -> {
                 startActivity(intentFor<DadosBackupActivity>())
-                registrosFragment.disableMultiSelectLayout()
+                Trigger.launch(TriggerEvent.DesabilitarModoMultiSelecao())
             }
         }
         return super.onOptionsItemSelected(item)
@@ -142,11 +143,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
     
-    private fun registerGlobalToast() {
+    private fun registerGlobalUIMessage() {
         Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe { t ->
                 if (t is TriggerEvent.Toast) {
                     toast(t.message)
+                } else if (t is TriggerEvent.Snack) {
+                    Snackbar.make(findViewById(android.R.id.content), t.message, Snackbar.LENGTH_LONG)
                 }
             }.apply {  }
     }
@@ -163,7 +166,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onStart()
     
         setupFirebaseMessaging()
-        registerGlobalToast()
+        registerGlobalUIMessage()
     }
     
     override fun onResume() {
@@ -178,7 +181,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     ) : ActionBarDrawerToggle(
         activity, drawerLayout, toolbar, android.R.string.yes, android.R.string.cancel
     ) {
-        
         
         override fun onDrawerOpened(drawerView: View) {
             super.onDrawerOpened(drawerView)
