@@ -40,10 +40,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - IMPLEMENTAÇÃO DE NOTAS DE LEMBRETES
      * - VISUALIZAÇÃO EM GRADE/LISTA DAS NOTAS
      * - LIVE SCROLL ? (IDEIA !!!!!!!)
-     * - FILTROS VARIADOS
+     * - RESUMO DE TODOS OS DADOS + FILTROS VARIADOS
      * - (DONE) FORMA MAIS VIÁVEL/PRÁTICA DE CAPTURAR DATA
      * - (DONE) APONTAR NO POPUP DOS REGISTROS SE PERTENCE A ALGUMA DESPESA
-     * - RESUMO DE TODOS OS DADOS
      * - PIN de acesso regular
      *
      */
@@ -104,14 +103,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         searchMenuItem = menu.findItem(R.id.action_pesquisar)
-        
+        searchMenuItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                registrosFragment.desabilitarTabs()
+                return true
+            }
+    
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                registrosFragment.habilitarTabs()
+                return true
+            }
+        })
+    
         val searchView = searchMenuItem!!.actionView as SearchView
         searchView.onActionViewCollapsed()
-        searchView.queryHint = "Descrição..."
+        searchView.queryHint = "Digite sua busca..."
+        
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
+            override fun onQueryTextSubmit(query: String?): Boolean { return false }
             
             override fun onQueryTextChange(newText: String?): Boolean {
                 Trigger.launch(TriggerEvent.FiltrarMovimentosPelaDescricao(newText))
@@ -126,7 +135,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.action_dados_backup -> {
                 startActivity(intentFor<DadosBackupActivity>())
-                Trigger.launch(TriggerEvent.DesabilitarModoMultiSelecao())
+                searchMenuItem?.collapseActionView()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -146,10 +155,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun registerGlobalUIMessage() {
         Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe { t ->
-                if (t is TriggerEvent.Toast) {
-                    toast(t.message)
-                } else if (t is TriggerEvent.Snack) {
-                    Snackbar.make(findViewById(android.R.id.content), t.message, Snackbar.LENGTH_LONG)
+                when (t) {
+                    is TriggerEvent.Toast -> toast(t.message)
+                    is TriggerEvent.Snack -> {
+                        Snackbar.make(findViewById(android.R.id.content), t.message, Snackbar.LENGTH_LONG).show()
+                    }
                 }
             }.apply {  }
     }

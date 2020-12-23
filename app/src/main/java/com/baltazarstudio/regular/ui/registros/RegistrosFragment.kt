@@ -47,14 +47,8 @@ class RegistrosFragment : Fragment() {
                     is TriggerEvent.UpdateTelaMovimento -> movimentosFragment.carregarMovimentos()
                     is TriggerEvent.UpdateTelaDespesa -> despesasFragment.carregarDespesas()
                     is TriggerEvent.FiltrarMovimentosPelaDescricao -> movimentosFragment.carregarMovimentos(t.newText)
-                    is TriggerEvent.HabilitarModoMultiSelecao -> {
-                        view.vp_movimentos.locked = true
-                        tablayout_movimentos.visibility = View.GONE
-                    }
-                    is TriggerEvent.DesabilitarModoMultiSelecao -> {
-                        view.vp_movimentos.locked = false
-                        tablayout_movimentos.visibility = View.VISIBLE
-                    }
+                    is TriggerEvent.HabilitarModoMultiSelecao -> desabilitarTabs()
+                    is TriggerEvent.DesabilitarModoMultiSelecao -> habilitarTabs()
                 }
         })
     }
@@ -78,6 +72,16 @@ class RegistrosFragment : Fragment() {
             }
         })
         
+    }
+    
+    fun habilitarTabs() {
+        tablayout_movimentos.visibility = View.VISIBLE
+        vp_movimentos.locked = false
+    }
+
+    fun desabilitarTabs() {
+        tablayout_movimentos.visibility = View.GONE
+        vp_movimentos.locked = true
     }
     
     override fun onResume() {

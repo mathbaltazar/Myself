@@ -11,6 +11,7 @@ import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
+import com.baltazarstudio.regular.ui.MainActivity
 import com.baltazarstudio.regular.ui.adapter.MovimentosAdapterSection
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
@@ -73,10 +74,10 @@ class MovimentosFragment : Fragment() {
                             AlertDialog.Builder(mView.context).setTitle("Excluir")
                                 .setMessage("Confirma a exclusão dos itens selecionados?")
                                 .setPositiveButton("Excluir") { _, _ ->
-                                    MovimentoContext.excluirMovimentos(mView.context)
+                                    val countExcluidos = MovimentoContext.excluirMovimentos(mView.context)
                                     desabilitarModoSelecao()
                             
-                                    Trigger.launch(TriggerEvent.Snack("Registros Removidos!"))
+                                    Trigger.launch(TriggerEvent.Snack("$countExcluidos Registros Removidos"))
                                     Trigger.launch(TriggerEvent.UpdateTelaMovimento())
                                     Trigger.launch(TriggerEvent.UpdateTelaDespesa())
                                 }.setNegativeButton("Cancelar", null).show()

@@ -16,10 +16,12 @@ abstract class MovimentoContext {
             return mDAO!!
         }
     
-        fun excluirMovimentos(context: Context) {
+        fun excluirMovimentos(context: Context): Int {
             for (movimento in movimentosParaExcluir) {
                 getDAO(context).excluir(movimento)
             }
+            
+            return movimentosParaExcluir.size
         }
     }
     
