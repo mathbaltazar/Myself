@@ -90,6 +90,36 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
         return null
     }
     
+    fun getQuantidadeDespesas(): Int {
+        val sql = "SELECT COUNT(*) FROM $TABELA"
+        
+        val cursor = readableDatabase.rawQuery(sql, null)
+        cursor.moveToNext()
+        val count = cursor.getInt(0)
+        cursor.close()
+        return count
+    }
+    
+    fun getValorTotalDespesas(): Double {
+        val sql = "SELECT SUM($VALOR) FROM $TABELA"
+        
+        val cursor = readableDatabase.rawQuery(sql, null)
+        cursor.moveToNext()
+        val total = cursor.getDouble(0)
+        cursor.close()
+        return total
+    }
+    
+    fun getTotalPagoDespesas(): Double {
+        val sql = "SELECT SUM($VALOR) FROM ${MovimentoDAO.TABELA} WHERE ${MovimentoDAO.REFERENCIA_DESPESA} <> 0"
+    
+        val cursor = readableDatabase.rawQuery(sql, null)
+        cursor.moveToNext()
+        val total = cursor.getDouble(0)
+        cursor.close()
+        return total
+    }
+    
     companion object {
         const val TABELA = "Despesa"
         

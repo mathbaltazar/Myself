@@ -2,11 +2,13 @@
     <string name="app_name">Regular</string>
     <string name="activity_title_meus_registros">Meus Registros</string>
     <string name="activity_title_entradas">Entradas</string>
+    <string name="activity_title_resumos">Resumos</string>
     <string name="activity_main_menu_dados_backup">Dados</string>
     <string name="activity_main_menu_pesquisar">Pesquisar</string>
 
     <string name="drawer_menu_movimentos">Movimentos</string>
     <string name="drawer_menu_entradas">Entradas</string>
+    <string name="drawer_menu_resumo">Resumo</string>
 
     <string name="layout_movimentos_despesas_info">Estas são as suas despesas. Considere atribuir como aluguel, internet, Netflix, planos de operadora de celular, mensalidades do carro ou da casa, pensão alimentícia etc…</string>
     <string name="action_mode_fragment_registros_excluir_movimentos">Excluir</string>

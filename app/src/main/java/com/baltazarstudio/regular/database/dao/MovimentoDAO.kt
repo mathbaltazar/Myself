@@ -6,6 +6,10 @@ import android.database.sqlite.SQLiteDatabase
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.database.Database 
 import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.util.Utils
+import org.jetbrains.anko.db.select
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     
@@ -155,6 +159,44 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         }
         
         db.endTransaction()
+    }
+    
+    fun getQuantidadeMovimentos(): Int {
+        val query = "SELECT COUNT(*) FROM $TABELA"
+        
+        val cursor = readableDatabase.rawQuery(query, null)
+        cursor.moveToNext()
+        val count = cursor.getInt(0)
+        cursor.close()
+        return count
+    }
+    
+    fun getTotalValorMovimentos(): Double {
+        val query = "SELECT SUM($VALOR) FROM $TABELA"
+    
+        val cursor = readableDatabase.rawQuery(query, null)
+        cursor.moveToNext()
+        val total = cursor.getDouble(0)
+        cursor.close()
+        return total
+    }
+    
+    fun getTotalValorMovimentosPorDia(dias: Int): Double {
+        val calendar = Utils.getUTCCalendar()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        
+        calendar.add(Calendar.DAY_OF_MONTH, -dias)
+        
+        val query = "SELECT SUM($VALOR) FROM $TABELA WHERE $DATA >= ${calendar.timeInMillis}"
+    
+        val cursor = readableDatabase.rawQuery(query, null)
+        cursor.moveToNext()
+        val total = cursor.getDouble(0)
+        cursor.close()
+        return total
     }
     
     companion object {

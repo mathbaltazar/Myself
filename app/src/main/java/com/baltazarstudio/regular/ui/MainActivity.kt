@@ -20,6 +20,7 @@ import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.ui.backup.DadosBackupActivity
 import com.baltazarstudio.regular.ui.entradas.EntradasFragment
 import com.baltazarstudio.regular.ui.registros.RegistrosFragment
+import com.baltazarstudio.regular.ui.resumo.ResumoFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
@@ -44,6 +45,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) FORMA MAIS VIÁVEL/PRÁTICA DE CAPTURAR DATA
      * - (DONE) APONTAR NO POPUP DOS REGISTROS SE PERTENCE A ALGUMA DESPESA
      * - PIN de acesso regular
+     * - Editar despesa (Popup selecionar registros a seram alterados também)
+     * - FONTE EXCLUSIVA ?
      *
      */
     
@@ -91,7 +94,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             
                 toolbar.setTitle(R.string.activity_title_entradas)
                 searchMenuItem?.isVisible = false
-                searchMenuItem?.collapseActionView()
+            }
+            R.id.menu_drawer_resumo -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, ResumoFragment())
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+    
+                toolbar.setTitle(R.string.activity_title_resumos)
+                searchMenuItem?.isVisible = false
             }
         }
     
@@ -135,7 +145,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.action_dados_backup -> {
                 startActivity(intentFor<DadosBackupActivity>())
-                searchMenuItem?.collapseActionView()
+                if (searchMenuItem?.isVisible!!) {
+                    searchMenuItem?.collapseActionView()
+                }
             }
         }
         return super.onOptionsItemSelected(item)

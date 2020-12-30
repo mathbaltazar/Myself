@@ -5,6 +5,9 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.baltazarstudio.regular.database.Database
 import com.baltazarstudio.regular.model.Entrada
+import com.baltazarstudio.regular.util.Utils
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EntradaDAO(context: Context) : Database<Entrada>(context) {
     
@@ -69,6 +72,43 @@ class EntradaDAO(context: Context) : Database<Entrada>(context) {
         }
         
         db.endTransaction()
+    }
+    
+    fun getQuantidadeEntradas(): Int {
+        val sql = "SELECT COUNT(*) FROM $TABELA"
+        
+        val cursor = readableDatabase.rawQuery(sql, null)
+        cursor.moveToNext()
+        val count = cursor.getInt(0)
+        cursor.close()
+        return count
+    }
+    
+    fun getValorTotalEntradas(): Double {
+        val sql = "SELECT SUM($VALOR) FROM $TABELA"
+        
+        val cursor = readableDatabase.rawQuery(sql, null)
+        cursor.moveToNext()
+        val total = cursor.getDouble(0)
+        cursor.close()
+        return total
+    }
+    
+    fun getValorMediaEntradasPorMes(meses: Int): Double {
+        val calendar = Utils.getUTCCalendar()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        
+        calendar.add(Calendar.MONTH, -meses)
+        
+        val sql = "SELECT AVG($VALOR) FROM $TABELA WHERE $DATA >= ${calendar.timeInMillis}"
+        
+        val cursor = readableDatabase.rawQuery(sql, null)
+        cursor.moveToNext()
+        val media = cursor.getDouble(0)
+        cursor.close()
+        return media
     }
     
     companion object {

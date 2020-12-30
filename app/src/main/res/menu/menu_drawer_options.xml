@@ -10,6 +10,10 @@
             android:id="@+id/menu_drawer_entradas"
             android:icon="@drawable/ic_drawer_entradas"
             android:title="@string/drawer_menu_entradas" />
+        <item
+            android:id="@+id/menu_drawer_resumo"
+            android:icon="@drawable/ic_drawer_resumo"
+            android:title="@string/drawer_menu_resumo" />
     </group>
 
 </menu>
