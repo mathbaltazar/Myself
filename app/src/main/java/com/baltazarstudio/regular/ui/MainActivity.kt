@@ -41,12 +41,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - IMPLEMENTAÇÃO DE NOTAS DE LEMBRETES
      * - VISUALIZAÇÃO EM GRADE/LISTA DAS NOTAS
      * - LIVE SCROLL ? (IDEIA !!!!!!!)
-     * - RESUMO DE TODOS OS DADOS + FILTROS VARIADOS
+     * - (DONE) RESUMO DE TODOS OS DADOS + FILTROS VARIADOS
      * - (DONE) FORMA MAIS VIÁVEL/PRÁTICA DE CAPTURAR DATA
      * - (DONE) APONTAR NO POPUP DOS REGISTROS SE PERTENCE A ALGUMA DESPESA
      * - PIN de acesso regular
      * - Editar despesa (Popup selecionar registros a seram alterados também)
-     * - FONTE EXCLUSIVA ?
+     * - Nova Fonte
      *
      */
     

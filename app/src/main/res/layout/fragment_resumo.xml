@@ -358,7 +358,8 @@
                     android:textColor="@android:color/holo_purple"
                     android:textSize="@dimen/text_size_16"
                     android:textStyle="bold"
-                    android:visibility="visible"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     tools:text="R$ 18.563,21" />
 
             </LinearLayout>
