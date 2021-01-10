@@ -2,10 +2,13 @@ package com.baltazarstudio.regular.ui.registros.despesa
 
 import android.app.Dialog
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
+import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
@@ -17,6 +20,9 @@ import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import java.math.BigDecimal
 
 class CriarDespesaDialog(context: Context) : Dialog(context) {
+    
+    private var isEdicao: Boolean = false
+    private lateinit var despesaEmEdicao: Despesa
     
     init {
         setUpView()
@@ -40,12 +46,26 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
                 et_dialog_despesa_valor.error = "Valor inválido"
             } else {
                 
-                val despesa = Despesa()
-                despesa.nome = nome
-                despesa.valor = Utils.unformatCurrency(valor).toDouble()
-                
-                DespesaContext.getDAO(context).inserir(despesa)
-                Toast.makeText(context, "Despesa adicionada!", Toast.LENGTH_SHORT).show()
+    
+                if (isEdicao) {
+                    despesaEmEdicao.nome = nome
+                    despesaEmEdicao.valor = Utils.unformatCurrency(valor).toDouble()
+                    DespesaContext.getDAO(context).alterar(despesaEmEdicao)
+                    
+                    Trigger.launch(TriggerEvent.Snack("Despesa alterada"))
+                    
+                    if (chk_dialog_despesa_alterar_registros.isChecked) {
+                        MovimentoContext.getDAO(context).atualizarRegistrosDaDespesa(despesaEmEdicao)
+                        Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+                    }
+                    
+                } else {
+                    val despesa = Despesa()
+                    despesa.nome = nome
+                    despesa.valor = Utils.unformatCurrency(valor).toDouble()
+                    DespesaContext.getDAO(context).inserir(despesa)
+                    Trigger.launch(TriggerEvent.Toast("Despesa adicionada!"))
+                }
                 
                 Trigger.launch(TriggerEvent.UpdateTelaDespesa())
                 
@@ -58,7 +78,6 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(window?.attributes)
         
-        ///val height = Utils.getScreenSize(context).y * 0.5 // %
         lp.width = WindowManager.LayoutParams.MATCH_PARENT
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT
         
@@ -67,6 +86,31 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
     
     private fun isValorValido(valor: String): Boolean {
         return valor.isNotBlank() && Utils.unformatCurrency(valor).toBigDecimal() > BigDecimal.ZERO
+    }
+    
+    fun editar(despesa: Despesa) {
+        isEdicao = true
+        despesaEmEdicao = despesa
+        
+        et_dialog_despesa_nome.setText(despesaEmEdicao.nome)
+        et_dialog_despesa_nome.setSelection(despesaEmEdicao.nome?.length ?: 0)
+        et_dialog_despesa_valor.setText(Utils.formatCurrency(despesaEmEdicao.valor))
+        button_dialog_despesa_cadastrar.text = "Alterar"
+        tv_dialog_registrar_despesa_title.text = "Editar"
+        
+        et_dialog_despesa_nome.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (et_dialog_despesa_nome.text.toString().equals(despesaEmEdicao.nome, false)) {
+                    chk_dialog_despesa_alterar_registros.visibility = View.GONE
+                    chk_dialog_despesa_alterar_registros.isChecked = false
+                } else {
+                    chk_dialog_despesa_alterar_registros.visibility = View.VISIBLE
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+        
     }
     
 }

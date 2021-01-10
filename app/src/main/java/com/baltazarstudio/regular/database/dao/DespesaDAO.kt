@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.baltazarstudio.regular.database.Database
 import com.baltazarstudio.regular.model.Despesa
+import java.lang.StringBuilder
 import kotlin.collections.ArrayList
 
 class DespesaDAO(context: Context) : Database<Despesa>(context) {
@@ -35,6 +36,16 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
             "INSERT INTO $TABELA ($NOME, $VALOR) VALUES ('${despesa.nome}', ${despesa.valor})"
         
         writableDatabase.execSQL(insert)
+    }
+    
+    fun alterar(despesa: Despesa) {
+        val update = StringBuilder()
+        update.append("UPDATE $TABELA SET")
+        update.append(" $NOME = '${despesa.nome}'")
+        update.append(", $VALOR = ${despesa.valor}")
+        update.append(" WHERE $CODIGO = ${despesa.codigo}")
+        
+        writableDatabase.execSQL(update.toString())
     }
     
     fun restaurarDespesas(despesas: List<Despesa>?) {

@@ -38,6 +38,16 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/all_default_layout_offset_4"
             android:src="@drawable/ic_arrow_down" />
+
+        <ImageView
+            android:id="@+id/iv_section_item_despesas_opcoes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/all_default_layout_offset_4"
+            android:src="@drawable/ic_more_vertical" />
     </LinearLayout>
 
     <TextView

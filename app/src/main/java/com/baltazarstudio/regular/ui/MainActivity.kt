@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) FORMA MAIS VIÁVEL/PRÁTICA DE CAPTURAR DATA
      * - (DONE) APONTAR NO POPUP DOS REGISTROS SE PERTENCE A ALGUMA DESPESA
      * - PIN de acesso regular
-     * - Editar despesa (Popup selecionar registros a seram alterados também)
+     * - Editar despesa (Perguntar se registros serão alterados também)
      * - Nova Fonte
      *
      */

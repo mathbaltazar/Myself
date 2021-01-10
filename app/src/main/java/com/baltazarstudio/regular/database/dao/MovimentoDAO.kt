@@ -4,10 +4,11 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.baltazarstudio.regular.context.MovimentoContext
-import com.baltazarstudio.regular.database.Database 
+import com.baltazarstudio.regular.database.Database
+import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.util.Utils
-import org.jetbrains.anko.db.select
+import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -54,18 +55,24 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         return movimentos
     }
     
-    fun getMovimentosPorTipo(tipoMovimento: Int): ArrayList<Movimento> {
+    fun getRegistrosPelaDespesa(codigoDespesa: Int): ArrayList<Movimento> {
         val movimentos = ArrayList<Movimento>()
         
         if (MovimentoContext.useCache) {
-            movimentos.addAll(movimentosCache.filter { it.tipoMovimento == tipoMovimento })
+            movimentos.addAll(movimentosCache.filter {
+                it.tipoMovimento == Movimento.DESPESA
+                    && it.referenciaDespesa == codigoDespesa
+            })
             return movimentos
         }
         
-        val query =
-            "SELECT * FROM $TABELA WHERE $TIPO_MOVIMENTO = $tipoMovimento ORDER BY $DATA, $TABLE_ID DESC"
+        val queryBuilder = StringBuilder()
+        queryBuilder.append("SELECT * FROM $TABELA")
+        queryBuilder.append(" WHERE $TIPO_MOVIMENTO = ${Movimento.DESPESA}")
+        queryBuilder.append(" AND $REFERENCIA_DESPESA = $codigoDespesa")
+        queryBuilder.append(" ORDER BY $DATA, $TABLE_ID DESC")
     
-        val cursor = readableDatabase.rawQuery(query, null)
+        val cursor = readableDatabase.rawQuery(queryBuilder.toString(), null)
         while (cursor.moveToNext()) {
             val item = Movimento()
             bind(cursor, item)
@@ -75,6 +82,21 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         cursor.close()
     
         return movimentos
+    }
+    
+    fun getUltimoRegistro(codigo: Int): Long {
+        
+        val sql = "SELECT MAX($DATA) FROM $TABELA WHERE $REFERENCIA_DESPESA = $codigo"
+        
+        val cursor = readableDatabase.rawQuery(sql, null)
+        
+        var data = 0L
+        if (cursor.moveToNext()) {
+            data = cursor.getLong(0)
+        }
+        
+        cursor.close()
+        return data
     }
     
     fun inserir(movimento: Movimento) {
@@ -108,6 +130,17 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         
         writableDatabase.execSQL(update)
     
+        MovimentoContext.useCache = false
+    }
+    
+    fun atualizarRegistrosDaDespesa(despesaEmEdicao: Despesa) {
+        val sql = StringBuilder()
+        sql.append("UPDATE $TABELA SET")
+        sql.append(" $DESCRICAO = '${despesaEmEdicao.nome}'")
+        sql.append(" WHERE $REFERENCIA_DESPESA = ${despesaEmEdicao.codigo}")
+        
+        writableDatabase.execSQL(sql.toString())
+        
         MovimentoContext.useCache = false
     }
     
@@ -180,6 +213,7 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         cursor.close()
         return total
     }
+    
     
     fun getTotalValorMovimentosPorDia(dias: Int): Double {
         val calendar = Utils.getUTCCalendar()

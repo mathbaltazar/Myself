@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_dialog_registrar_despesa_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -12,7 +14,8 @@
         android:text="Nova Despesa"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/text_size_18" />
+        android:textSize="@dimen/text_size_18"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
@@ -32,6 +35,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/chk_dialog_despesa_alterar_registros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+        android:text="Alterar o nome de todos os registros"
+        android:textSize="@dimen/text_size_16"
+        tools:checked="true" />
 
     <TextView
         android:layout_width="match_parent"
@@ -56,9 +69,9 @@
     <Button
         android:id="@+id/button_dialog_despesa_cadastrar"
         android:layout_width="match_parent"
-        android:textColor="@android:color/black"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset_8"
         android:backgroundTint="@color/off_primary"
-        android:text="Cadastrar Despesa" />
+        android:text="Cadastrar Despesa"
+        android:textColor="@android:color/black" />
 </LinearLayout>

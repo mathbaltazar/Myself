@@ -2,10 +2,12 @@ package com.baltazarstudio.regular.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
@@ -14,8 +16,9 @@ import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
-import com.baltazarstudio.regular.ui.registros.despesa.RegistrarDespesaDialog
+import com.baltazarstudio.regular.ui.registros.despesa.CriarDespesaDialog
 import com.baltazarstudio.regular.ui.registros.despesa.MovimentosDespesasDialog
+import com.baltazarstudio.regular.ui.registros.despesa.RegistrarDespesaDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_section_item_despesa.view.*
@@ -75,11 +78,12 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             itemView.tv_section_item_despesas_nome.text = despesa.nome
             
             // ULTIMO REGISTRO
-            val ultimoRegistro = obterUltimoRegistro(despesa.codigo!!)
-            if (ultimoRegistro != null) {
-                itemView.tv_section_item_despesas_ultimo_registro.text = "Último registro: ${ultimoRegistro.formattedDate()}"
-            } else {
+            //val ultimoRegistro = obterUltimoRegistro(despesa.codigo!!)
+            val ultimoRegistro = MovimentoContext.getDAO(itemView.context).getUltimoRegistro(despesa.codigo!!)
+            if (ultimoRegistro == 0L) {
                 itemView.tv_section_item_despesas_ultimo_registro.text = "Não há registros."
+            } else {
+                itemView.tv_section_item_despesas_ultimo_registro.text = "Último registro: ${ultimoRegistro.formattedDate()}"
             }
             
             // VALOR
@@ -96,48 +100,47 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             }
             
             // TODAS DESPESAS
-            itemView.button_section_item_despesas_todos.isEnabled = ultimoRegistro != null
+            itemView.button_section_item_despesas_todos.isEnabled = ultimoRegistro != 0L
             itemView.button_section_item_despesas_todos.setOnClickListener {
-                val registrosDaDespesa = MovimentoContext.getDAO(itemView.context).getMovimentosPorTipo(Movimento.DESPESA)
-                    .filter { it.referenciaDespesa == despesa.codigo }
-    
+                val registrosDaDespesa = MovimentoContext.getDAO(itemView.context).getRegistrosPelaDespesa(despesa.codigo!!)
                 val dialog = MovimentosDespesasDialog(itemView.context, registrosDaDespesa)
                 dialog.show()
             }
-            
-            // EXCLUIR DESPESA
-            itemView.setOnLongClickListener {
-                AlertDialog.Builder(itemView.context).setTitle("Excluir")
-                    .setMessage("Deseja realmente deletar esta despesa?")
-                    .setPositiveButton("Excluir") { _, _ ->
-                        DespesaContext.getDAO(itemView.context).deletar(despesa)
-                        Toast.makeText(itemView.context, "Removido!", Toast.LENGTH_SHORT).show()
-                        despesas.remove(despesa)
-                        /*notifyItemRemoved(position)
-                        reassignExpadedItem(position)*/
-                        Trigger.launch(TriggerEvent.UpdateTelaDespesa())
-                    }.setNegativeButton("Cancelar", null)
-                    .show()
-                true
+    
+            // OPÇOES
+            itemView.iv_section_item_despesas_opcoes.setOnClickListener {
+                val popupMenu = PopupMenu(itemView.context, it)
+                popupMenu.menu.add(Menu.NONE, 0, Menu.NONE, "Editar")
+                popupMenu.menu.add(Menu.NONE, 1, Menu.NONE, "Excluir")
+                popupMenu.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        0 -> editarDespesa(despesa)
+                        1 -> excluirDepesa(despesa)
+                    }
+                    false
+                }
+                popupMenu.show()
             }
+            
         }
     
-        private fun obterUltimoRegistro(codigo: Int): Long? {
-            val registrosDespesas = MovimentoContext.getDAO(itemView.context).getMovimentosPorTipo(Movimento.DESPESA)
-                .filter { it.referenciaDespesa == codigo }
-            
-            if (registrosDespesas.isNullOrEmpty())
-                return null
-            
-            return registrosDespesas.sortedByDescending { it.data }.first().data
+        private fun editarDespesa(despesa: Despesa) {
+            val dialog = CriarDespesaDialog(itemView.context)
+            dialog.editar(despesa)
+            dialog.show()
         }
     
-        /*private fun reassignExpadedItem(excludedPosition: Int) {
-            if (excludedPosition == expandedItemPosition)
-                expandedItemPosition = -1
-            else if (excludedPosition < expandedItemPosition)
-                expandedItemPosition--
-        }*/
+    
+        private fun excluirDepesa(despesa: Despesa) {
+            AlertDialog.Builder(itemView.context).setTitle("Excluir")
+                .setMessage("Deseja realmente deletar esta despesa?")
+                .setPositiveButton("Excluir") { _, _ ->
+                    DespesaContext.getDAO(itemView.context).deletar(despesa)
+                    Trigger.launch(TriggerEvent.Toast("Removido!"))
+                    Trigger.launch(TriggerEvent.UpdateTelaDespesa())
+                }.setNegativeButton("Cancelar", null)
+                .show()
+        }
     
     }
 }
