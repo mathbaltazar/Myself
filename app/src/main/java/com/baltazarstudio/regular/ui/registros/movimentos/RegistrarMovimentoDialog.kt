@@ -21,7 +21,7 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
     
     private lateinit var onEditedListener: (Movimento) -> Unit
     private var edit: Boolean = false
-    private var id: Int? = null
+    private var idMovimentoEmEdicao: Int? = null
     
     init {
         setUpView()
@@ -62,7 +62,7 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
                 
                 
                 if (edit) {
-                    movimento.id = id
+                    movimento.id = idMovimentoEmEdicao
                     MovimentoContext.getDAO(context).alterar(movimento)
                     Trigger.launch(TriggerEvent.Toast("Alterado!"))
                     
@@ -87,7 +87,6 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(window?.attributes)
         
-        ///val height = Utils.getScreenSize(context).y * 0.5 // %
         lp.width = WindowManager.LayoutParams.MATCH_PARENT
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT
         
@@ -95,10 +94,12 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
     }
     
     fun edit(movimento: Movimento, onEditedListener: (Movimento) -> Unit) {
-        edit = true
-        id = movimento.id
+        this.edit = true
+        this.idMovimentoEmEdicao = movimento.id
         this.onEditedListener = onEditedListener
+        
         textinput_dialog_novo_movimento_descricao.setText(movimento.descricao)
+        textinput_dialog_novo_movimento_descricao.setSelection(movimento.descricao?.length ?: 0)
         textinput_dialog_novo_movimento_valor.setText(formatCurrency(movimento.valor))
         dateinput_dialog_novo_movimento_data.setDate(movimento.data!!)
         button_dialog_novo_movimento_adicionar.text = "Alterar"

@@ -12,7 +12,7 @@ import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_section_item_movimento.view.*
 
-class MovimentoSimpleAdapter(context: Context, private val movimentos: List<Movimento>)
+class MovimentoSimpleAdapter(context: Context, private val movimentos: ArrayList<Movimento>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
     private val layoutInflater = LayoutInflater.from(context)
@@ -42,7 +42,8 @@ class MovimentoSimpleAdapter(context: Context, private val movimentos: List<Movi
             itemView.setOnClickListener {
                 val dialog = RegistrarMovimentoDialog(itemView.context)
                 dialog.edit(movimento) {
-    
+                    movimentos[position] = it
+                    notifyItemChanged(position)
                 }
                 dialog.show()
             }
