@@ -58,7 +58,6 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
                 movimento.valor = Utils.unformatCurrency(valor).toDouble()
                 //movimento.data = SimpleDateFormat("dd/MM/yyyy").parse(data).time
                 movimento.data = dateinput_dialog_novo_movimento_data.getTime()
-                movimento.tipoMovimento = Movimento.GASTO
                 
                 
                 if (edit) {

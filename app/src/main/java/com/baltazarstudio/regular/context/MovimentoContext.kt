@@ -8,7 +8,6 @@ abstract class MovimentoContext {
     companion object {
         
         private var mDAO: MovimentoDAO? = null
-        var useCache: Boolean = false
         var movimentosParaExcluir: ArrayList<Movimento> = arrayListOf()
     
         fun getDAO(context: Context): MovimentoDAO {

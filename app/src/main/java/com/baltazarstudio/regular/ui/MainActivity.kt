@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) Editar despesa (Perguntar se registros serão alterados também)
      * - Nova Fonte
      * - (DONE) Manutenção: Alterar registro pelo "Ver Todos" da aba despesa não altera o popup
-     * - Despesa: Agregar/desagregar registro existente
+     * - (DONE) Despesa: Agregar/desagregar registro existente
      * - Despesa: Dia do vencimento
      * - Despesa: Quantidade Registros
      *

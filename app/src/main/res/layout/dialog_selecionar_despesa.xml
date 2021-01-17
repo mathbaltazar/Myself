@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:padding="@dimen/all_default_layout_offset_8"
+        android:text="SELECIONE A DESPESA ..."
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_16"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_selecionar_despesa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/all_default_layout_offset_4"
+        tools:itemCount="3"
+        tools:listitem="@layout/list_item_selecionar_despesa" />
+
+
+</LinearLayout>

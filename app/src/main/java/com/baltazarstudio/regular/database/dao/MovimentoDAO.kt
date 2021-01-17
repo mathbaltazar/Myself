@@ -3,23 +3,16 @@ package com.baltazarstudio.regular.database.dao
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.database.Database
 import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.util.Utils
-import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
 class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     
-    private var movimentosCache = arrayListOf<Movimento>()
-    
     fun getTodosMovimentos(): List<Movimento> {
-        if (MovimentoContext.useCache)
-            return movimentosCache
-        
         val movimentos = ArrayList<Movimento>()
         val query = "SELECT * FROM $TABELA ORDER BY $DATA DESC, $TABLE_ID DESC"
         
@@ -32,8 +25,6 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         }
         cursor.close()
         
-        movimentosCache = movimentos
-        MovimentoContext.useCache = true
         return movimentos
     }
     
@@ -58,18 +49,9 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     fun getRegistrosPelaDespesa(codigoDespesa: Int): ArrayList<Movimento> {
         val movimentos = ArrayList<Movimento>()
         
-        if (MovimentoContext.useCache) {
-            movimentos.addAll(movimentosCache.filter {
-                it.tipoMovimento == Movimento.DESPESA
-                    && it.referenciaDespesa == codigoDespesa
-            })
-            return movimentos
-        }
-        
         val queryBuilder = StringBuilder()
         queryBuilder.append("SELECT * FROM $TABELA")
-        queryBuilder.append(" WHERE $TIPO_MOVIMENTO = ${Movimento.DESPESA}")
-        queryBuilder.append(" AND $REFERENCIA_DESPESA = $codigoDespesa")
+        queryBuilder.append(" WHERE $REFERENCIA_DESPESA = $codigoDespesa")
         queryBuilder.append(" ORDER BY $DATA, $TABLE_ID DESC")
     
         val cursor = readableDatabase.rawQuery(queryBuilder.toString(), null)
@@ -105,32 +87,34 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
                 "$DESCRICAO," +
                 "$VALOR," +
                 "$DATA," +
-                "$TIPO_MOVIMENTO," +
                 "$REFERENCIA_DESPESA)" +
                 " VALUES (?,?,?,?,?)")
     
         insert.bindString(1, movimento.descricao)
         insert.bindDouble(2, movimento.valor)
         movimento.data?.let { insert.bindLong(3, it) } ?: insert.bindNull(3)
-        insert.bindLong(4, movimento.tipoMovimento!!.toLong())
-        movimento.referenciaDespesa?.let { insert.bindLong(5, it.toLong()) } ?: insert.bindNull(5)
+        movimento.referenciaDespesa?.let { insert.bindLong(4, it.toLong()) } ?: insert.bindNull(4)
     
         insert.executeInsert()
         
-        MovimentoContext.useCache = false
     }
     
     fun alterar(movimento: Movimento) {
-        val update =
-            "UPDATE $TABELA" + " SET " +
-                    "$DESCRICAO = '${movimento.descricao}'," +
-                    "$DATA = ${movimento.data}," +
-                    "$VALOR = ${movimento.valor}" +
-                    " WHERE $TABLE_ID = ${movimento.id}"
+        val queryBuilder = StringBuilder()
+        queryBuilder.append(" UPDATE $TABELA SET ")
+        queryBuilder.append(" $DESCRICAO = '${movimento.descricao}', ")
+        queryBuilder.append(" $VALOR = ${movimento.valor}, ")
+        queryBuilder.append(" $DATA = ${movimento.data}, ")
+        queryBuilder.append(" $REFERENCIA_DESPESA = ? ")
+        queryBuilder.append(" WHERE $TABLE_ID = ${movimento.id} ")
         
-        writableDatabase.execSQL(update)
+        val update = writableDatabase.compileStatement(queryBuilder.toString())
     
-        MovimentoContext.useCache = false
+        if (movimento.referenciaDespesa == null) update.bindNull(1)
+        else update.bindLong(1, movimento.referenciaDespesa!!.toLong())
+        
+        update.executeUpdateDelete()
+    
     }
     
     fun atualizarRegistrosDaDespesa(despesaEmEdicao: Despesa) {
@@ -140,15 +124,11 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         sql.append(" WHERE $REFERENCIA_DESPESA = ${despesaEmEdicao.codigo}")
         
         writableDatabase.execSQL(sql.toString())
-        
-        MovimentoContext.useCache = false
     }
     
     fun excluir(movimento: Movimento) {
         val query = "DELETE FROM $TABELA WHERE $TABLE_ID = ${movimento.id}"
         writableDatabase.execSQL(query)
-    
-        MovimentoContext.useCache = false
     }
     
     override fun bind(cursor: Cursor, elemento: Movimento) {
@@ -156,15 +136,12 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         elemento.descricao = cursor.getString(cursor.getColumnIndex(DESCRICAO))
         elemento.data = cursor.getLong(cursor.getColumnIndex(DATA))
         elemento.valor = cursor.getDouble(cursor.getColumnIndex(VALOR))
-        elemento.tipoMovimento = cursor.getInt(cursor.getColumnIndex(TIPO_MOVIMENTO))
         elemento.referenciaDespesa = cursor.getInt(cursor.getColumnIndex(REFERENCIA_DESPESA))
     }
     
     fun restaurarMovimentos(movimentos: List<Movimento>?) {
         val db = writableDatabase
         db.beginTransaction()
-        
-        //db.execSQL("DELETE FROM $TABELA")
         
         if (!movimentos.isNullOrEmpty()) {
             val sqlInsertStatement = "INSERT INTO $TABELA (" +
@@ -180,15 +157,13 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
                 stmt.bindString(1, movimento.descricao)
                 stmt.bindDouble(2, movimento.valor)
                 movimento.data?.let { stmt.bindLong(3, it) } ?: stmt.bindNull(3)
-                stmt.bindLong(4, movimento.tipoMovimento!!.toLong())
-                movimento.referenciaDespesa?.let { stmt.bindLong(5, it.toLong()) } ?: stmt.bindNull(5)
+                movimento.referenciaDespesa?.let { stmt.bindLong(4, it.toLong()) } ?: stmt.bindNull(4)
         
                 stmt.executeInsert()
                 stmt.clearBindings()
             }
             
             db.setTransactionSuccessful()
-            MovimentoContext.useCache = false
         }
         
         db.endTransaction()
@@ -255,7 +230,6 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
             
             db.execSQL(create)
         }
-        
     }
     
 }

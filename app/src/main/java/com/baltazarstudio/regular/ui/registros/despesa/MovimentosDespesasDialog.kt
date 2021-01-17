@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.Movimento
-import com.baltazarstudio.regular.ui.adapter.MovimentoSimpleAdapter
+import com.baltazarstudio.regular.ui.adapter.RegistrosDaDespesaAdapter
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.dialog_movimentos_despesas.*
 
@@ -18,7 +18,7 @@ class MovimentosDespesasDialog(context: Context, movimentos: ArrayList<Movimento
     init {
         setContentView(R.layout.dialog_movimentos_despesas)
     
-        rv_dialog_registros_despesa.adapter = MovimentoSimpleAdapter(context, movimentos)
+        rv_dialog_registros_despesa.adapter = RegistrosDaDespesaAdapter(context, movimentos)
         rv_dialog_registros_despesa.layoutManager = LinearLayoutManager(context)
         rv_dialog_registros_despesa.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         

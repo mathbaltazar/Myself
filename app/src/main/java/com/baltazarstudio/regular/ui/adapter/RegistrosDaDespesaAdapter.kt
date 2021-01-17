@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.Movimento
-import com.baltazarstudio.regular.ui.registros.movimentos.RegistrarMovimentoDialog
+import com.baltazarstudio.regular.ui.registros.movimentos.DetalhesMovimentoDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_section_item_movimento.view.*
 
-class MovimentoSimpleAdapter(context: Context, private val movimentos: ArrayList<Movimento>)
+class RegistrosDaDespesaAdapter(context: Context, private val movimentos: ArrayList<Movimento>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
     private val layoutInflater = LayoutInflater.from(context)
@@ -40,8 +40,8 @@ class MovimentoSimpleAdapter(context: Context, private val movimentos: ArrayList
             itemView.tv_movimento_data.text = movimento.data!!.formattedDate()
             
             itemView.setOnClickListener {
-                val dialog = RegistrarMovimentoDialog(itemView.context)
-                dialog.edit(movimento) {
+                val dialog = DetalhesMovimentoDialog(itemView.context, movimento)
+                dialog.setOnEditedMovimento {
                     movimentos[position] = it
                     notifyItemChanged(position)
                 }

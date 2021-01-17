@@ -93,7 +93,6 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
             movimento.data = dateinput_dialog_registrar_despesa_data.getTime()
             
             movimento.referenciaDespesa = despesa.codigo
-            movimento.tipoMovimento = Movimento.DESPESA
     
             MovimentoContext.getDAO(context).inserir(movimento)
             Trigger.launch(TriggerEvent.Toast("Registrado!"))

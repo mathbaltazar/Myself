@@ -13,14 +13,32 @@
         android:layout_margin="@dimen/all_default_layout_offset_8"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-            android:text="DETALHES"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/text_size_16"
-            android:textStyle="bold" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+                android:layout_weight="1"
+                android:text="DETALHES"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/button_detalhes_movimento_opcoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/all_default_layout_offset_8"
+                android:src="@drawable/ic_more_vertical" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

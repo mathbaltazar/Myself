@@ -52,8 +52,6 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
         val db = writableDatabase
         db.beginTransaction()
         
-        //db.execSQL("DELETE FROM ${TABELA}")
-        
         if (!despesas.isNullOrEmpty()) {
     
             val sqlInsertStatement = "INSERT INTO ${TABELA} (" +

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/all_default_layout_offset_4"
+    app:cardElevation="@dimen/all_default_layout_offset_8">
+
+    <LinearLayout
+        android:id="@+id/ll_list_item_selecionar_despesa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/all_default_layout_offset_8">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_selecionar_despesa_descricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/all_default_layout_offset_4"
+                android:textSize="@dimen/text_size_18"
+                android:textStyle="bold|italic"
+                tools:text="Prestação Carro" />
+
+            <TextView
+                android:id="@+id/tv_selecionar_despesa_valor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold"
+                tools:text="R$ 250,00" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="@dimen/all_default_layout_offset_4"
+            android:src="@drawable/ic_arrow_right" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
