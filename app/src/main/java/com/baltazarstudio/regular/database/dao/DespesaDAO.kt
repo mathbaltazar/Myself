@@ -133,6 +133,14 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
         return total
     }
     
+    fun addVenc() {
+        val addColumn = "ALTER TABLE $TABELA ADD COLUMN $DIA_VENCIMENTO INTEGER"
+        
+        writableDatabase.execSQL(addColumn)
+        
+        writableDatabase.execSQL("UPDATE $TABELA SET $DIA_VENCIMENTO = 0")
+    }
+    
     companion object {
         const val TABELA = "Despesa"
         

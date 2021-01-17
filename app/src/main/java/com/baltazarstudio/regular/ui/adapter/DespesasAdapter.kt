@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +12,6 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Despesa
-import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
 import com.baltazarstudio.regular.ui.registros.despesa.CriarDespesaDialog
@@ -113,6 +111,9 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
                 val dialog = MovimentosDespesasDialog(itemView.context, registrosDaDespesa)
                 dialog.show()
             }
+            
+            val qtd = "${MovimentoContext.getDAO(itemView.context).getQuantidadeRegistrosPorDespesa(despesa.codigo!!)}"
+            itemView.button_section_item_despesas_todos.setText("Ver Todos ($qtd)")
     
             // OPÇOES
             itemView.iv_section_item_despesas_opcoes.setOnClickListener {

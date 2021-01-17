@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/all_default_layout_offset_8">
+    android:padding="@dimen/all_default_layout_offset_8"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,23 +22,23 @@
                 android:id="@+id/tv_section_item_despesas_nome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pensão Alimentícia"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/text_size_24" />
+                android:textSize="@dimen/text_size_24"
+                tools:text="Pensão Alimentícia" />
 
             <TextView
                 android:id="@+id/tv_section_item_despesas_ultimo_registro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Último registro: 25/07/2020" />
+                tools:text="Último registro: 25/07/2020" />
 
             <LinearLayout
                 android:id="@+id/ll_section_item_despesas_vencimento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:visibility="gone"
-                tools:visibility="visible"
-                android:orientation="horizontal">
+                tools:visibility="visible">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -49,11 +50,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/all_default_layout_offset_4"
-                    android:text="05"
                     android:background="@drawable/underline_text_custom_drawable"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/text_size_16"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="05" />
             </LinearLayout>
 
         </LinearLayout>
@@ -63,7 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/all_default_layout_offset_4"
-            android:src="@drawable/ic_arrow_down" />
+            android:src="@drawable/ic_arrow_down"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/iv_section_item_despesas_opcoes"
@@ -73,7 +75,8 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="@dimen/all_default_layout_offset_4"
-            android:src="@drawable/ic_more_vertical" />
+            android:src="@drawable/ic_more_vertical"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <TextView
@@ -81,9 +84,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/all_default_layout_offset_16"
-        android:text="R$ 44,00"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/text_size_36" />
+        android:textSize="@dimen/text_size_36"
+        tools:text="R$ 44,00" />
 
     <View
         android:id="@+id/divider_section_item_despesas"
@@ -114,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/all_default_layout_offset_4"
             android:layout_weight="1"
-            android:text="Ver Todos" />
+            android:text="Ver Todos (0)" />
     </LinearLayout>
 
 
