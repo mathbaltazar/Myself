@@ -88,7 +88,7 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
                 "$VALOR," +
                 "$DATA," +
                 "$REFERENCIA_DESPESA)" +
-                " VALUES (?,?,?,?,?)")
+                " VALUES (?,?,?,?)")
     
         insert.bindString(1, movimento.descricao)
         insert.bindDouble(2, movimento.valor)
@@ -148,9 +148,8 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
                     "$DESCRICAO," +
                     "$VALOR," +
                     "$DATA," +
-                    "$TIPO_MOVIMENTO," +
                     "$REFERENCIA_DESPESA)" +
-                    " VALUES (?, ?, ?, ?, ?)"
+                    " VALUES (?, ?, ?, ?)"
             val stmt = db.compileStatement(sqlInsertStatement)
     
             movimentos.forEach { movimento ->
@@ -214,7 +213,6 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         private const val DESCRICAO = "descricao"
         internal const val DATA = "data"
         private const val VALOR = "valor"
-        const val TIPO_MOVIMENTO = "tipo_movimento"
         const val REFERENCIA_DESPESA = "referencia_despesa"
         
         fun onCreate(db: SQLiteDatabase) {
@@ -224,7 +222,6 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
                         "$DESCRICAO TEXT," +
                         "$DATA NUMERIC," +
                         "$VALOR DECIMAL(10, 2)," +
-                        "$TIPO_MOVIMENTO INTEGER," +
                         "$REFERENCIA_DESPESA INTEGER" +
                         ")"
             
