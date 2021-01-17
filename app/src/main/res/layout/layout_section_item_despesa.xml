@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -29,6 +30,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Último registro: 25/07/2020" />
+
+            <LinearLayout
+                android:id="@+id/ll_section_item_despesas_vencimento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Vence dia:" />
+
+                <TextView
+                    android:id="@+id/tv_section_item_despesas_dia_vencimento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/all_default_layout_offset_4"
+                    android:text="05"
+                    android:background="@drawable/underline_text_custom_drawable"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
         </LinearLayout>
 

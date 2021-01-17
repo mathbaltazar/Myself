@@ -4,8 +4,10 @@ import android.app.Dialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import android.widget.ArrayAdapter
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.MovimentoContext
@@ -34,7 +36,16 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
         
         et_dialog_despesa_valor.apply { addTextChangedListener(CurrencyMask(this)) }
         et_dialog_despesa_valor.onFocusChange { v, hasFocus ->
-            if (hasFocus) (v as TextInputEditText).setSelection(v.length()) }
+            if (hasFocus) {
+                (v as TextInputEditText).setSelection(v.length())
+            }
+        }
+        
+        et_dialog_despesa_dia_vencimento.setAdapter(obterAdapter())
+        
+        chk_dialog_despesa_sem_vencimento.setOnCheckedChangeListener { _, isChecked ->
+            til_dialog_despesa_dia_vencimento.isEnabled = !isChecked
+        }
         
         button_dialog_despesa_cadastrar.setOnClickListener {
             val nome = et_dialog_despesa_nome.text.toString()
@@ -45,11 +56,17 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
             } else if (!isValorValido(valor)) {
                 et_dialog_despesa_valor.error = "Valor inválido"
             } else {
-                
     
                 if (isEdicao) {
                     despesaEmEdicao.nome = nome
                     despesaEmEdicao.valor = Utils.unformatCurrency(valor).toDouble()
+                    
+                    if (chk_dialog_despesa_sem_vencimento.isChecked) {
+                        despesaEmEdicao.diaVencimento = 0
+                    } else {
+                        despesaEmEdicao.diaVencimento = et_dialog_despesa_dia_vencimento.text.toString().toInt()
+                    }
+                    
                     DespesaContext.getDAO(context).alterar(despesaEmEdicao)
                     
                     Trigger.launch(TriggerEvent.Snack("Despesa alterada"))
@@ -63,8 +80,13 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
                     val despesa = Despesa()
                     despesa.nome = nome
                     despesa.valor = Utils.unformatCurrency(valor).toDouble()
+    
+                    if (!chk_dialog_despesa_sem_vencimento.isChecked) {
+                        despesa.diaVencimento = et_dialog_despesa_dia_vencimento.text.toString().toInt()
+                    }
+                    
                     DespesaContext.getDAO(context).inserir(despesa)
-                    Trigger.launch(TriggerEvent.Toast("Despesa adicionada!"))
+                    Trigger.launch(TriggerEvent.Snack("Despesa adicionada!"))
                 }
                 
                 Trigger.launch(TriggerEvent.UpdateTelaDespesa())
@@ -95,6 +117,14 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
         et_dialog_despesa_nome.setText(despesaEmEdicao.nome)
         et_dialog_despesa_nome.setSelection(despesaEmEdicao.nome?.length ?: 0)
         et_dialog_despesa_valor.setText(Utils.formatCurrency(despesaEmEdicao.valor))
+        
+        if (despesaEmEdicao.diaVencimento != 0) {
+            et_dialog_despesa_dia_vencimento.setText("${despesaEmEdicao.diaVencimento}")
+            et_dialog_despesa_dia_vencimento.setAdapter(obterAdapter())
+            
+            chk_dialog_despesa_sem_vencimento.isChecked = false
+        }
+        
         button_dialog_despesa_cadastrar.text = "Alterar"
         tv_dialog_registrar_despesa_title.text = "Editar"
         
@@ -111,6 +141,14 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
         
+    }
+    
+    private fun obterAdapter(): ArrayAdapter<String> {
+        val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item)
+        
+        (1..28).forEach { dia -> adapter.add("$dia") }
+        
+        return adapter
     }
     
 }

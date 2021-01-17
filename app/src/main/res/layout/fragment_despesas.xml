@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    tools:ignore="HardcodedText"
     tools:context=".ui.registros.RegistrosFragment">
 
     <LinearLayout
@@ -33,7 +34,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="@dimen/all_default_layout_offset_4"
-                android:src="@drawable/ic_info" />
+                android:src="@drawable/ic_info"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
 
         <TextView
@@ -50,6 +52,8 @@
             android:id="@+id/rv_despesas"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            tools:listitem="@layout/layout_section_item_despesa"
+            tools:itemCount="3"
             android:layout_weight="1" />
 
         <Button
@@ -96,7 +100,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="@dimen/all_default_layout_offset_4"
-                android:src="@drawable/ic_close" />
+                android:src="@drawable/ic_close"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

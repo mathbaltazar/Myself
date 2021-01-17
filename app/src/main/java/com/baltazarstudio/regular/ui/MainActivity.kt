@@ -14,6 +14,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import com.baltazarstudio.regular.R
+import com.baltazarstudio.regular.database.dao.DespesaDAO
 import com.baltazarstudio.regular.notification.Notification
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
@@ -49,8 +50,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - Nova Fonte
      * - (DONE) Manutenção: Alterar registro pelo "Ver Todos" da aba despesa não altera o popup
      * - (DONE) Despesa: Agregar/desagregar registro existente
-     * - Despesa: Dia do vencimento
+     * - (DONE) Despesa: Dia do vencimento
      * - Despesa: Quantidade Registros
+     * - Manutenção: Inverter ordem resultado das pesquisas registros
+     * - Manutenção: Alterar ou excluir registro enquanto há pesquisa, volta todos registros ao invés da última pesquisa
+     * - Manutenção: Inverter ordem resultado dos registros "Ver Todos" das despesas
      *
      */
     

@@ -78,7 +78,6 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             itemView.tv_section_item_despesas_nome.text = despesa.nome
             
             // ULTIMO REGISTRO
-            //val ultimoRegistro = obterUltimoRegistro(despesa.codigo!!)
             val ultimoRegistro = MovimentoContext.getDAO(itemView.context).getUltimoRegistro(despesa.codigo!!)
             if (ultimoRegistro == 0L) {
                 itemView.tv_section_item_despesas_ultimo_registro.text = "Não há registros."
@@ -86,6 +85,14 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
                 itemView.tv_section_item_despesas_ultimo_registro.text = "Último registro: ${ultimoRegistro.formattedDate()}"
             }
             
+            // DIA VENCIMENTO
+            if (despesa.diaVencimento != 0) {
+                itemView.ll_section_item_despesas_vencimento.visibility = View.VISIBLE
+                itemView.tv_section_item_despesas_dia_vencimento.text = despesa.diaVencimento.toString()
+            } else {
+                itemView.ll_section_item_despesas_vencimento.visibility = View.GONE
+            }
+    
             // VALOR
             itemView.tv_section_item_despesas_valor.text = Utils.formatCurrency(despesa.valor)
             

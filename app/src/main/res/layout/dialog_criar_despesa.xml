@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
 
     <TextView
         android:id="@+id/tv_dialog_registrar_despesa_title"
@@ -40,10 +42,10 @@
         android:id="@+id/chk_dialog_despesa_alterar_registros"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
         android:text="Alterar o nome de todos os registros"
         android:textSize="@dimen/text_size_16"
+        android:visibility="gone"
         tools:checked="true" />
 
     <TextView
@@ -65,6 +67,46 @@
             android:inputType="number"
             android:text="R$ 0,00" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+        android:text="Vencimento" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_dialog_despesa_dia_vencimento"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+            android:layout_weight="1"
+            android:enabled="false"
+            app:endIconMode="dropdown_menu">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/et_dialog_despesa_dia_vencimento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:text="01" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/chk_dialog_despesa_sem_vencimento"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:checked="true"
+            android:text="Sem vencimento"
+            android:textSize="@dimen/text_size_16" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_dialog_despesa_cadastrar"

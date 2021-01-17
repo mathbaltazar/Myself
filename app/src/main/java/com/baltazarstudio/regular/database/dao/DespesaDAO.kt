@@ -14,6 +14,7 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
         elemento.codigo = cursor.getInt(cursor.getColumnIndex(CODIGO))
         elemento.nome = cursor.getString(cursor.getColumnIndex(NOME))
         elemento.valor = cursor.getDouble(cursor.getColumnIndex(VALOR))
+        elemento.diaVencimento = cursor.getInt(cursor.getColumnIndex(DIA_VENCIMENTO))
     }
     
     fun getTodasDespesas(): ArrayList<Despesa> {
@@ -33,7 +34,7 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
     
     fun inserir(despesa: Despesa) {
         val insert =
-            "INSERT INTO $TABELA ($NOME, $VALOR) VALUES ('${despesa.nome}', ${despesa.valor})"
+            "INSERT INTO $TABELA ($NOME, $VALOR, $DIA_VENCIMENTO) VALUES ('${despesa.nome}', ${despesa.valor}, ${despesa.diaVencimento})"
         
         writableDatabase.execSQL(insert)
     }
@@ -43,6 +44,7 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
         update.append("UPDATE $TABELA SET")
         update.append(" $NOME = '${despesa.nome}'")
         update.append(", $VALOR = ${despesa.valor}")
+        update.append(", $DIA_VENCIMENTO = ${despesa.diaVencimento}")
         update.append(" WHERE $CODIGO = ${despesa.codigo}")
         
         writableDatabase.execSQL(update.toString())
@@ -57,8 +59,9 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
             val sqlInsertStatement = "INSERT INTO ${TABELA} (" +
                     "${CODIGO}," +
                     "${NOME}," +
-                    "${VALOR})" +
-                    " VALUES (?, ?, ?)"
+                    "${VALOR}," +
+                    "${DIA_VENCIMENTO})" +
+                    " VALUES (?, ?, ?, ?)"
             val stmt = db.compileStatement(sqlInsertStatement)
             
             
@@ -66,6 +69,7 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
                 stmt.bindLong(1, it.codigo!!.toLong())
                 stmt.bindString(2, it.nome)
                 stmt.bindDouble(3, it.valor)
+                stmt.bindLong(3, it.diaVencimento.toLong())
                 
                 stmt.executeInsert()
                 stmt.clearBindings()
@@ -132,14 +136,16 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
     companion object {
         const val TABELA = "Despesa"
         
+        const val CODIGO = "codigo"
         const val NOME = "nome"
         const val VALOR = "valor"
-        const val CODIGO = "codigo"
+        const val DIA_VENCIMENTO = "dia_vencimento"
         
         fun onCreate(db: SQLiteDatabase) {
             val sql = "CREATE TABLE $TABELA (" +
                     "$NOME TEXT," +
                     "$VALOR DECIMAL(10,2)," +
+                    "$DIA_VENCIMENTO INTEGER," +
                     "$CODIGO INTEGER PRIMARY KEY AUTOINCREMENT)"
             
             db.execSQL(sql)
