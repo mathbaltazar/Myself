@@ -207,6 +207,16 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         return total
     }
     
+    fun getQuantidadeRegistrosPorDespesa(codigoDespesa: Int): Int {
+        val query = "SELECT COUNT(*) FROM $TABELA WHERE $REFERENCIA_DESPESA = $codigoDespesa"
+        
+        val cursor = readableDatabase.rawQuery(query, null)
+        cursor.moveToNext()
+        val count = cursor.getInt(0)
+        cursor.close()
+        return count
+    }
+    
     companion object {
         internal const val TABELA = "Movimento"
         
