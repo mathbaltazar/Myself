@@ -11,13 +11,17 @@
         android:id="@+id/tv_dialog_registrar_despesa_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:padding="@dimen/all_default_layout_offset_8"
         android:text="Nova Despesa"
         android:textAllCaps="true"
-        android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_18"
         android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
+        android:background="@color/off_white" />
 
     <TextView
         android:layout_width="match_parent"

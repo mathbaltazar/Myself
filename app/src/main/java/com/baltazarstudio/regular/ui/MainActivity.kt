@@ -1,6 +1,7 @@
 package com.baltazarstudio.regular.ui
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -25,6 +26,7 @@ import com.baltazarstudio.regular.ui.resumo.ResumoFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) APONTAR NO POPUP DOS REGISTROS SE PERTENCE A ALGUMA DESPESA
      * - PIN de acesso regular
      * - (DONE) Editar despesa (Perguntar se registros serão alterados também)
-     * - Nova Fonte
+     * - (DONE) Nova Fonte
      * - (DONE) Manutenção: Alterar registro pelo "Ver Todos" da aba despesa não altera o popup
      * - (DONE) Despesa: Agregar/desagregar registro existente
      * - (DONE) Despesa: Dia do vencimento
@@ -206,6 +208,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onResume() {
         super.onResume()
         Notification.notificar(this)
+    }
+    
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
     
     private class DrawerToggle(

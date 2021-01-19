@@ -1,5 +1,6 @@
 package com.baltazarstudio.regular.ui.backup
 
+import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -18,6 +19,7 @@ import com.baltazarstudio.regular.service.BackupService
 import com.baltazarstudio.regular.service.ConnectionTestService
 import com.baltazarstudio.regular.service.dto.SincronizarDadosBackupDTO
 import com.google.android.material.snackbar.Snackbar
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_dados_backup.*
@@ -284,5 +286,9 @@ class DadosBackupActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         conectar("")
+    }
+    
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }
