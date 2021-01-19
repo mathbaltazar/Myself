@@ -77,11 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         
         drawer_navigation_view.setNavigationItemSelectedListener(this)
-        
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, registrosFragment)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
-        drawer_navigation_view.setCheckedItem(R.id.menu_drawer_movimentos)
+        onNavigationItemSelected(drawer_navigation_view.menu.getItem(0))
         
     }
     
@@ -188,6 +184,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
+            val menuItem = drawer_navigation_view.menu.getItem(0)
+            if (!menuItem.isChecked) {
+                onNavigationItemSelected(menuItem)
+                return
+            }
+            
             super.onBackPressed()
         }
     }
