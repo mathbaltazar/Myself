@@ -65,7 +65,7 @@ class DetalhesMovimentoDialog(
         button_detalhes_movimento_opcoes.setOnClickListener {
             val popup = PopupMenu(context, it, Gravity.END)
             
-            val titulo = if (temDespesaAgregada) "Desagregar Despesa" else "Agregar a Despesa"
+            val titulo = if (temDespesaAgregada) "Desvincular da Despesa" else "Vincular a Despesa"
             
             popup.menu.add(Menu.NONE, 0, Menu.NONE, titulo)
             popup.setOnMenuItemClickListener { menuItem ->
@@ -75,7 +75,7 @@ class DetalhesMovimentoDialog(
                         if (temDespesaAgregada) {
                             movimento.referenciaDespesa = null
                             MovimentoContext.getDAO(context).alterar(movimento)
-                            Trigger.launch(TriggerEvent.Snack("Despesa desagregada!"))
+                            Trigger.launch(TriggerEvent.Snack("Despesa desvinculada!"))
                             Trigger.launch(TriggerEvent.UpdateTelaDespesa())
                             Trigger.launch(TriggerEvent.UpdateTelaMovimento())
                             onEditedListener(movimento)
@@ -87,7 +87,7 @@ class DetalhesMovimentoDialog(
                             val dialog = SelecionarDespesaDialog(context) { codigoDespesa ->
                                 movimento.referenciaDespesa = codigoDespesa
                                 MovimentoContext.getDAO(context).alterar(movimento)
-                                Trigger.launch(TriggerEvent.Snack("Despesa agregada!"))
+                                Trigger.launch(TriggerEvent.Snack("Despesa vinculada!"))
                                 Trigger.launch(TriggerEvent.UpdateTelaDespesa())
                                 Trigger.launch(TriggerEvent.UpdateTelaMovimento())
                                 onEditedListener(movimento)
