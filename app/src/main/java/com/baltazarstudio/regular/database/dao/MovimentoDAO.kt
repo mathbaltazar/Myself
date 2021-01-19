@@ -52,7 +52,7 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         val queryBuilder = StringBuilder()
         queryBuilder.append("SELECT * FROM $TABELA")
         queryBuilder.append(" WHERE $REFERENCIA_DESPESA = $codigoDespesa")
-        queryBuilder.append(" ORDER BY $DATA, $TABLE_ID DESC")
+        queryBuilder.append(" ORDER BY $DATA DESC, $TABLE_ID DESC")
     
         val cursor = readableDatabase.rawQuery(queryBuilder.toString(), null)
         while (cursor.moveToNext()) {

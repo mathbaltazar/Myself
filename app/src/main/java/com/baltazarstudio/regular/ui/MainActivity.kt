@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) Despesa: Quantidade Registros
      * - (DONE) Manutenção: Inverter ordem resultado das pesquisas registros
      * - (DONE) Manutenção: Alterar ou excluir registro enquanto há pesquisa, volta todos registros ao invés da última pesquisa
-     * - Manutenção: Inverter ordem resultado dos registros "Ver Todos" das despesas
+     * - (DONE) Manutenção: Inverter ordem resultado dos registros "Ver Todos" das despesas
      *
      */
     
