@@ -8,6 +8,8 @@ abstract class MovimentoContext {
     companion object {
         
         private var mDAO: MovimentoDAO? = null
+        
+        var textoPesquisa: String? = null
         var movimentosParaExcluir: ArrayList<Movimento> = arrayListOf()
     
         fun getDAO(context: Context): MovimentoDAO {

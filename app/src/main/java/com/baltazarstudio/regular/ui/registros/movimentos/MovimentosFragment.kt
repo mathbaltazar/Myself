@@ -11,7 +11,6 @@ import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
-import com.baltazarstudio.regular.ui.MainActivity
 import com.baltazarstudio.regular.ui.adapter.MovimentosAdapterSection
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
@@ -108,15 +107,15 @@ class MovimentosFragment : Fragment() {
     }
     
     
-    fun carregarMovimentos(pesquisa: String? = null) {
+    fun carregarMovimentos() {
         val mDAO = MovimentoContext.getDAO(mView.context)
         val itensMovimentos: List<Movimento>
-        if (pesquisa.isNullOrBlank()) {
+        if (MovimentoContext.textoPesquisa.isNullOrBlank()) {
             itensMovimentos = mDAO.getTodosMovimentos()
             mView.fab_add_movimento.visibility = View.VISIBLE
         } else {
             MovimentoContext.getDAO(mView.context)
-            itensMovimentos = mDAO.getTodosMovimentos(pesquisa.trim())
+            itensMovimentos = mDAO.getTodosMovimentos(MovimentoContext.textoPesquisa!!.trim())
             mView.fab_add_movimento.visibility = View.GONE
         }
         

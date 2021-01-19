@@ -17,7 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_registros.*
-import kotlinx.android.synthetic.main.fragment_registros.view.*
 
 
 class RegistrosFragment : Fragment() {
@@ -46,7 +45,7 @@ class RegistrosFragment : Fragment() {
                 when (t) {
                     is TriggerEvent.UpdateTelaMovimento -> movimentosFragment.carregarMovimentos()
                     is TriggerEvent.UpdateTelaDespesa -> despesasFragment.carregarDespesas()
-                    is TriggerEvent.FiltrarMovimentosPelaDescricao -> movimentosFragment.carregarMovimentos(t.newText)
+                    is TriggerEvent.FiltrarMovimentosPelaDescricao -> movimentosFragment.carregarMovimentos()
                     is TriggerEvent.HabilitarModoMultiSelecao -> desabilitarTabs()
                     is TriggerEvent.DesabilitarModoMultiSelecao -> habilitarTabs()
                 }

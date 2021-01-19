@@ -14,7 +14,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.database.dao.DespesaDAO
+import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.notification.Notification
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.TriggerEvent
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) Despesa: Dia do vencimento
      * - (DONE) Despesa: Quantidade Registros
      * - Manutenção: Inverter ordem resultado das pesquisas registros
-     * - Manutenção: Alterar ou excluir registro enquanto há pesquisa, volta todos registros ao invés da última pesquisa
+     * - (DONE) Manutenção: Alterar ou excluir registro enquanto há pesquisa, volta todos registros ao invés da última pesquisa
      * - Manutenção: Inverter ordem resultado dos registros "Ver Todos" das despesas
      *
      */
@@ -137,7 +137,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onQueryTextSubmit(query: String?): Boolean { return false }
             
             override fun onQueryTextChange(newText: String?): Boolean {
-                Trigger.launch(TriggerEvent.FiltrarMovimentosPelaDescricao(newText))
+                MovimentoContext.textoPesquisa = newText
+                Trigger.launch(TriggerEvent.FiltrarMovimentosPelaDescricao())
                 return true
             }
         })

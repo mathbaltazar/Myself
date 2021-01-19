@@ -8,7 +8,7 @@ object TriggerEvent {
     class UpdateTelaMovimento
     class UpdateTelaDespesa
     class UpdateTelaEntradas
-    class FiltrarMovimentosPelaDescricao(val newText: String?)
+    class FiltrarMovimentosPelaDescricao
     class HabilitarModoMultiSelecao
     class DesabilitarModoMultiSelecao
 }
