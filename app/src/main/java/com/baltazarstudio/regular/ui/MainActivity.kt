@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) Manutenção: Inverter ordem resultado das pesquisas registros
      * - (DONE) Manutenção: Alterar ou excluir registro enquanto há pesquisa, volta todos registros ao invés da última pesquisa
      * - (DONE) Manutenção: Inverter ordem resultado dos registros "Ver Todos" das despesas
+     * - (DONE) Correção: Dropdown dia vencimento não se ajustando a diferente resoluções
      *
      */
     
