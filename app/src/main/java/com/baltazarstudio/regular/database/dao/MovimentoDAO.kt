@@ -32,7 +32,7 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
     fun getTodosMovimentos(pesquisa: String): List<Movimento> {
         val movimentos = ArrayList<Movimento>()
         val query =
-            "SELECT * FROM $TABELA WHERE $DESCRICAO LIKE '%$pesquisa%' ORDER BY $DATA, $TABLE_ID DESC"
+            "SELECT * FROM $TABELA WHERE $DESCRICAO LIKE '%$pesquisa%' ORDER BY $DATA DESC, $TABLE_ID DESC"
         
         val cursor = readableDatabase.rawQuery(query, null)
         while (cursor.moveToNext()) {

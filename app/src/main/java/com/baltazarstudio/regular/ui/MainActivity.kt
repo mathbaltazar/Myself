@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) Despesa: Agregar/desagregar registro existente
      * - (DONE) Despesa: Dia do vencimento
      * - (DONE) Despesa: Quantidade Registros
-     * - Manutenção: Inverter ordem resultado das pesquisas registros
+     * - (DONE) Manutenção: Inverter ordem resultado das pesquisas registros
      * - (DONE) Manutenção: Alterar ou excluir registro enquanto há pesquisa, volta todos registros ao invés da última pesquisa
      * - Manutenção: Inverter ordem resultado dos registros "Ver Todos" das despesas
      *
