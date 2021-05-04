@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="ContentDescription">
 
-    <com.baltazarstudio.regular.components.LockableViewPager
-        android:id="@+id/vp_movimentos"
+    <TextView
+        android:id="@+id/tv_registros_sem_registros"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/all_default_layout_offset_16"
+        android:text="Não há registros."
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayout_movimentos"
-            style="@style/Widget.MaterialComponents.TabLayout.PrimarySurface"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="fixed" />
-    </com.baltazarstudio.regular.components.LockableViewPager>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_registros"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/all_default_layout_offset_8"
+        tools:itemCount="3"
+        tools:listitem="@layout/layout_section_item_registro" />
+    <!--android:layout_below="@id/toolbar_movimentos_multi_select"-->
 
-</FrameLayout>
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_movimento"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/all_default_layout_offset_16"
+        android:backgroundTint="@color/off_primary"
+        android:src="@drawable/ic_add" />-->
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.registros.movimentos
+package com.baltazarstudio.regular.ui.movimentacao.registros
 
 import android.app.Dialog
 import android.content.Context
@@ -7,7 +7,7 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
+import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.getUTCCalendar
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.dialog_registrar_movimento.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import java.math.BigDecimal
 
-class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
+class CriarRegistroDialog(context: Context) : Dialog(context) {
     
     private lateinit var onEditedListener: (Movimento) -> Unit
     private var edit: Boolean = false
@@ -63,15 +63,15 @@ class RegistrarMovimentoDialog(context: Context) : Dialog(context) {
                 if (edit) {
                     movimento.id = idMovimentoEmEdicao
                     MovimentoContext.getDAO(context).alterar(movimento)
-                    Trigger.launch(TriggerEvent.Toast("Alterado!"))
+                    Trigger.launch(Events.Toast("Alterado!"))
                     
                     onEditedListener(movimento)
                 } else {
                     MovimentoContext.getDAO(context).inserir(movimento)
-                    Trigger.launch(TriggerEvent.Toast("Movimento adicionado!"))
+                    Trigger.launch(Events.Toast("Movimento adicionado!"))
                 }
     
-                Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+                Trigger.launch(Events.UpdateRegistros())
     
                 cancel()
             }

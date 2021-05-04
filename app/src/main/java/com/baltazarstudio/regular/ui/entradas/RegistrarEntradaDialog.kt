@@ -7,7 +7,7 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.model.Entrada
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
+import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.Utils
 import com.google.android.material.textfield.TextInputEditText
@@ -15,8 +15,6 @@ import kotlinx.android.synthetic.main.dialog_registrar_entrada.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import org.jetbrains.anko.toast
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
-import java.util.*
 
 class RegistrarEntradaDialog(context: Context) : Dialog(context) {
     
@@ -55,7 +53,7 @@ class RegistrarEntradaDialog(context: Context) : Dialog(context) {
                 EntradaContext.getDAO(context).inserir(novaEntrada)
                 context.toast("Adicionado!")
 
-                Trigger.launch(TriggerEvent.UpdateTelaEntradas())
+                Trigger.launch(Events.UpdateTelaEntradas())
                 dismiss()
             }
 

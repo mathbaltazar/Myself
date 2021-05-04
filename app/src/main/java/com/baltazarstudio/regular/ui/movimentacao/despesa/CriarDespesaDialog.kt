@@ -1,10 +1,9 @@
-package com.baltazarstudio.regular.ui.registros.despesa
+package com.baltazarstudio.regular.ui.movimentacao.despesa
 
 import android.app.Dialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.ArrayAdapter
@@ -13,7 +12,7 @@ import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
+import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.Utils
 import com.google.android.material.textfield.TextInputEditText
@@ -69,11 +68,11 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
                     
                     DespesaContext.getDAO(context).alterar(despesaEmEdicao)
                     
-                    Trigger.launch(TriggerEvent.Snack("Despesa alterada"))
+                    Trigger.launch(Events.Snack("Despesa alterada"))
                     
                     if (chk_dialog_despesa_alterar_registros.isChecked) {
                         MovimentoContext.getDAO(context).atualizarRegistrosDaDespesa(despesaEmEdicao)
-                        Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+                        Trigger.launch(Events.UpdateRegistros())
                     }
                     
                 } else {
@@ -86,10 +85,10 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
                     }
                     
                     DespesaContext.getDAO(context).inserir(despesa)
-                    Trigger.launch(TriggerEvent.Snack("Despesa adicionada!"))
+                    Trigger.launch(Events.Snack("Despesa adicionada!"))
                 }
                 
-                Trigger.launch(TriggerEvent.UpdateTelaDespesa())
+                Trigger.launch(Events.UpdateDespesas())
                 
                 cancel()
             }

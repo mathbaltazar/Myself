@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.registros.movimentos
+package com.baltazarstudio.regular.ui.movimentacao.registros
 
 import android.app.Dialog
 import android.content.Context
@@ -13,13 +13,13 @@ import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
-import com.baltazarstudio.regular.ui.registros.despesa.SelecionarDespesaDialog
+import com.baltazarstudio.regular.observer.Events
+import com.baltazarstudio.regular.ui.movimentacao.despesa.SelecionarDespesaDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.dialog_detalhes_movimento.*
 
-class DetalhesMovimentoDialog(
+class DetalhesRegistroDialog(
     context: Context, private var movimento: Movimento
 ) : Dialog(context) {
     
@@ -29,18 +29,19 @@ class DetalhesMovimentoDialog(
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
+        setContentView(R.layout.dialog_detalhes_movimento)
+        
         setUpView()
         show()
     }
     
     private fun setUpView() {
-        setContentView(R.layout.dialog_detalhes_movimento)
         
         verificarSeTemDespesaAgregada()
         bindData()
         
         button_detalhes_movimento_alterar.setOnClickListener {
-            val dialog = RegistrarMovimentoDialog(context)
+            val dialog = CriarRegistroDialog(context)
             dialog.edit(movimento) { movimento ->
                 this.movimento = movimento
                 bindData()
@@ -55,9 +56,9 @@ class DetalhesMovimentoDialog(
                 .setPositiveButton("Excluir") { _, _ ->
                     MovimentoContext.getDAO(context).excluir(movimento)
                     
-                    Trigger.launch(TriggerEvent.Toast("Removido!"))
-                    Trigger.launch(TriggerEvent.UpdateTelaMovimento())
-                    Trigger.launch(TriggerEvent.UpdateTelaDespesa())
+                    Trigger.launch(Events.Toast("Removido!"))
+                    Trigger.launch(Events.UpdateRegistros())
+                    Trigger.launch(Events.UpdateDespesas())
                     cancel()
                 }.setNegativeButton("Cancelar", null).show()
         }
@@ -75,9 +76,9 @@ class DetalhesMovimentoDialog(
                         if (temDespesaAgregada) {
                             movimento.referenciaDespesa = null
                             MovimentoContext.getDAO(context).alterar(movimento)
-                            Trigger.launch(TriggerEvent.Snack("Despesa desvinculada!"))
-                            Trigger.launch(TriggerEvent.UpdateTelaDespesa())
-                            Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+                            Trigger.launch(Events.Snack("Despesa desvinculada!"))
+                            Trigger.launch(Events.UpdateDespesas())
+                            Trigger.launch(Events.UpdateRegistros())
                             onEditedListener(movimento)
                             temDespesaAgregada = false
                             bindData()
@@ -87,9 +88,9 @@ class DetalhesMovimentoDialog(
                             val dialog = SelecionarDespesaDialog(context) { codigoDespesa ->
                                 movimento.referenciaDespesa = codigoDespesa
                                 MovimentoContext.getDAO(context).alterar(movimento)
-                                Trigger.launch(TriggerEvent.Snack("Despesa vinculada!"))
-                                Trigger.launch(TriggerEvent.UpdateTelaDespesa())
-                                Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+                                Trigger.launch(Events.Snack("Despesa vinculada!"))
+                                Trigger.launch(Events.UpdateDespesas())
+                                Trigger.launch(Events.UpdateRegistros())
                                 onEditedListener(movimento)
                                 temDespesaAgregada = true
                                 bindData()

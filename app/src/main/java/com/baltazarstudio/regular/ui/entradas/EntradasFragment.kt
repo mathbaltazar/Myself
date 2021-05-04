@@ -12,13 +12,12 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.model.Entrada
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
+import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.ui.adapter.EntradasAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_entradas.view.*
-import org.jetbrains.anko.toast
 
 class EntradasFragment : Fragment() {
     
@@ -41,7 +40,7 @@ class EntradasFragment : Fragment() {
         
         disposables.add(Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe { t ->
-                if (t is TriggerEvent.UpdateTelaEntradas) {
+                if (t is Events.UpdateTelaEntradas) {
                     loadEntradas()
                 }
             })

@@ -14,7 +14,7 @@ import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.database.dao.ConfiguracaoDAO
 import com.baltazarstudio.regular.model.Configuracao
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
+import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.service.BackupService
 import com.baltazarstudio.regular.service.ConnectionTestService
 import com.baltazarstudio.regular.service.dto.SincronizarDadosBackupDTO
@@ -215,8 +215,8 @@ class DadosBackupActivity : AppCompatActivity() {
                 
                 toast("Os dados do servidor foram restaurados!")
                 
-                Trigger.launch(TriggerEvent.UpdateTelaMovimento())
-                Trigger.launch(TriggerEvent.UpdateTelaDespesa())
+                Trigger.launch(Events.UpdateRegistros())
+                Trigger.launch(Events.UpdateDespesas())
 
             }, { error ->
                 error.printStackTrace()

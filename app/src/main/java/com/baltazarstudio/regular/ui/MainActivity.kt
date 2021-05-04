@@ -18,16 +18,17 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.notification.Notification
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
+import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.ui.backup.DadosBackupActivity
 import com.baltazarstudio.regular.ui.entradas.EntradasFragment
-import com.baltazarstudio.regular.ui.registros.RegistrosFragment
+import com.baltazarstudio.regular.ui.movimentacao.MovimentacaoFragment
 import com.baltazarstudio.regular.ui.resumo.ResumoFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
@@ -35,6 +36,11 @@ import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     
+    
+    private val disposable: CompositeDisposable = CompositeDisposable()
+    private val movimentacaoFragment = MovimentacaoFragment()
+    
+    var searchMenuItem: MenuItem? = null
     
     /**
      *
@@ -61,13 +67,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      *
      */
     
-
-
-
-    private val registrosFragment = RegistrosFragment()
-    
-    var searchMenuItem: MenuItem? = null
-    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -88,7 +87,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.menu_drawer_movimentos -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, registrosFragment)
+                    .replace(R.id.fragment_container_main, movimentacaoFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
             
                 toolbar.setTitle(R.string.activity_title_meus_registros)
@@ -96,7 +95,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.menu_drawer_entradas -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, EntradasFragment())
+                    .replace(R.id.fragment_container_main, EntradasFragment())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
             
                 toolbar.setTitle(R.string.activity_title_entradas)
@@ -104,7 +103,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.menu_drawer_resumo -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, ResumoFragment())
+                    .replace(R.id.fragment_container_main, ResumoFragment())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
     
                 toolbar.setTitle(R.string.activity_title_resumos)
@@ -122,12 +121,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         searchMenuItem = menu.findItem(R.id.action_pesquisar)
         searchMenuItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                registrosFragment.desabilitarTabs()
+                Trigger.launch(Events.DesabilitarModoMultiSelecao())
                 return true
             }
     
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                registrosFragment.habilitarTabs()
+                Trigger.launch(Events.HabilitarModoMultiSelecao())
                 return true
             }
         })
@@ -141,7 +140,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             
             override fun onQueryTextChange(newText: String?): Boolean {
                 MovimentoContext.textoPesquisa = newText
-                Trigger.launch(TriggerEvent.FiltrarMovimentosPelaDescricao())
+                Trigger.launch(Events.FiltrarMovimentosPelaDescricao())
                 return true
             }
         })
@@ -173,15 +172,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     
     private fun registerGlobalUIMessage() {
-        Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        disposable.dispose()
+        disposable.add(Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe { t ->
                 when (t) {
-                    is TriggerEvent.Toast -> toast(t.message)
-                    is TriggerEvent.Snack -> {
+                    is Events.Toast -> toast(t.message)
+                    is Events.Snack -> {
                         Snackbar.make(findViewById(android.R.id.content), t.message, Snackbar.LENGTH_LONG).show()
                     }
                 }
-            }.apply {  }
+            })
     }
     
     override fun onBackPressed() {
@@ -203,11 +203,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     
         setupFirebaseMessaging()
         registerGlobalUIMessage()
+        Notification.notificar(this)
     }
     
-    override fun onResume() {
-        super.onResume()
-        Notification.notificar(this)
+    override fun onDestroy() {
+        disposable.clear()
+        super.onDestroy()
     }
     
     override fun attachBaseContext(newBase: Context) {

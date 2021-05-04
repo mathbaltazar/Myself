@@ -1,7 +1,8 @@
-package com.baltazarstudio.regular.ui.registros.despesa
+package com.baltazarstudio.regular.ui.movimentacao.despesa
 
 import android.app.Dialog
 import android.content.Context
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,11 +21,16 @@ class SelecionarDespesaDialog(context: Context, onItemSelected: (Int) -> Unit) :
         setContentView(R.layout.dialog_selecionar_despesa)
     
         val despesas = DespesaContext.getDAO(context).getTodasDespesas()
-        rv_selecionar_despesa.adapter = SelecionarDespesaAdapter(context, despesas) { codigo ->
-            onItemSelected(codigo)
-            cancel()
+        
+        if (despesas.isEmpty()) {
+            tv_dialog_selecionar_despesa_sem_despesa.visibility = View.VISIBLE
+        } else {
+            rv_selecionar_despesa.adapter = SelecionarDespesaAdapter(context, despesas) { codigo ->
+                onItemSelected(codigo)
+                cancel()
+            }
+            rv_selecionar_despesa.layoutManager = LinearLayoutManager(context)
         }
-        rv_selecionar_despesa.layoutManager = LinearLayoutManager(context)
         
         setUpDimensions()
     }

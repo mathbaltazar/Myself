@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.registros.despesa
+package com.baltazarstudio.regular.ui.movimentacao.despesa
 
 import android.os.Bundle
 import android.view.LayoutInflater

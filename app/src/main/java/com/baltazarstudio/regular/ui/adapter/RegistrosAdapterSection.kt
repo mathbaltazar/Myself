@@ -6,29 +6,30 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
-import com.baltazarstudio.regular.ui.registros.movimentos.DetalhesMovimentoDialog
+import com.baltazarstudio.regular.observer.Events
+import com.baltazarstudio.regular.ui.movimentacao.registros.DetalhesRegistroDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
-import kotlinx.android.synthetic.main.layout_section_header_movimento.view.*
-import kotlinx.android.synthetic.main.layout_section_item_movimento.view.*
+import kotlinx.android.synthetic.main.layout_section_header_registro.view.*
+import kotlinx.android.synthetic.main.layout_section_item_registro.view.*
 
-class MovimentosAdapterSection(
+class RegistrosAdapterSection(
     private val adapter: SectionedRecyclerViewAdapter,
     private val ano: Int,
     private val mes: Int,
     private val movimentos: List<Movimento>
 ) : Section(
-    SectionParameters.builder().headerResourceId(R.layout.layout_section_header_movimento)
-        .itemResourceId(R.layout.layout_section_item_movimento).build()
+    SectionParameters.builder().headerResourceId(R.layout.layout_section_header_registro)
+        .itemResourceId(R.layout.layout_section_item_registro).build()
 ) {
     
     
     private var mOnCheckableModeItemSelectedListener: (Int) -> Unit = {}
     var checkableMode: Boolean = false
+    private var expanded: Boolean = true
     
     
     fun setOnCheckableModeItemSelectedListener(listener: (Int) -> Unit) {
@@ -36,7 +37,7 @@ class MovimentosAdapterSection(
     }
     
     override fun getContentItemsTotal(): Int {
-        return movimentos.size
+        return if (expanded) movimentos.size else 0
     }
     
     override fun getHeaderViewHolder(view: View): RecyclerView.ViewHolder {
@@ -59,8 +60,18 @@ class MovimentosAdapterSection(
         fun bindView() {
             var total = 0.0
             for (movimento in movimentos) total += movimento.valor
-            itemView.tv_header_movimento_title.text = Utils.getMesString(mes, ano)
-            itemView.tv_header_movimento_total.text = Utils.formatCurrency(total)
+            itemView.tv_section_header_registros_title.text = Utils.getMesString(mes, ano)
+            itemView.tv_section_header_registros_total.text = Utils.formatCurrency(total)
+            
+            if (expanded)
+                itemView.iv_section_header_registros_expand.setImageResource(R.drawable.ic_arrow_up)
+            else
+                itemView.iv_section_header_registros_expand.setImageResource(R.drawable.ic_arrow_down)
+            
+            itemView.setOnClickListener {
+                expanded = !expanded
+                adapter.notifyDataSetChanged()
+            }
         }
     }
     
@@ -79,7 +90,7 @@ class MovimentosAdapterSection(
             
             itemView.setOnClickListener {
                 if (!checkableMode) {
-                    DetalhesMovimentoDialog(itemView.context, movimento)
+                    DetalhesRegistroDialog(itemView.context, movimento)
                 } else {
                     if (!MovimentoContext.movimentosParaExcluir.contains(movimento)) {
                         selectItem(movimento)
@@ -95,7 +106,7 @@ class MovimentosAdapterSection(
                 if (!checkableMode) {
                     selectItem(movimento)
                     checkableMode = true
-                    Trigger.launch(TriggerEvent.HabilitarModoMultiSelecao())
+                    Trigger.launch(Events.HabilitarModoMultiSelecao())
                 }
                 
                 return@setOnLongClickListener checkableMode

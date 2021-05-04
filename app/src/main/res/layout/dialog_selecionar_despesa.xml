@@ -23,5 +23,15 @@
         tools:itemCount="3"
         tools:listitem="@layout/list_item_selecionar_despesa" />
 
+    <TextView
+        android:id="@+id/tv_dialog_selecionar_despesa_sem_despesa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/all_default_layout_offset_8"
+        android:text="Não há despesas."
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </LinearLayout>

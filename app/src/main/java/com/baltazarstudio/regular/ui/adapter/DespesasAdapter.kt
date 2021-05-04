@@ -13,10 +13,10 @@ import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
-import com.baltazarstudio.regular.ui.registros.despesa.CriarDespesaDialog
-import com.baltazarstudio.regular.ui.registros.despesa.MovimentosDespesasDialog
-import com.baltazarstudio.regular.ui.registros.despesa.RegistrarDespesaDialog
+import com.baltazarstudio.regular.observer.Events
+import com.baltazarstudio.regular.ui.movimentacao.despesa.CriarDespesaDialog
+import com.baltazarstudio.regular.ui.movimentacao.despesa.MovimentosDespesasDialog
+import com.baltazarstudio.regular.ui.movimentacao.despesa.RegistrarDespesaDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_section_item_despesa.view.*
@@ -98,7 +98,7 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             itemView.button_section_item_despesas_registrar.setOnClickListener {
                 val dialog = RegistrarDespesaDialog(itemView.context, despesa)
                 dialog.setOnDespesaRegistrada {
-                    Trigger.launch(TriggerEvent.UpdateTelaMovimento())
+                    Trigger.launch(Events.UpdateRegistros())
                     notifyItemChanged(position)
                 }
                 dialog.show()
@@ -144,8 +144,8 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
                 .setMessage("Deseja realmente deletar esta despesa?")
                 .setPositiveButton("Excluir") { _, _ ->
                     DespesaContext.getDAO(itemView.context).deletar(despesa)
-                    Trigger.launch(TriggerEvent.Toast("Removido!"))
-                    Trigger.launch(TriggerEvent.UpdateTelaDespesa())
+                    Trigger.launch(Events.Toast("Removido!"))
+                    Trigger.launch(Events.UpdateDespesas())
                 }.setNegativeButton("Cancelar", null)
                 .show()
         }

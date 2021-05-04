@@ -25,7 +25,7 @@
                 android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
                 android:layout_weight="1"
                 android:text="DETALHES"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_size_16"
                 android:textStyle="bold" />
 
@@ -116,16 +116,16 @@
             android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
             android:layout_marginTop="@dimen/all_default_layout_offset_8"
             android:text="Alterar"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_size_16"
-            app:strokeColor="@color/colorAccent" />
+            app:strokeColor="@color/colorPrimary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_detalhes_movimento_excluir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-            android:backgroundTint="@color/colorAccent"
+            android:backgroundTint="@color/colorPrimary"
             android:text="Excluir"
             android:textSize="@dimen/text_size_16" />
 

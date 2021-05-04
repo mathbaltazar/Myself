@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/all_default_layout_offset_8"
-    tools:ignore="HardcodedText">
+    tools:ignore="HardcodedText,ContentDescription">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +66,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/all_default_layout_offset_4"
             android:src="@drawable/ic_arrow_down"
-            tools:ignore="ContentDescription" />
+            app:tint="@color/colorAccent" />
 
         <ImageView
             android:id="@+id/iv_section_item_despesas_opcoes"
@@ -75,8 +76,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="@dimen/all_default_layout_offset_4"
-            android:src="@drawable/ic_more_vertical"
-            tools:ignore="ContentDescription" />
+            android:src="@drawable/ic_more_vertical" />
     </LinearLayout>
 
     <TextView

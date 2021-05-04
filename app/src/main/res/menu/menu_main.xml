@@ -4,6 +4,12 @@
     tools:context="com.baltazarstudio.regular.ui.MainActivity">
 
     <item
+        android:id="@+id/action_adicionar"
+        android:title="@string/adicionar"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_pesquisar"
         android:icon="@drawable/ic_search"
         android:title="@string/activity_main_menu_pesquisar"

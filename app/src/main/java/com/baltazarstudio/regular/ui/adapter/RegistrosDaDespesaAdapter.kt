@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.Movimento
-import com.baltazarstudio.regular.ui.registros.movimentos.DetalhesMovimentoDialog
+import com.baltazarstudio.regular.ui.movimentacao.registros.DetalhesRegistroDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
-import kotlinx.android.synthetic.main.layout_section_item_movimento.view.*
+import kotlinx.android.synthetic.main.layout_section_item_registro.view.*
 
 class RegistrosDaDespesaAdapter(context: Context, private val movimentos: ArrayList<Movimento>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -19,7 +19,7 @@ class RegistrosDaDespesaAdapter(context: Context, private val movimentos: ArrayL
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ItemViewHolder(
-            layoutInflater.inflate(R.layout.layout_section_item_movimento, parent, false))
+            layoutInflater.inflate(R.layout.layout_section_item_registro, parent, false))
     }
     
     override fun getItemCount(): Int {
@@ -40,7 +40,7 @@ class RegistrosDaDespesaAdapter(context: Context, private val movimentos: ArrayL
             itemView.tv_movimento_data.text = movimento.data!!.formattedDate()
             
             itemView.setOnClickListener {
-                val dialog = DetalhesMovimentoDialog(itemView.context, movimento)
+                val dialog = DetalhesRegistroDialog(itemView.context, movimento)
                 dialog.setOnEditedMovimento {
                     movimentos[position] = it
                     notifyItemChanged(position)

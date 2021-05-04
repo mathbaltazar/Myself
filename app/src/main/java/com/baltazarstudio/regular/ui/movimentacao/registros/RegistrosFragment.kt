@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.registros.movimentos
+package com.baltazarstudio.regular.ui.movimentacao.registros
 
 import android.os.Bundle
 import android.view.*
@@ -10,17 +10,16 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.MovimentoContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.observer.TriggerEvent
-import com.baltazarstudio.regular.ui.adapter.MovimentosAdapterSection
+import com.baltazarstudio.regular.observer.Events
+import com.baltazarstudio.regular.ui.adapter.RegistrosAdapterSection
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_movimentos.*
-import kotlinx.android.synthetic.main.fragment_movimentos.view.*
+import kotlinx.android.synthetic.main.fragment_registros.view.*
 
-class MovimentosFragment : Fragment() {
+class RegistrosFragment : Fragment() {
     
     private lateinit var mView: View
     private var multiChoiceToolbarActionMode: androidx.appcompat.view.ActionMode? = null
@@ -33,7 +32,7 @@ class MovimentosFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.fragment_movimentos, container, false)
+        mView = inflater.inflate(R.layout.fragment_registros, container, false)
         return mView
     }
     
@@ -43,10 +42,10 @@ class MovimentosFragment : Fragment() {
         carregarMovimentos()
         registerMultiSelectionCallbacks()
     
-        mView.fab_add_movimento.setOnClickListener {
-            val dialog = RegistrarMovimentoDialog(mView.context)
+        /*mView.fab_add_movimento.setOnClickListener {
+            val dialog = CriarRegistroDialog(mView.context)
             dialog.show()
-        }
+        }*/
     
         callback = object : androidx.appcompat.view.ActionMode.Callback {
             
@@ -68,7 +67,7 @@ class MovimentosFragment : Fragment() {
                 when (item?.itemId) {
                     R.id.action_delete_movimentos -> {
                         if (MovimentoContext.movimentosParaExcluir.size == 0) {
-                            Trigger.launch(TriggerEvent.Toast("Não há movimentos selecionados"))
+                            Trigger.launch(Events.Toast("Não há movimentos selecionados"))
                         } else {
                             AlertDialog.Builder(mView.context).setTitle("Excluir")
                                 .setMessage("Confirma a exclusão dos itens selecionados?")
@@ -76,9 +75,9 @@ class MovimentosFragment : Fragment() {
                                     val countExcluidos = MovimentoContext.excluirMovimentos(mView.context)
                                     desabilitarModoSelecao()
                             
-                                    Trigger.launch(TriggerEvent.Snack("$countExcluidos Registros Removidos"))
-                                    Trigger.launch(TriggerEvent.UpdateTelaMovimento())
-                                    Trigger.launch(TriggerEvent.UpdateTelaDespesa())
+                                    Trigger.launch(Events.Snack("$countExcluidos Registros Removidos"))
+                                    Trigger.launch(Events.UpdateRegistros())
+                                    Trigger.launch(Events.UpdateDespesas())
                                 }.setNegativeButton("Cancelar", null).show()
                         }
                     }
@@ -89,7 +88,7 @@ class MovimentosFragment : Fragment() {
     
             override fun onDestroyActionMode(mode: androidx.appcompat.view.ActionMode?) {
                 multiChoiceToolbarActionMode = null
-                Trigger.launch(TriggerEvent.DesabilitarModoMultiSelecao())
+                Trigger.launch(Events.DesabilitarModoMultiSelecao())
             }
         }
         
@@ -100,8 +99,8 @@ class MovimentosFragment : Fragment() {
         disposable.add(Trigger.watcher().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe { t ->
                 when (t) {
-                    is TriggerEvent.HabilitarModoMultiSelecao -> habilitarModoSelecao()
-                    is TriggerEvent.DesabilitarModoMultiSelecao -> desabilitarModoSelecao()
+                    is Events.HabilitarModoMultiSelecao -> habilitarModoSelecao()
+                    is Events.DesabilitarModoMultiSelecao -> desabilitarModoSelecao()
                 }
             })
     }
@@ -112,16 +111,16 @@ class MovimentosFragment : Fragment() {
         val itensMovimentos: List<Movimento>
         if (MovimentoContext.textoPesquisa.isNullOrBlank()) {
             itensMovimentos = mDAO.getTodosMovimentos()
-            mView.fab_add_movimento.visibility = View.VISIBLE
+            //mView.fab_add_movimento.visibility = View.VISIBLE
         } else {
             MovimentoContext.getDAO(mView.context)
             itensMovimentos = mDAO.getTodosMovimentos(MovimentoContext.textoPesquisa!!.trim())
-            mView.fab_add_movimento.visibility = View.GONE
+            //mView.fab_add_movimento.visibility = View.GONE
         }
         
         if (itensMovimentos.isNotEmpty()) {
-            mView.tv_movimentos_empty.visibility = View.GONE
-            mView.rv_movimentos.visibility = View.VISIBLE
+            mView.tv_registros_sem_registros.visibility = View.GONE
+            mView.rv_registros.visibility = View.VISIBLE
             
             val adapter = SectionedRecyclerViewAdapter()
             
@@ -131,7 +130,7 @@ class MovimentosFragment : Fragment() {
                     
                     if (itens.isEmpty()) continue
     
-                    val section = MovimentosAdapterSection(adapter, ano, mes, itens)
+                    val section = RegistrosAdapterSection(adapter, ano, mes, itens)
                     adapter.addSection(section)
                     
                     section.setOnCheckableModeItemSelectedListener { count ->
@@ -140,12 +139,12 @@ class MovimentosFragment : Fragment() {
                 }
             }
             
-            mView.rv_movimentos.adapter = adapter
-            mView.rv_movimentos.layoutManager = LinearLayoutManager(mView.context)
+            mView.rv_registros.adapter = adapter
+            mView.rv_registros.layoutManager = LinearLayoutManager(mView.context)
             
         } else {
-            mView.tv_movimentos_empty.visibility = View.VISIBLE
-            mView.rv_movimentos.visibility = View.GONE
+            mView.tv_registros_sem_registros.visibility = View.VISIBLE
+            mView.rv_registros.visibility = View.GONE
         }
         
     }
@@ -172,12 +171,12 @@ class MovimentosFragment : Fragment() {
     }
     
     private fun habilitarModoSelecao() {
-        mView.fab_add_movimento.visibility = View.GONE
+        //mView.fab_add_movimento.visibility = View.GONE
         multiChoiceToolbarActionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(callback)
     
-        val adapter = mView.rv_movimentos.adapter as SectionedRecyclerViewAdapter
+        val adapter = mView.rv_registros.adapter as SectionedRecyclerViewAdapter
         for (count in 0 until adapter.sectionCount) {
-            val sec = (adapter.getSection(count) as MovimentosAdapterSection)
+            val sec = (adapter.getSection(count) as RegistrosAdapterSection)
             sec.checkableMode = true
         }
     
@@ -185,9 +184,9 @@ class MovimentosFragment : Fragment() {
     }
     
     private fun desabilitarModoSelecao() {
-        val adapter = rv_movimentos.adapter as SectionedRecyclerViewAdapter
+        val adapter = mView.rv_registros.adapter as SectionedRecyclerViewAdapter
         for (count in 0 until adapter.sectionCount) {
-            val sec = (adapter.getSection(count) as MovimentosAdapterSection)
+            val sec = (adapter.getSection(count) as RegistrosAdapterSection)
             sec.checkableMode = false
         }
         
@@ -195,7 +194,7 @@ class MovimentosFragment : Fragment() {
         adapter.notifyDataSetChanged()
     
         multiChoiceToolbarActionMode?.finish()
-        mView.fab_add_movimento.visibility = View.VISIBLE
+        //mView.fab_add_movimento.visibility = View.VISIBLE
     }
     
     private fun atualizarQuantidadeSelecionados(count: Int) {
