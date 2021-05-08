@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.movimentacao.despesa
+package com.baltazarstudio.regular.ui.despesa
 
 import android.app.Dialog
 import android.content.Context

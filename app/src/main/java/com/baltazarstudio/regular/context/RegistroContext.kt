@@ -4,13 +4,13 @@ import android.content.Context
 import com.baltazarstudio.regular.database.dao.MovimentoDAO
 import com.baltazarstudio.regular.model.Movimento
 
-abstract class MovimentoContext {
+abstract class RegistroContext {
     companion object {
         
         private var mDAO: MovimentoDAO? = null
         
         var textoPesquisa: String? = null
-        var movimentosParaExcluir: ArrayList<Movimento> = arrayListOf()
+        var registrosParaExcluir: ArrayList<Movimento> = arrayListOf()
     
         fun getDAO(context: Context): MovimentoDAO {
             if (mDAO == null) mDAO = MovimentoDAO(context)
@@ -18,11 +18,11 @@ abstract class MovimentoContext {
         }
     
         fun excluirMovimentos(context: Context): Int {
-            for (movimento in movimentosParaExcluir) {
+            for (movimento in registrosParaExcluir) {
                 getDAO(context).excluir(movimento)
             }
             
-            return movimentosParaExcluir.size
+            return registrosParaExcluir.size
         }
     }
     

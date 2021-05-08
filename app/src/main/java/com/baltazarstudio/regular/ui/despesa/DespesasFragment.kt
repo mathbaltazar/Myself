@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.movimentacao.despesa
+package com.baltazarstudio.regular.ui.despesa
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,7 +22,7 @@ class DespesasFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mView = inflater.inflate(R.layout.fragment_despesas, container, false)
         return mView
     }
@@ -41,6 +41,7 @@ class DespesasFragment : Fragment() {
             mView.card_despesas_info.visibility = View.GONE
         }
     
+        // TODO Carregamento assincrono ???!!
         carregarDespesas()
     
         mView.button_despesas_adicionar.setOnClickListener {

@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.movimentacao.registros
+package com.baltazarstudio.regular.ui.registros
 
 import android.app.Dialog
 import android.content.Context
@@ -10,11 +10,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
-import com.baltazarstudio.regular.ui.movimentacao.despesa.SelecionarDespesaDialog
+import com.baltazarstudio.regular.ui.despesa.SelecionarDespesaDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.dialog_detalhes_movimento.*
@@ -54,7 +54,7 @@ class DetalhesRegistroDialog(
             AlertDialog.Builder(context).setTitle("Excluir")
                 .setMessage("Deseja realmente excluir este registro?")
                 .setPositiveButton("Excluir") { _, _ ->
-                    MovimentoContext.getDAO(context).excluir(movimento)
+                    RegistroContext.getDAO(context).excluir(movimento)
                     
                     Trigger.launch(Events.Toast("Removido!"))
                     Trigger.launch(Events.UpdateRegistros())
@@ -75,7 +75,7 @@ class DetalhesRegistroDialog(
                         
                         if (temDespesaAgregada) {
                             movimento.referenciaDespesa = null
-                            MovimentoContext.getDAO(context).alterar(movimento)
+                            RegistroContext.getDAO(context).alterar(movimento)
                             Trigger.launch(Events.Snack("Despesa desvinculada!"))
                             Trigger.launch(Events.UpdateDespesas())
                             Trigger.launch(Events.UpdateRegistros())
@@ -87,7 +87,7 @@ class DetalhesRegistroDialog(
                         
                             val dialog = SelecionarDespesaDialog(context) { codigoDespesa ->
                                 movimento.referenciaDespesa = codigoDespesa
-                                MovimentoContext.getDAO(context).alterar(movimento)
+                                RegistroContext.getDAO(context).alterar(movimento)
                                 Trigger.launch(Events.Snack("Despesa vinculada!"))
                                 Trigger.launch(Events.UpdateDespesas())
                                 Trigger.launch(Events.UpdateRegistros())

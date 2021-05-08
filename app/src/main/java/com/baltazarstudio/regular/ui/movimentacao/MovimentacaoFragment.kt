@@ -8,10 +8,10 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.ui.MainActivity
-import com.baltazarstudio.regular.ui.movimentacao.despesa.CriarDespesaDialog
-import com.baltazarstudio.regular.ui.movimentacao.despesa.DespesasFragment
-import com.baltazarstudio.regular.ui.movimentacao.registros.RegistrosFragment
-import com.baltazarstudio.regular.ui.movimentacao.registros.CriarRegistroDialog
+import com.baltazarstudio.regular.ui.despesa.CriarDespesaDialog
+import com.baltazarstudio.regular.ui.despesa.DespesasFragment
+import com.baltazarstudio.regular.ui.registros.RegistrosFragment
+import com.baltazarstudio.regular.ui.registros.CriarRegistroDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -62,7 +62,6 @@ class MovimentacaoFragment : Fragment() {
                         .addToBackStack(null)
                         .commit()
     
-                    val activity = (requireActivity() as MainActivity)
                     activity.searchMenuItem?.isVisible = false
                     activity.toolbar.title = "Minhas Despesas"
                     
@@ -113,23 +112,13 @@ class MovimentacaoFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { t ->
                 when (t) {
-                    is Events.UpdateRegistros -> registrosFragment.carregarMovimentos()
-                    is Events.UpdateDespesas -> despesasFragment.carregarDespesas()
-                    is Events.FiltrarMovimentosPelaDescricao -> registrosFragment.carregarMovimentos()
+                    is Events.UpdateRegistros -> registrosFragment.carregarRegistros()
+                    //is Events.UpdateDespesas -> despesasFragment.carregarDespesas()
+                    is Events.FiltrarRegistrosPelaDescricao -> registrosFragment.carregarRegistros()
                     is Events.HabilitarModoMultiSelecao -> bottom_navigation_view_movimentacao.visibility = View.GONE //desabilitarTabs()
                     is Events.DesabilitarModoMultiSelecao -> bottom_navigation_view_movimentacao.visibility = View.VISIBLE //habilitarTabs()
                 }
             })
-    }
-    
-    fun habilitarTabs() {
-        //tablayout_movimentos.visibility = View.VISIBLE
-        //vp_movimentos.locked = false
-    }
-    
-    fun desabilitarTabs() {
-        //tablayout_movimentos.visibility = View.GONE
-        //vp_movimentos.locked = true
     }
     
     override fun onResume() {

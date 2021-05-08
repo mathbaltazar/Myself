@@ -1,13 +1,14 @@
-package com.baltazarstudio.regular.ui.movimentacao.registros
+package com.baltazarstudio.regular.ui.registros
 
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
@@ -23,7 +24,7 @@ class RegistrosFragment : Fragment() {
     
     private lateinit var mView: View
     private var multiChoiceToolbarActionMode: androidx.appcompat.view.ActionMode? = null
-    private lateinit var callback: androidx.appcompat.view.ActionMode.Callback
+    private var callback: androidx.appcompat.view.ActionMode.Callback? = null
     
     private val disposable = CompositeDisposable()
     
@@ -31,7 +32,7 @@ class RegistrosFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mView = inflater.inflate(R.layout.fragment_registros, container, false)
         return mView
     }
@@ -39,58 +40,8 @@ class RegistrosFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        carregarMovimentos()
+        carregarRegistros()
         registerMultiSelectionCallbacks()
-    
-        /*mView.fab_add_movimento.setOnClickListener {
-            val dialog = CriarRegistroDialog(mView.context)
-            dialog.show()
-        }*/
-    
-        callback = object : androidx.appcompat.view.ActionMode.Callback {
-            
-            override fun onCreateActionMode(
-                mode: androidx.appcompat.view.ActionMode?, menu: Menu?
-            ): Boolean {
-                requireActivity().menuInflater.inflate(R.menu.menu_contextual_multi_select, menu)
-                return true
-            }
-    
-            override fun onPrepareActionMode(
-                mode: androidx.appcompat.view.ActionMode?, menu: Menu?
-            ): Boolean {
-                return false
-            }
-    
-            override fun onActionItemClicked(
-                mode: androidx.appcompat.view.ActionMode?, item: MenuItem?): Boolean {
-                when (item?.itemId) {
-                    R.id.action_delete_movimentos -> {
-                        if (MovimentoContext.movimentosParaExcluir.size == 0) {
-                            Trigger.launch(Events.Toast("Não há movimentos selecionados"))
-                        } else {
-                            AlertDialog.Builder(mView.context).setTitle("Excluir")
-                                .setMessage("Confirma a exclusão dos itens selecionados?")
-                                .setPositiveButton("Excluir") { _, _ ->
-                                    val countExcluidos = MovimentoContext.excluirMovimentos(mView.context)
-                                    desabilitarModoSelecao()
-                            
-                                    Trigger.launch(Events.Snack("$countExcluidos Registros Removidos"))
-                                    Trigger.launch(Events.UpdateRegistros())
-                                    Trigger.launch(Events.UpdateDespesas())
-                                }.setNegativeButton("Cancelar", null).show()
-                        }
-                    }
-                }
-        
-                return true
-            }
-    
-            override fun onDestroyActionMode(mode: androidx.appcompat.view.ActionMode?) {
-                multiChoiceToolbarActionMode = null
-                Trigger.launch(Events.DesabilitarModoMultiSelecao())
-            }
-        }
         
     }
     
@@ -100,21 +51,19 @@ class RegistrosFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread()).subscribe { t ->
                 when (t) {
                     is Events.HabilitarModoMultiSelecao -> habilitarModoSelecao()
-                    is Events.DesabilitarModoMultiSelecao -> desabilitarModoSelecao()
                 }
             })
     }
     
-    
-    fun carregarMovimentos() {
-        val mDAO = MovimentoContext.getDAO(mView.context)
+    fun carregarRegistros() {
+        val mDAO = RegistroContext.getDAO(mView.context)
         val itensMovimentos: List<Movimento>
-        if (MovimentoContext.textoPesquisa.isNullOrBlank()) {
+        if (RegistroContext.textoPesquisa.isNullOrBlank()) {
             itensMovimentos = mDAO.getTodosMovimentos()
             //mView.fab_add_movimento.visibility = View.VISIBLE
         } else {
-            MovimentoContext.getDAO(mView.context)
-            itensMovimentos = mDAO.getTodosMovimentos(MovimentoContext.textoPesquisa!!.trim())
+            RegistroContext.getDAO(mView.context)
+            itensMovimentos = mDAO.getTodosMovimentos(RegistroContext.textoPesquisa!!.trim())
             //mView.fab_add_movimento.visibility = View.GONE
         }
         
@@ -171,8 +120,7 @@ class RegistrosFragment : Fragment() {
     }
     
     private fun habilitarModoSelecao() {
-        //mView.fab_add_movimento.visibility = View.GONE
-        multiChoiceToolbarActionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(callback)
+        multiChoiceToolbarActionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(getCallback())
     
         val adapter = mView.rv_registros.adapter as SectionedRecyclerViewAdapter
         for (count in 0 until adapter.sectionCount) {
@@ -183,18 +131,62 @@ class RegistrosFragment : Fragment() {
         atualizarQuantidadeSelecionados(1)
     }
     
-    private fun desabilitarModoSelecao() {
-        val adapter = mView.rv_registros.adapter as SectionedRecyclerViewAdapter
-        for (count in 0 until adapter.sectionCount) {
-            val sec = (adapter.getSection(count) as RegistrosAdapterSection)
-            sec.checkableMode = false
+    private fun getCallback(): ActionMode.Callback {
+        if (callback == null) {
+            callback = object : androidx.appcompat.view.ActionMode.Callback {
+                override fun onCreateActionMode(
+                    mode: androidx.appcompat.view.ActionMode?, menu: Menu?
+                ): Boolean {
+                    requireActivity().menuInflater.inflate(R.menu.menu_action_mode_multi_selecao, menu)
+                    return true
+                }
+        
+                override fun onPrepareActionMode(
+                    mode: androidx.appcompat.view.ActionMode?, menu: Menu?
+                ): Boolean {
+                    return false
+                }
+        
+                override fun onActionItemClicked(
+                    mode: androidx.appcompat.view.ActionMode?, item: MenuItem?): Boolean {
+                    when (item?.itemId) {
+                        R.id.action_delete_movimentos -> {
+                            if (RegistroContext.registrosParaExcluir.size == 0) {
+                                Trigger.launch(Events.Toast("Selecione pelo menos 1 registro"))
+                                mode?.subtitle = "Selecione pelo menos 1 registro"
+                            } else {
+                                AlertDialog.Builder(mView.context).setTitle("Excluir").setMessage("Confirma a exclusão dos itens selecionados?")
+                                    .setPositiveButton("Excluir") { _, _ ->
+                                        val countExcluidos = RegistroContext.excluirMovimentos(mView.context)
+                                
+                                        Trigger.launch(Events.Snack("$countExcluidos Registros Removidos"))
+                                        Trigger.launch(Events.UpdateRegistros())
+                                        Trigger.launch(Events.UpdateDespesas())
+                                
+                                        mode?.finish()
+                                    }.setNegativeButton("Cancelar", null).show()
+                            }
+                        }
+                    }
+                    return true
+                }
+        
+                override fun onDestroyActionMode(mode: androidx.appcompat.view.ActionMode?) {
+                    val adapter = mView.rv_registros.adapter as SectionedRecyclerViewAdapter
+                    for (count in 0 until adapter.sectionCount) {
+                        val sec = (adapter.getSection(count) as RegistrosAdapterSection)
+                        sec.checkableMode = false
+                    }
+            
+                    RegistroContext.registrosParaExcluir.clear()
+                    adapter.notifyDataSetChanged()
+                    mode?.subtitle = null
+                    Trigger.launch(Events.DesabilitarModoMultiSelecao())
+                }
+            }
         }
         
-        MovimentoContext.movimentosParaExcluir.clear()
-        adapter.notifyDataSetChanged()
-    
-        multiChoiceToolbarActionMode?.finish()
-        //mView.fab_add_movimento.visibility = View.VISIBLE
+        return callback!!
     }
     
     private fun atualizarQuantidadeSelecionados(count: Int) {

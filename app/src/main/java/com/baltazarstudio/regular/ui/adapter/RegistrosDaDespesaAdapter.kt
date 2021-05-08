@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.model.Movimento
-import com.baltazarstudio.regular.ui.movimentacao.registros.DetalhesRegistroDialog
+import com.baltazarstudio.regular.ui.registros.DetalhesRegistroDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_section_item_registro.view.*

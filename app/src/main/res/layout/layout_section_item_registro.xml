@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:selectableItemBackground"
-    android:orientation="vertical"
+    android:layout_marginHorizontal="@dimen/all_default_layout_offset_4"
     android:layout_marginVertical="@dimen/all_default_layout_offset_2"
-    android:paddingVertical="@dimen/all_default_layout_offset_2"
-    android:paddingHorizontal="@dimen/all_default_layout_offset_8">
-
+    android:orientation="vertical"
+    android:padding="@dimen/all_default_layout_offset_4">
+    <!--android:background="@drawable/background_section_item_selected"-->
 
     <TextView
         android:id="@+id/tv_movimento_descricao"

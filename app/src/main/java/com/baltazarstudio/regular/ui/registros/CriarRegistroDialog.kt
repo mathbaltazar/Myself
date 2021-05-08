@@ -1,10 +1,10 @@
-package com.baltazarstudio.regular.ui.movimentacao.registros
+package com.baltazarstudio.regular.ui.registros
 
 import android.app.Dialog
 import android.content.Context
 import android.view.WindowManager
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
@@ -62,13 +62,13 @@ class CriarRegistroDialog(context: Context) : Dialog(context) {
                 
                 if (edit) {
                     movimento.id = idMovimentoEmEdicao
-                    MovimentoContext.getDAO(context).alterar(movimento)
+                    RegistroContext.getDAO(context).alterar(movimento)
                     Trigger.launch(Events.Toast("Alterado!"))
                     
                     onEditedListener(movimento)
                 } else {
-                    MovimentoContext.getDAO(context).inserir(movimento)
-                    Trigger.launch(Events.Toast("Movimento adicionado!"))
+                    RegistroContext.getDAO(context).inserir(movimento)
+                    Trigger.launch(Events.Toast("Registro adicionado!"))
                 }
     
                 Trigger.launch(Events.UpdateRegistros())
@@ -102,7 +102,7 @@ class CriarRegistroDialog(context: Context) : Dialog(context) {
         textinput_dialog_novo_movimento_valor.setText(formatCurrency(movimento.valor))
         dateinput_dialog_novo_movimento_data.setDate(movimento.data!!)
         button_dialog_novo_movimento_adicionar.text = "Alterar"
-        tv_dialog_novo_movimento_title.text = "Alterar Movimento"
+        tv_dialog_novo_movimento_title.text = "Alterar Registro"
     }
     
     private fun isValorValido(valor: String): Boolean {

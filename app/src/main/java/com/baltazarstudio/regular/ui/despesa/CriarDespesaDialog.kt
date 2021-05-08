@@ -1,4 +1,4 @@
-package com.baltazarstudio.regular.ui.movimentacao.despesa
+package com.baltazarstudio.regular.ui.despesa
 
 import android.app.Dialog
 import android.content.Context
@@ -9,7 +9,7 @@ import android.view.WindowManager
 import android.widget.ArrayAdapter
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
@@ -71,7 +71,7 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
                     Trigger.launch(Events.Snack("Despesa alterada"))
                     
                     if (chk_dialog_despesa_alterar_registros.isChecked) {
-                        MovimentoContext.getDAO(context).atualizarRegistrosDaDespesa(despesaEmEdicao)
+                        RegistroContext.getDAO(context).atualizarRegistrosDaDespesa(despesaEmEdicao)
                         Trigger.launch(Events.UpdateRegistros())
                     }
                     

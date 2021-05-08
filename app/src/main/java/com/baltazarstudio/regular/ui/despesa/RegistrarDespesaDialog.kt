@@ -1,10 +1,10 @@
-package com.baltazarstudio.regular.ui.movimentacao.despesa
+package com.baltazarstudio.regular.ui.despesa
 
 import android.app.Dialog
 import android.content.Context
 import android.view.View
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
@@ -94,7 +94,7 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
             
             movimento.referenciaDespesa = despesa.codigo
     
-            MovimentoContext.getDAO(context).inserir(movimento)
+            RegistroContext.getDAO(context).inserir(movimento)
             Trigger.launch(Events.Toast("Registrado!"))
             onDespesaRegistrada.invoke()
             

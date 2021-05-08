@@ -15,7 +15,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.notification.Notification
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
@@ -65,6 +65,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) Manutenção: Inverter ordem resultado dos registros "Ver Todos" das despesas
      * - (DONE) Correção: Dropdown dia vencimento não se ajustando a diferente resoluções
      *
+     * BUGS ---> ADAPTAR À TODAS AS UI NECESSÁRIAS QUANDO UM REGISTRO/DESPESA FOR ALTERADO
+     * BUGS ---> ESTUDAR ESTRATÉGIA PARA CARREGAMENTO DE DADOS AO TROCAR DE VIEW PELA BOTTOMVIEWNAVIGATION
+     * BUGS ---> NOVO DESIGN DESPESA: NOVA TELA PARA DETALHES DA DESPESA (TENTAR "ICONIFICAR")
+     * BUGS ---> TRANSFERIR BACKUP PARA MENU LATERAL
+     * BUGS ---> REFORMULAÇÃO DO BANCO DE DADOS: REUTILIZAÇÃO DE PRIMARY KEY COM BACKEND (VER LINK NO CELULAR)
+     * E NOVO PARAMETRO "STATUS" PARA A ENTITY "REGISTRO"
+     * BUGS ---> OTIMIZAR COMUNICAÇÃO DA SINCRONIZAÇÃO DE DADOS COM BACKEND
      */
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,13 +92,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_drawer_movimentos -> {
+            R.id.menu_drawer_movimentacao -> {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container_main, movimentacaoFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
             
                 toolbar.setTitle(R.string.activity_title_meus_registros)
-                searchMenuItem?.isVisible = true
             }
             R.id.menu_drawer_entradas -> {
                 supportFragmentManager.beginTransaction()
@@ -99,7 +105,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
             
                 toolbar.setTitle(R.string.activity_title_entradas)
-                searchMenuItem?.isVisible = false
             }
             R.id.menu_drawer_resumo -> {
                 supportFragmentManager.beginTransaction()
@@ -107,10 +112,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
     
                 toolbar.setTitle(R.string.activity_title_resumos)
-                searchMenuItem?.isVisible = false
             }
         }
     
+        searchMenuItem?.isVisible = item.itemId == R.id.menu_drawer_movimentacao
         item.isChecked = true
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
@@ -119,28 +124,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         searchMenuItem = menu.findItem(R.id.action_pesquisar)
-        searchMenuItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                Trigger.launch(Events.DesabilitarModoMultiSelecao())
-                return true
-            }
-    
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                Trigger.launch(Events.HabilitarModoMultiSelecao())
-                return true
-            }
-        })
     
         val searchView = searchMenuItem!!.actionView as SearchView
         searchView.onActionViewCollapsed()
-        searchView.queryHint = "Digite sua busca..."
+        searchView.queryHint = "O que você procura?"
         
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean { return false }
             
             override fun onQueryTextChange(newText: String?): Boolean {
-                MovimentoContext.textoPesquisa = newText
-                Trigger.launch(Events.FiltrarMovimentosPelaDescricao())
+                RegistroContext.textoPesquisa = newText
+                Trigger.launch(Events.FiltrarRegistrosPelaDescricao())
                 return true
             }
         })

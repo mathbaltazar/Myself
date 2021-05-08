@@ -1,13 +1,14 @@
 package com.baltazarstudio.regular.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
-import com.baltazarstudio.regular.ui.movimentacao.registros.DetalhesRegistroDialog
+import com.baltazarstudio.regular.ui.registros.DetalhesRegistroDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section
@@ -92,13 +93,13 @@ class RegistrosAdapterSection(
                 if (!checkableMode) {
                     DetalhesRegistroDialog(itemView.context, movimento)
                 } else {
-                    if (!MovimentoContext.movimentosParaExcluir.contains(movimento)) {
+                    if (!RegistroContext.registrosParaExcluir.contains(movimento)) {
                         selectItem(movimento)
                     } else {
                         unselectItem(movimento)
                     }
                     
-                    mOnCheckableModeItemSelectedListener(MovimentoContext.movimentosParaExcluir.size)
+                    mOnCheckableModeItemSelectedListener(RegistroContext.registrosParaExcluir.size)
                 }
             }
             
@@ -115,13 +116,13 @@ class RegistrosAdapterSection(
         }
     
         private fun selectItem(movimento: Movimento) {
-            itemView.setBackgroundResource(R.drawable.ripple_selectable_item_unselect)
-            MovimentoContext.movimentosParaExcluir.add(movimento)
+            itemView.setBackgroundResource(R.drawable.background_section_item_selected)
+            RegistroContext.registrosParaExcluir.add(movimento)
         }
     
-         private fun unselectItem(movimento: Movimento) {
-            itemView.setBackgroundResource(R.drawable.ripple_selectable_item_select)
-            MovimentoContext.movimentosParaExcluir.remove(movimento)
+        private fun unselectItem(movimento: Movimento) {
+            itemView.setBackgroundResource(android.R.drawable.screen_background_light)
+            RegistroContext.registrosParaExcluir.remove(movimento)
         }
     }
     

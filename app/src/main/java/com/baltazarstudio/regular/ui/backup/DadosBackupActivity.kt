@@ -10,7 +10,7 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.ConfigContext
 import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.EntradaContext
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.database.dao.ConfiguracaoDAO
 import com.baltazarstudio.regular.model.Configuracao
 import com.baltazarstudio.regular.observer.Trigger
@@ -157,7 +157,7 @@ class DadosBackupActivity : AppCompatActivity() {
 
 
         val request = SincronizarDadosBackupDTO()
-        request.movimentos = MovimentoContext.getDAO(this).getTodosMovimentos()
+        request.movimentos = RegistroContext.getDAO(this).getTodosMovimentos()
         request.despesas = DespesaContext.getDAO(this).getTodasDespesas()
         request.entradas = EntradaContext.getDAO(this).getTodasEntradas()
         request.configuracao = mConfiguracao
@@ -208,7 +208,7 @@ class DadosBackupActivity : AppCompatActivity() {
                 button_backup_restaurar.isEnabled = true
 
                 val dto = t.body()!!
-                MovimentoContext.getDAO(this).restaurarMovimentos(dto.movimentos)
+                RegistroContext.getDAO(this).restaurarMovimentos(dto.movimentos)
                 DespesaContext.getDAO(this).restaurarDespesas(dto.despesas)
                 EntradaContext.getDAO(this).restaurarEntradas(dto.entradas)
                 ConfigContext.getDAO(this).salvarConfiguracao(dto.configuracao)

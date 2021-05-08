@@ -10,13 +10,13 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Despesa
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
-import com.baltazarstudio.regular.ui.movimentacao.despesa.CriarDespesaDialog
-import com.baltazarstudio.regular.ui.movimentacao.despesa.MovimentosDespesasDialog
-import com.baltazarstudio.regular.ui.movimentacao.despesa.RegistrarDespesaDialog
+import com.baltazarstudio.regular.ui.despesa.CriarDespesaDialog
+import com.baltazarstudio.regular.ui.despesa.MovimentosDespesasDialog
+import com.baltazarstudio.regular.ui.despesa.RegistrarDespesaDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_section_item_despesa.view.*
@@ -76,7 +76,7 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             itemView.tv_section_item_despesas_nome.text = despesa.nome
             
             // ULTIMO REGISTRO
-            val ultimoRegistro = MovimentoContext.getDAO(itemView.context).getUltimoRegistro(despesa.codigo!!)
+            val ultimoRegistro = RegistroContext.getDAO(itemView.context).getUltimoRegistro(despesa.codigo!!)
             if (ultimoRegistro == 0L) {
                 itemView.tv_section_item_despesas_ultimo_registro.text = "Não há registros."
             } else {
@@ -107,12 +107,12 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             // TODAS DESPESAS
             itemView.button_section_item_despesas_todos.isEnabled = ultimoRegistro != 0L
             itemView.button_section_item_despesas_todos.setOnClickListener {
-                val registrosDaDespesa = MovimentoContext.getDAO(itemView.context).getRegistrosPelaDespesa(despesa.codigo!!)
+                val registrosDaDespesa = RegistroContext.getDAO(itemView.context).getRegistrosPelaDespesa(despesa.codigo!!)
                 val dialog = MovimentosDespesasDialog(itemView.context, registrosDaDespesa)
                 dialog.show()
             }
             
-            val qtd = "${MovimentoContext.getDAO(itemView.context).getQuantidadeRegistrosPorDespesa(despesa.codigo!!)}"
+            val qtd = "${RegistroContext.getDAO(itemView.context).getQuantidadeRegistrosPorDespesa(despesa.codigo!!)}"
             itemView.button_section_item_despesas_todos.setText("Ver Todos ($qtd)")
     
             // OPÇOES

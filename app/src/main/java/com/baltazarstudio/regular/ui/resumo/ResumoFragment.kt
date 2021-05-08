@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.EntradaContext
-import com.baltazarstudio.regular.context.MovimentoContext
+import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.util.Utils
 import kotlinx.android.synthetic.main.fragment_resumo.view.*
 
@@ -31,7 +31,7 @@ class ResumoFragment : Fragment() {
     }
     
     private fun montarMovimentos(view: View) {
-        val dao = MovimentoContext.getDAO(view.context)
+        val dao = RegistroContext.getDAO(view.context)
         
         val quant = dao.getQuantidadeMovimentos()
         view.tv_resumo_movimentos_quantidade_registros.text = quant.toString()

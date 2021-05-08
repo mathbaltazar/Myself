@@ -21,7 +21,7 @@
         android:id="@+id/rv_registros"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/all_default_layout_offset_8"
+        android:layout_margin="@dimen/all_default_layout_offset_4"
         tools:itemCount="3"
         tools:listitem="@layout/layout_section_item_registro" />
     <!--android:layout_below="@id/toolbar_movimentos_multi_select"-->
