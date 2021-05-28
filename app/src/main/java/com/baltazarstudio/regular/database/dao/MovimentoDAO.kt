@@ -46,7 +46,7 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         return movimentos
     }
     
-    fun getRegistrosPelaDespesa(codigoDespesa: Int): ArrayList<Movimento> {
+    fun getRegistrosFiltradosPelaDespesa(codigoDespesa: Int): ArrayList<Movimento> {
         val movimentos = ArrayList<Movimento>()
         
         val queryBuilder = StringBuilder()
@@ -115,15 +115,6 @@ class MovimentoDAO(context: Context) : Database<Movimento>(context) {
         
         update.executeUpdateDelete()
     
-    }
-    
-    fun atualizarRegistrosDaDespesa(despesaEmEdicao: Despesa) {
-        val sql = StringBuilder()
-        sql.append("UPDATE $TABELA SET")
-        sql.append(" $DESCRICAO = '${despesaEmEdicao.nome}'")
-        sql.append(" WHERE $REFERENCIA_DESPESA = ${despesaEmEdicao.codigo}")
-        
-        writableDatabase.execSQL(sql.toString())
     }
     
     fun excluir(movimento: Movimento) {

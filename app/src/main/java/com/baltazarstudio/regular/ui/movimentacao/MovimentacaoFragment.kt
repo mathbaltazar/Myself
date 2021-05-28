@@ -22,8 +22,6 @@ import kotlinx.android.synthetic.main.fragment_movimentacao.*
 class MovimentacaoFragment : Fragment() {
     
     private var firstUse: Boolean = true
-    private val registrosFragment = RegistrosFragment()
-    private val despesasFragment = DespesasFragment()
     
     private val disposables = CompositeDisposable()
     
@@ -36,7 +34,6 @@ class MovimentacaoFragment : Fragment() {
     @SuppressLint("CheckResult")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpView()
         registerCallbacks()
     
         val activity = (requireActivity() as MainActivity)
@@ -46,29 +43,23 @@ class MovimentacaoFragment : Fragment() {
                 R.id.bottom_navigation_registros -> {
                     childFragmentManager.beginTransaction()
                         .setReorderingAllowed(true)
-                        .replace(R.id.fragment_container_movimentacao, registrosFragment)
-                        .addToBackStack(null)
+                        .replace(R.id.fragment_container_movimentacao, RegistrosFragment())
                         .commit()
-                
-                    activity.searchMenuItem?.isVisible = true
+                    
                     activity.toolbar.title = "Meus Registros"
-                
-                    true
                 }
                 R.id.bottom_navigation_despesas -> {
                     childFragmentManager.beginTransaction()
                         .setReorderingAllowed(true)
-                        .replace(R.id.fragment_container_movimentacao, despesasFragment)
-                        .addToBackStack(null)
+                        .replace(R.id.fragment_container_movimentacao, DespesasFragment())
                         .commit()
     
-                    activity.searchMenuItem?.isVisible = false
                     activity.toolbar.title = "Minhas Despesas"
-                    
-                    true
                 }
-                else -> false
             }
+    
+            activity.searchMenuItem?.isVisible = item.itemId == R.id.bottom_navigation_registros
+            true
         }
         
         view.post {
@@ -80,30 +71,10 @@ class MovimentacaoFragment : Fragment() {
                 true
             }
         }
+        
         if (savedInstanceState == null)
             // Inicializar o frgament
             bottom_navigation_view_movimentacao.selectedItemId = R.id.bottom_navigation_registros
-    }
-    
-    private fun setUpView() {
-        /*val adapter = FragmentTabAdapter(childFragmentManager)
-        adapter.addFragment(registrosFragment, "Registros")
-        adapter.addFragment(despesasFragment, "Despesas")
-        vp_movimentos.adapter = adapter
-        
-        tablayout_movimentos.setupWithViewPager(vp_movimentos)
-        tablayout_movimentos.getTabAt(0)!!.setIcon(R.drawable.ic_registros)
-        tablayout_movimentos.getTabAt(1)!!.setIcon(R.drawable.ic_despesas)
-        
-        vp_movimentos.addOnPageChangeListener(object :
-        ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-            override fun onPageSelected(position: Int) {
-                (requireActivity() as MainActivity).searchMenuItem?.isVisible = position == 0
-            }
-        })*/
-        
     }
     
     private fun registerCallbacks() {
@@ -112,9 +83,6 @@ class MovimentacaoFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { t ->
                 when (t) {
-                    is Events.UpdateRegistros -> registrosFragment.carregarRegistros()
-                    //is Events.UpdateDespesas -> despesasFragment.carregarDespesas()
-                    is Events.FiltrarRegistrosPelaDescricao -> registrosFragment.carregarRegistros()
                     is Events.HabilitarModoMultiSelecao -> bottom_navigation_view_movimentacao.visibility = View.GONE //desabilitarTabs()
                     is Events.DesabilitarModoMultiSelecao -> bottom_navigation_view_movimentacao.visibility = View.VISIBLE //habilitarTabs()
                 }
@@ -124,11 +92,17 @@ class MovimentacaoFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         
-        if (activity?.intent?.action == "abrir_adicionar_gasto" && firstUse) {
-            val dialog = CriarRegistroDialog(context!!)
-            dialog.show()
+        view?.post {
+            if (activity?.intent?.action == "abrir_adicionar_gasto" && firstUse) {
+                val dialog = CriarRegistroDialog(context!!)
+                dialog.show()
+            }
+            firstUse = false
         }
-        firstUse = false
     }
     
+    override fun onDetach() {
+        disposables.clear()
+        super.onDetach()
+    }
 }

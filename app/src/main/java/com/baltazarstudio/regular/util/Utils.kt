@@ -3,6 +3,7 @@ package com.baltazarstudio.regular.util
 import android.content.Context
 import android.graphics.Point
 import android.view.WindowManager
+import com.baltazarstudio.regular.model.Movimento
 import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -29,6 +30,7 @@ class Utils {
             return NumberFormat.getCurrencyInstance(mLocale)
                 .format(valor)
                 .replace("R$", "R$ ")
+                .trim()
         }
 
         fun unformatCurrency(valor: String): String {
@@ -92,6 +94,26 @@ class Utils {
             val size = Point()
             wm.defaultDisplay.getSize(size)
             return size
+        }
+    
+        fun getAnosDisponiveis(itens: List<Movimento>): Collection<Int> {
+            val anos = itens.map { it.data?.formattedDate()?.substring(6) }
+            return anos.distinct().map { it!!.toInt() }
+        }
+    
+        fun getMesDisponivelPorAno(itens: List<Movimento>, ano: Int): Collection<Int> {
+            val meses = itens.filter { it.data?.formattedDate()?.substring(6) == ano.toString() }.map {
+                it.data?.formattedDate()?.substring(3, 5)
+            }
+            return meses.distinct().map { it!!.toInt() }
+        }
+    
+        fun filtrarItensPorData(itens: List<Movimento>, mes: Int, ano: Int): List<Movimento> {
+            return itens.filter {
+                it.data?.formattedDate()?.substring(6) == ano.toString() && it.data?.formattedDate()
+                    ?.substring(3, 5)?.toInt() == mes
+            }
+        
         }
     }
 }

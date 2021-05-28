@@ -17,7 +17,7 @@ abstract class RegistroContext {
             return mDAO!!
         }
     
-        fun excluirMovimentos(context: Context): Int {
+        fun excluirMovimentosSelecionados(context: Context): Int {
             for (movimento in registrosParaExcluir) {
                 getDAO(context).excluir(movimento)
             }

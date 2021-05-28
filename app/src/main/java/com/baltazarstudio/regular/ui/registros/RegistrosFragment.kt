@@ -13,6 +13,7 @@ import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.ui.adapter.RegistrosAdapterSection
+import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,9 +30,7 @@ class RegistrosFragment : Fragment() {
     private val disposable = CompositeDisposable()
     
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mView = inflater.inflate(R.layout.fragment_registros, container, false)
         return mView
@@ -39,32 +38,30 @@ class RegistrosFragment : Fragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        registerCallbacks()
         
         carregarRegistros()
-        registerMultiSelectionCallbacks()
-        
     }
     
-    private fun registerMultiSelectionCallbacks() {
+    private fun registerCallbacks() {
         disposable.clear()
         disposable.add(Trigger.watcher().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe { t ->
                 when (t) {
+                    is Events.UpdateRegistros -> carregarRegistros()
+                    is Events.FiltrarRegistrosPelaDescricao -> carregarRegistros()
                     is Events.HabilitarModoMultiSelecao -> habilitarModoSelecao()
                 }
             })
     }
     
-    fun carregarRegistros() {
+    private fun carregarRegistros() {
         val mDAO = RegistroContext.getDAO(mView.context)
         val itensMovimentos: List<Movimento>
         if (RegistroContext.textoPesquisa.isNullOrBlank()) {
             itensMovimentos = mDAO.getTodosMovimentos()
-            //mView.fab_add_movimento.visibility = View.VISIBLE
         } else {
-            RegistroContext.getDAO(mView.context)
             itensMovimentos = mDAO.getTodosMovimentos(RegistroContext.textoPesquisa!!.trim())
-            //mView.fab_add_movimento.visibility = View.GONE
         }
         
         if (itensMovimentos.isNotEmpty()) {
@@ -73,12 +70,12 @@ class RegistrosFragment : Fragment() {
             
             val adapter = SectionedRecyclerViewAdapter()
             
-            for (ano in getAnosDisponiveis(itensMovimentos)) {
-                for (mes in getMesDisponivelPorAno(itensMovimentos, ano)) {
-                    val itens = filtrarItensPorData(itensMovimentos, mes, ano)
+            for (ano in Utils.getAnosDisponiveis(itensMovimentos)) {
+                for (mes in Utils.getMesDisponivelPorAno(itensMovimentos, ano)) {
+                    val itens = Utils.filtrarItensPorData(itensMovimentos, mes, ano)
                     
                     if (itens.isEmpty()) continue
-    
+                    
                     val section = RegistrosAdapterSection(adapter, ano, mes, itens)
                     adapter.addSection(section)
                     
@@ -98,36 +95,16 @@ class RegistrosFragment : Fragment() {
         
     }
     
-    private fun getAnosDisponiveis(itens: List<Movimento>): Collection<Int> {
-        val anos = itens.map { it.data?.formattedDate()?.substring(6) }
-        return anos.distinct().map { it!!.toInt() }
-    }
-    
-    private fun getMesDisponivelPorAno(itens: List<Movimento>, ano: Int): Collection<Int> {
-        val meses = itens
-            .filter { it.data?.formattedDate()?.substring(6) == ano.toString() }
-            .map {
-                it.data?.formattedDate()?.substring(3, 5)
-            }
-        return meses.distinct().map { it!!.toInt() }
-    }
-    
-    private fun filtrarItensPorData(itens: List<Movimento>, mes: Int, ano: Int): List<Movimento> {
-        return itens
-            .filter { it.data?.formattedDate()?.substring(6) == ano.toString()
-                    && it.data?.formattedDate()?.substring(3, 5)?.toInt() == mes }
-        
-    }
-    
     private fun habilitarModoSelecao() {
-        multiChoiceToolbarActionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(getCallback())
-    
+        multiChoiceToolbarActionMode =
+            (requireActivity() as AppCompatActivity).startSupportActionMode(getCallback())
+        
         val adapter = mView.rv_registros.adapter as SectionedRecyclerViewAdapter
         for (count in 0 until adapter.sectionCount) {
             val sec = (adapter.getSection(count) as RegistrosAdapterSection)
             sec.checkableMode = true
         }
-    
+        
         atualizarQuantidadeSelecionados(1)
     }
     
@@ -137,32 +114,40 @@ class RegistrosFragment : Fragment() {
                 override fun onCreateActionMode(
                     mode: androidx.appcompat.view.ActionMode?, menu: Menu?
                 ): Boolean {
-                    requireActivity().menuInflater.inflate(R.menu.menu_action_mode_multi_selecao, menu)
+                    requireActivity().menuInflater.inflate(
+                        R.menu.menu_action_mode_multi_selecao,
+                        menu
+                    )
                     return true
                 }
-        
+                
                 override fun onPrepareActionMode(
                     mode: androidx.appcompat.view.ActionMode?, menu: Menu?
                 ): Boolean {
                     return false
                 }
-        
+                
                 override fun onActionItemClicked(
-                    mode: androidx.appcompat.view.ActionMode?, item: MenuItem?): Boolean {
+                    mode: androidx.appcompat.view.ActionMode?, item: MenuItem?
+                ): Boolean {
                     when (item?.itemId) {
                         R.id.action_delete_movimentos -> {
                             if (RegistroContext.registrosParaExcluir.size == 0) {
                                 Trigger.launch(Events.Toast("Selecione pelo menos 1 registro"))
                                 mode?.subtitle = "Selecione pelo menos 1 registro"
                             } else {
-                                AlertDialog.Builder(mView.context).setTitle("Excluir").setMessage("Confirma a exclusão dos itens selecionados?")
+                                AlertDialog.Builder(mView.context).setTitle("Excluir")
+                                    .setMessage("Confirma a exclusão dos itens selecionados?")
                                     .setPositiveButton("Excluir") { _, _ ->
-                                        val countExcluidos = RegistroContext.excluirMovimentos(mView.context)
-                                
-                                        Trigger.launch(Events.Snack("$countExcluidos Registros Removidos"))
-                                        Trigger.launch(Events.UpdateRegistros())
-                                        Trigger.launch(Events.UpdateDespesas())
-                                
+                                        val countExcluidos =
+                                            RegistroContext.excluirMovimentosSelecionados(mView.context)
+                                        
+                                        Trigger.launch(
+                                            Events.Snack("$countExcluidos Registros Removidos"),
+                                            Events.UpdateRegistros(),
+                                            Events.UpdateDespesas()
+                                        )
+                                        
                                         mode?.finish()
                                     }.setNegativeButton("Cancelar", null).show()
                             }
@@ -170,14 +155,14 @@ class RegistrosFragment : Fragment() {
                     }
                     return true
                 }
-        
+                
                 override fun onDestroyActionMode(mode: androidx.appcompat.view.ActionMode?) {
                     val adapter = mView.rv_registros.adapter as SectionedRecyclerViewAdapter
                     for (count in 0 until adapter.sectionCount) {
                         val sec = (adapter.getSection(count) as RegistrosAdapterSection)
                         sec.checkableMode = false
                     }
-            
+                    
                     RegistroContext.registrosParaExcluir.clear()
                     adapter.notifyDataSetChanged()
                     mode?.subtitle = null
@@ -193,8 +178,9 @@ class RegistrosFragment : Fragment() {
         multiChoiceToolbarActionMode?.title = "$count Selecionados"
     }
     
-    override fun onDetach() {
+    //Utilizado por causa do childFragmentManager - ideal seria onDetach()
+    override fun onDestroyView() {
         disposable.clear()
-        super.onDetach()
+        super.onDestroyView()
     }
 }

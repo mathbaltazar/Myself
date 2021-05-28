@@ -56,16 +56,6 @@
             tools:itemCount="3"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/button_despesas_adicionar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/all_default_layout_offset_8"
-            android:backgroundTint="@color/off_primary"
-            android:text="Adicionar Despesa"
-            android:textAllCaps="true"
-            android:textColor="@android:color/black" />
-
     </LinearLayout>
 
 

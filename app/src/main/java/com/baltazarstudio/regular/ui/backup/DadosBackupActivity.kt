@@ -215,8 +215,8 @@ class DadosBackupActivity : AppCompatActivity() {
                 
                 toast("Os dados do servidor foram restaurados!")
                 
-                Trigger.launch(Events.UpdateRegistros())
-                Trigger.launch(Events.UpdateDespesas())
+                //Trigger.launch(Events.UpdateRegistros())
+                //Trigger.launch(Events.UpdateDespesas())
 
             }, { error ->
                 error.printStackTrace()

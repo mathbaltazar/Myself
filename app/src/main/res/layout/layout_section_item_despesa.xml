@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_section_item_despesas_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_size_24"
-                tools:text="Pensão Alimentícia" />
+                tools:text="TV a Cabo" />
 
             <TextView
                 android:id="@+id/tv_section_item_despesas_ultimo_registro"
@@ -61,14 +61,6 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/iv_section_item_despesas_expand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/all_default_layout_offset_4"
-            android:src="@drawable/ic_arrow_down"
-            app:tint="@color/colorAccent" />
-
-        <ImageView
             android:id="@+id/iv_section_item_despesas_opcoes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,34 +83,7 @@
     <View
         android:id="@+id/divider_section_item_despesas"
         android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_marginVertical="@dimen/all_default_layout_offset_4"
-        android:background="@color/off_white" />
-
-    <LinearLayout
-        android:id="@+id/ll_section_item_despesas_acoes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button_section_item_despesas_registrar"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/all_default_layout_offset_4"
-            android:layout_weight="1"
-            android:text="Registrar" />
-
-        <Button
-            android:id="@+id/button_section_item_despesas_todos"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/all_default_layout_offset_4"
-            android:layout_weight="1"
-            android:text="Ver Todos (0)" />
-    </LinearLayout>
-
-
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/all_default_layout_offset_4"
+        android:background="@android:color/darker_gray" />
 </LinearLayout>

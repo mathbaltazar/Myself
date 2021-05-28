@@ -2,6 +2,7 @@ package com.baltazarstudio.regular.ui
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -37,9 +38,6 @@ import org.jetbrains.anko.toast
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     
     
-    private val disposable: CompositeDisposable = CompositeDisposable()
-    private val movimentacaoFragment = MovimentacaoFragment()
-    
     var searchMenuItem: MenuItem? = null
     
     /**
@@ -47,9 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * Próximas Atividades do APP
      *
      * - (DONE) SELEÇÃO MÚLTIPLA DOS MOVIMENTOS
-     * - IMPLEMENTAÇÃO DE NOTAS DE LEMBRETES
-     * - VISUALIZAÇÃO EM GRADE/LISTA DAS NOTAS
-     * - LIVE SCROLL ? (IDEIA !!!!!!!)
+     * - LIVE SCROLL PARA REGISTROS/DESPESAS
      * - (DONE) RESUMO DE TODOS OS DADOS + FILTROS VARIADOS
      * - (DONE) FORMA MAIS VIÁVEL/PRÁTICA DE CAPTURAR DATA
      * - (DONE) APONTAR NO POPUP DOS REGISTROS SE PERTENCE A ALGUMA DESPESA
@@ -65,10 +61,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) Manutenção: Inverter ordem resultado dos registros "Ver Todos" das despesas
      * - (DONE) Correção: Dropdown dia vencimento não se ajustando a diferente resoluções
      *
-     * BUGS ---> ADAPTAR À TODAS AS UI NECESSÁRIAS QUANDO UM REGISTRO/DESPESA FOR ALTERADO
-     * BUGS ---> ESTUDAR ESTRATÉGIA PARA CARREGAMENTO DE DADOS AO TROCAR DE VIEW PELA BOTTOMVIEWNAVIGATION
-     * BUGS ---> NOVO DESIGN DESPESA: NOVA TELA PARA DETALHES DA DESPESA (TENTAR "ICONIFICAR")
+     * BUGS ---> (DONE) ADAPTAR À TODAS AS UI NECESSÁRIAS QUANDO UM REGISTRO/DESPESA FOR ALTERADO
+     * BUGS ---> (DONE) NOVO DESIGN DESPESA: NOVA TELA PARA DETALHES DA DESPESA (TENTAR "ICONIFICAR")
      * BUGS ---> TRANSFERIR BACKUP PARA MENU LATERAL
+     * BUGS ---> EDITAR ENTRADAS, ELABORAR NOVO LAYOUT
      * BUGS ---> REFORMULAÇÃO DO BANCO DE DADOS: REUTILIZAÇÃO DE PRIMARY KEY COM BACKEND (VER LINK NO CELULAR)
      * E NOVO PARAMETRO "STATUS" PARA A ENTITY "REGISTRO"
      * BUGS ---> OTIMIZAR COMUNICAÇÃO DA SINCRONIZAÇÃO DE DADOS COM BACKEND
@@ -79,6 +75,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         toolbar.setTitle(R.string.activity_title_meus_registros)
         setSupportActionBar(toolbar)
+        registerGlobalUIMessage()
         
         
         val toggle = DrawerToggle(this, drawer_layout, toolbar)
@@ -94,7 +91,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.menu_drawer_movimentacao -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_main, movimentacaoFragment)
+                    .replace(R.id.fragment_container_main, MovimentacaoFragment())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
             
                 toolbar.setTitle(R.string.activity_title_meus_registros)
@@ -166,16 +163,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     
     private fun registerGlobalUIMessage() {
-        disposable.dispose()
-        disposable.add(Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe { t ->
                 when (t) {
                     is Events.Toast -> toast(t.message)
                     is Events.Snack -> {
-                        Snackbar.make(findViewById(android.R.id.content), t.message, Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(findViewById(android.R.id.content),
+                            t.message,
+                            Snackbar.LENGTH_LONG).show()
                     }
                 }
-            })
+            }.apply {  }
     }
     
     override fun onBackPressed() {
@@ -196,13 +194,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onStart()
     
         setupFirebaseMessaging()
-        registerGlobalUIMessage()
         Notification.notificar(this)
-    }
-    
-    override fun onDestroy() {
-        disposable.clear()
-        super.onDestroy()
     }
     
     override fun attachBaseContext(newBase: Context) {

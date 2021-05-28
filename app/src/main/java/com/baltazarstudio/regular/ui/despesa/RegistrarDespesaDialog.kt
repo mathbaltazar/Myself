@@ -18,8 +18,6 @@ import java.math.BigDecimal
 
 class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : Dialog(context) {
     
-    private var onDespesaRegistrada: () -> Unit? = {}
-    
     init {
         setUpView()
     }
@@ -35,7 +33,8 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
         et_dialog_registrar_despesa_valor.setText(Utils.formatCurrency(despesa.valor))
         et_dialog_registrar_despesa_valor.apply { addTextChangedListener(CurrencyMask(this)) }
         et_dialog_registrar_despesa_valor.onFocusChange { v, hasFocus ->
-            if (hasFocus) (v as TextInputEditText).setSelection(v.length()) }
+            if (hasFocus) (v as TextInputEditText).setSelection(v.length())
+        }
         
         val chipSingleSelectionBehavior = { tag: String ->
             chip_dialog_registrar_despesa_hoje.isChecked = tag == CHIP_HOJE
@@ -51,10 +50,8 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
                 }
             }
         }
-        chip_dialog_registrar_despesa_hoje.tag =
-            CHIP_HOJE
-        chip_dialog_registrar_despesa_outra_data.tag =
-            CHIP_OUTRA_DATA
+        chip_dialog_registrar_despesa_hoje.tag = CHIP_HOJE
+        chip_dialog_registrar_despesa_outra_data.tag = CHIP_OUTRA_DATA
         
         chip_dialog_registrar_despesa_hoje.setOnClickListener { chipSingleSelectionBehavior(it.tag as String) }
         chip_dialog_registrar_despesa_outra_data.setOnClickListener { chipSingleSelectionBehavior(it.tag as String) }
@@ -86,6 +83,7 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
                 }
             }
             
+            // Criação do registro a partir da despesa
             val movimento = Movimento()
             movimento.descricao = despesa.nome
             movimento.valor = Utils.unformatCurrency(valor).toDouble()
@@ -93,10 +91,13 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
             movimento.data = dateinput_dialog_registrar_despesa_data.getTime()
             
             movimento.referenciaDespesa = despesa.codigo
-    
+            
             RegistroContext.getDAO(context).inserir(movimento)
-            Trigger.launch(Events.Toast("Registrado!"))
-            onDespesaRegistrada.invoke()
+            Trigger.launch(
+                Events.Snack("Registrado!"),
+                Events.UpdateRegistros(),
+                Events.UpdateDespesas()
+            )
             
             cancel()
         }
@@ -104,10 +105,6 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
     
     private fun isValorValido(valor: String): Boolean {
         return valor.isNotBlank() && Utils.unformatCurrency(valor).toBigDecimal() > BigDecimal.ZERO
-    }
-    
-    fun setOnDespesaRegistrada(function: () -> Unit) {
-        this.onDespesaRegistrada = function
     }
     
     companion object {

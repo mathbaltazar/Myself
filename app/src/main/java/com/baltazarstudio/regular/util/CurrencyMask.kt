@@ -29,7 +29,7 @@ class CurrencyMask(private var editText: EditText) : TextWatcher {
                 campo = Utils.formatCurrency(campo.toDouble())
             }
             
-        } catch (ex: NumberFormatException) {
+        } catch (ex: Exception) {
             campo = Utils.formatCurrency(0.0)
         }
         

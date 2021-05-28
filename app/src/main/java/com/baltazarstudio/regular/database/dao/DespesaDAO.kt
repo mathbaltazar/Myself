@@ -133,12 +133,22 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
         return total
     }
     
-    fun addVenc() {
-        val addColumn = "ALTER TABLE $TABELA ADD COLUMN $DIA_VENCIMENTO INTEGER"
+    fun atualizarValor(despesa: Despesa) {
+        val sql = "UPDATE $TABELA SET $VALOR = ${despesa.valor} WHERE $CODIGO = ${despesa.codigo}"
         
-        writableDatabase.execSQL(addColumn)
-        
-        writableDatabase.execSQL("UPDATE $TABELA SET $DIA_VENCIMENTO = 0")
+        writableDatabase.execSQL(sql)
+    }
+    
+    fun atualizarNome(despesa: Despesa) {
+        val sql = "UPDATE $TABELA SET $NOME = '${despesa.nome}' WHERE $CODIGO = ${despesa.codigo}"
+    
+        writableDatabase.execSQL(sql)
+    }
+    
+    fun atualizarDiaVencimento(despesa: Despesa) {
+        val sql = "UPDATE $TABELA SET $DIA_VENCIMENTO = ${despesa.diaVencimento} WHERE $CODIGO = ${despesa.codigo}"
+    
+        writableDatabase.execSQL(sql)
     }
     
     companion object {

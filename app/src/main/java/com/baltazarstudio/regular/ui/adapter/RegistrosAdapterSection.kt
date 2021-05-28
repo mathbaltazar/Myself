@@ -31,11 +31,14 @@ class RegistrosAdapterSection(
     private var mOnCheckableModeItemSelectedListener: (Int) -> Unit = {}
     var checkableMode: Boolean = false
     private var expanded: Boolean = true
+    private var multiSelectModeEnabled = true
     
     
     fun setOnCheckableModeItemSelectedListener(listener: (Int) -> Unit) {
         mOnCheckableModeItemSelectedListener = listener
     }
+    
+    fun disableMultiSelectMode() { multiSelectModeEnabled = false }
     
     override fun getContentItemsTotal(): Int {
         return if (expanded) movimentos.size else 0
@@ -104,10 +107,12 @@ class RegistrosAdapterSection(
             }
             
             itemView.setOnLongClickListener {
-                if (!checkableMode) {
-                    selectItem(movimento)
-                    checkableMode = true
-                    Trigger.launch(Events.HabilitarModoMultiSelecao())
+                if (multiSelectModeEnabled) {
+                    if (!checkableMode) {
+                        selectItem(movimento)
+                        checkableMode = true
+                        Trigger.launch(Events.HabilitarModoMultiSelecao())
+                    }
                 }
                 
                 return@setOnLongClickListener checkableMode

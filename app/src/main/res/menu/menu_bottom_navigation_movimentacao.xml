@@ -10,7 +10,7 @@
     <item
         android:id="@+id/bottom_navigation_despesas"
         android:enabled="true"
-        android:icon="@drawable/ic_despesas"
+        android:icon="@drawable/ic_despesa"
         android:title="Despesas" />
 
 </menu>
