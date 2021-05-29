@@ -1,5 +1,7 @@
 package com.baltazarstudio.regular.ui.adapter
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.view.*
 import androidx.appcompat.app.AlertDialog
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.layout_section_item_despesa.view.*
 import org.jetbrains.anko.startActivity
 import java.util.*
 
-class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>)
+class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>, val onDespesaItemClickListener: () -> Unit)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
     private val layoutInflater = LayoutInflater.from(context)
@@ -45,7 +47,8 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             
             itemView.setOnClickListener {
                 DespesaContext.despesaDetalhada = despesa
-                itemView.context.startActivity<DetalhesDespesaActivity>()
+                
+                onDespesaItemClickListener()
             }
             
             // NOME

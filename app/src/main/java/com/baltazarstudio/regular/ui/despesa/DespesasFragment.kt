@@ -1,5 +1,6 @@
 package com.baltazarstudio.regular.ui.despesa
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_despesas.view.*
+import org.jetbrains.anko.support.v4.intentFor
 
 class DespesasFragment : Fragment() {
     
@@ -71,7 +73,10 @@ class DespesasFragment : Fragment() {
             mView.rv_despesas.visibility = View.VISIBLE
             
             mView.rv_despesas.layoutManager = LinearLayoutManager(mView.context)
-            mView.rv_despesas.adapter = DespesasAdapter(mView.context, despesas)
+            mView.rv_despesas.adapter = DespesasAdapter(mView.context, despesas) {
+                val options = ActivityOptions.makeSceneTransitionAnimation(requireActivity())
+                startActivity(intentFor<DetalhesDespesaActivity>(), options.toBundle())
+            }
         }
     }
     

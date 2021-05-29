@@ -2,10 +2,9 @@ package com.baltazarstudio.regular.ui.despesa
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.View
+import android.transition.Slide
+import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,10 +26,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_detalhes_despesa.*
 
+
 class DetalhesDespesaActivity : AppCompatActivity() {
     
     companion object {
         private const val SEM_VENCIMENTO: String = "Sem vencimento"
+        private const val MENU_ITEMID_EXCLUIR: Int = 0
     }
     
     private lateinit var despesa: Despesa
@@ -45,6 +46,7 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         setUpView()
         bindView()
         registerCallbacks()
+        setUpTransitionAnimation()
     }
     
     private fun registerCallbacks() {
@@ -98,21 +100,6 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         }
     }
     
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_activity_detalhes_despesa, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-    
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-        } else if (item.itemId == R.id.menu_detalhes_despesa_excluir) {
-            excluirDepesa()
-        }
-        
-        return super.onOptionsItemSelected(item)
-    }
-    
     private fun bindView() {
         et_detalhes_despesa_nome.setText(despesa.nome)
         et_detalhes_despesa_nome.setSelection(despesa.nome!!.length)
@@ -123,6 +110,15 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         }
         
         carregarRegistros()
+    }
+    
+    private fun setUpTransitionAnimation() {
+        val slide = Slide()
+        slide.slideEdge = Gravity.END
+        slide.duration = 400
+        slide.interpolator = AccelerateDecelerateInterpolator()
+        window.exitTransition = slide
+        window.enterTransition = slide
     }
     
     private fun carregarRegistros() {
@@ -180,6 +176,21 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         (1..28).forEach { dia -> adapter.add("$dia") }
     
         return adapter
+    }
+    
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menu.add(Menu.NONE, MENU_ITEMID_EXCLUIR, Menu.NONE, "Excluir")
+        return super.onCreateOptionsMenu(menu)
+    }
+    
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        } else if (item.itemId == MENU_ITEMID_EXCLUIR) {
+            excluirDepesa()
+        }
+        
+        return super.onOptionsItemSelected(item)
     }
     
     private fun excluirDepesa() {
