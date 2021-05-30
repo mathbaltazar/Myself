@@ -3,7 +3,6 @@
     <string name="activity_title_meus_registros">Meus Registros</string>
     <string name="activity_title_entradas">Entradas</string>
     <string name="activity_title_resumos">Resumos</string>
-    <string name="activity_main_menu_dados_backup">Dados</string>
     <string name="activity_main_menu_pesquisar">Pesquisar</string>
 
     <string name="drawer_menu_movimentos">Movimentos</string>
@@ -19,5 +18,7 @@
     <string name="vencimento">Vencimento</string>
     <string name="registros">Registros</string>
     <string name="excluir">Excluir</string>
+    <string name="drawer_menu_dados_backup">Backup</string>
+    <string name="activity_title_dados_backup">Dados</string>
 
 </resources>

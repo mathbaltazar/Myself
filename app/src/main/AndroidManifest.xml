@@ -22,7 +22,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.backup.DadosBackupActivity" />
         <activity android:name=".ui.despesa.DetalhesDespesaActivity" />
         <activity
             android:name=".ui.MainActivity"

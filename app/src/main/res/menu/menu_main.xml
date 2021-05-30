@@ -16,8 +16,4 @@
         android:icon="@drawable/ic_add"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_dados_backup"
-        android:title="@string/activity_main_menu_dados_backup"
-        app:showAsAction="never" />
 </menu>

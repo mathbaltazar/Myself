@@ -14,6 +14,10 @@
             android:id="@+id/menu_drawer_resumo"
             android:icon="@drawable/ic_drawer_resumo"
             android:title="@string/drawer_menu_resumo" />
+        <item
+            android:id="@+id/menu_drawer_dados"
+            android:icon="@drawable/ic_drawer_backup"
+            android:title="@string/drawer_menu_dados_backup" />
     </group>
 
 </menu>

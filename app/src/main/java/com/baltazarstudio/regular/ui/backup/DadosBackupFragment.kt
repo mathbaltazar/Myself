@@ -1,11 +1,11 @@
 package com.baltazarstudio.regular.ui.backup
 
-import android.content.Context
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.ConfigContext
 import com.baltazarstudio.regular.context.DespesaContext
@@ -13,28 +13,25 @@ import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.database.dao.ConfiguracaoDAO
 import com.baltazarstudio.regular.model.Configuracao
-import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
+import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.service.BackupService
 import com.baltazarstudio.regular.service.ConnectionTestService
 import com.baltazarstudio.regular.service.dto.SincronizarDadosBackupDTO
 import com.google.android.material.snackbar.Snackbar
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_dados_backup.*
+import kotlinx.android.synthetic.main.fragment_dados_backup.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.jetbrains.anko.contentView
-import org.jetbrains.anko.toast
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DadosBackupActivity : AppCompatActivity() {
+class DadosBackupFragment : Fragment() {
 
     companion object {
 
@@ -45,17 +42,23 @@ class DadosBackupActivity : AppCompatActivity() {
         private const val FUNCAO_RESTAURAR = "funcao_restaurar"
     }
     
+    private lateinit var mView: View
     private lateinit var mConfiguracao: Configuracao
     private lateinit var httpClient: OkHttpClient
+    
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        mView = inflater.inflate(R.layout.fragment_dados_backup, container, false)
+        return mView
+    }
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dados_backup)
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = "Backup"
-
-        mConfiguracao = ConfiguracaoDAO(this).getUltimaConfiguracao()
+        mConfiguracao = ConfiguracaoDAO(mView.context).getUltimaConfiguracao()
 
         textinput_backup_url.setText(mConfiguracao.url ?: mUrl)
         textinput_backup_porta.setText(mConfiguracao.porta ?: mPorta)
@@ -77,7 +80,7 @@ class DadosBackupActivity : AppCompatActivity() {
         
 
         button_backup_sincronizar_dados.setOnClickListener {
-            AlertDialog.Builder(this).setTitle("Sincronizar")
+            AlertDialog.Builder(mView.context).setTitle("Sincronizar")
                 .setMessage("Sincronizar todos os seus dados atuais? (Todos os dados do servidor serão substuidos por estes)")
                 .setPositiveButton("Sincronizar") { _, _ -> conectar(FUNCAO_SINCRONIZAR) }
                 .setNegativeButton("Cancelar") { _, _ -> }
@@ -86,7 +89,7 @@ class DadosBackupActivity : AppCompatActivity() {
         }
 
         button_backup_restaurar.setOnClickListener {
-            AlertDialog.Builder(this).setTitle("Atenção")
+            AlertDialog.Builder(mView.context).setTitle("Atenção")
                 .setMessage("Restaurar dados do servidor?")
                 .setPositiveButton("Restaurar") { _, _ -> conectar(FUNCAO_RESTAURAR) }
                 .setNegativeButton("Cancelar") { _, _ -> }
@@ -120,7 +123,7 @@ class DadosBackupActivity : AppCompatActivity() {
         val service = retrofit.create(ConnectionTestService::class.java)
         service.test().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                progress_backup_loading.visibility = View.GONE
+                progress_backup_loading.visibility = View.INVISIBLE
                 button_backup_testar_conexao.isEnabled = true
                 button_backup_sincronizar_dados.isEnabled = true
 
@@ -135,7 +138,7 @@ class DadosBackupActivity : AppCompatActivity() {
 
                 mConfiguracao.url = textinput_backup_url.text.toString()
                 mConfiguracao.porta = textinput_backup_porta.text.toString()
-                ConfiguracaoDAO(this).salvarConfiguracao(mConfiguracao)
+                ConfiguracaoDAO(mView.context).salvarConfiguracao(mConfiguracao)
 
                 when (funcao) {
                     FUNCAO_RESTAURAR -> restaurarDadosDoServidor()
@@ -157,9 +160,9 @@ class DadosBackupActivity : AppCompatActivity() {
 
 
         val request = SincronizarDadosBackupDTO()
-        request.movimentos = RegistroContext.getDAO(this).getTodosMovimentos()
-        request.despesas = DespesaContext.getDAO(this).getTodasDespesas()
-        request.entradas = EntradaContext.getDAO(this).getTodasEntradas()
+        request.movimentos = RegistroContext.getDAO(mView.context).getTodosMovimentos()
+        request.despesas = DespesaContext.getDAO(mView.context).getTodasDespesas()
+        request.entradas = EntradaContext.getDAO(mView.context).getTodasEntradas()
         request.configuracao = mConfiguracao
         request.configuracao!!.dataUltimaSincronizacao = Calendar.getInstance().timeInMillis
 
@@ -167,12 +170,12 @@ class DadosBackupActivity : AppCompatActivity() {
         service.sincronizarDados(request).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                progress_backup_loading.visibility = View.GONE
+                progress_backup_loading.visibility = View.INVISIBLE
                 button_backup_testar_conexao.isEnabled = true
                 button_backup_sincronizar_dados.isEnabled = true
                 button_backup_restaurar.isEnabled = true
 
-                Snackbar.make(contentView!!, "Os dados foram salvos!", Snackbar.LENGTH_LONG)
+                Snackbar.make(mView, "Os dados foram salvos!", Snackbar.LENGTH_LONG)
                     .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
                     .show()
     
@@ -202,21 +205,18 @@ class DadosBackupActivity : AppCompatActivity() {
         service.restaurarDados().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ t ->
-                progress_backup_loading.visibility = View.GONE
+                progress_backup_loading.visibility = View.INVISIBLE
                 button_backup_testar_conexao.isEnabled = true
                 button_backup_sincronizar_dados.isEnabled = true
                 button_backup_restaurar.isEnabled = true
 
                 val dto = t.body()!!
-                RegistroContext.getDAO(this).restaurarMovimentos(dto.movimentos)
-                DespesaContext.getDAO(this).restaurarDespesas(dto.despesas)
-                EntradaContext.getDAO(this).restaurarEntradas(dto.entradas)
-                ConfigContext.getDAO(this).salvarConfiguracao(dto.configuracao)
+                RegistroContext.getDAO(mView.context).restaurarMovimentos(dto.movimentos)
+                DespesaContext.getDAO(mView.context).restaurarDespesas(dto.despesas)
+                EntradaContext.getDAO(mView.context).restaurarEntradas(dto.entradas)
+                ConfigContext.getDAO(mView.context).salvarConfiguracao(dto.configuracao)
                 
-                toast("Os dados do servidor foram restaurados!")
-                
-                //Trigger.launch(Events.UpdateRegistros())
-                //Trigger.launch(Events.UpdateDespesas())
+                Trigger.launch(Events.Toast("Os dados do servidor foram restaurados!"))
 
             }, { error ->
                 error.printStackTrace()
@@ -271,24 +271,13 @@ class DadosBackupActivity : AppCompatActivity() {
         tv_backup_teste_conexao_mensagem.visibility = View.VISIBLE
 
 
-        progress_backup_loading.visibility = View.GONE
+        progress_backup_loading.visibility = View.INVISIBLE
         button_backup_testar_conexao.isEnabled = true
         button_backup_sincronizar_dados.isEnabled = true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            super.onBackPressed()
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {
         super.onStart()
         conectar("")
-    }
-    
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }

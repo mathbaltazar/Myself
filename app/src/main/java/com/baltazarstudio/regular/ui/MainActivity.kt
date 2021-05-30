@@ -2,7 +2,6 @@ package com.baltazarstudio.regular.ui
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -18,9 +17,9 @@ import androidx.fragment.app.FragmentTransaction
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.notification.Notification
-import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
-import com.baltazarstudio.regular.ui.backup.DadosBackupActivity
+import com.baltazarstudio.regular.observer.Trigger
+import com.baltazarstudio.regular.ui.backup.DadosBackupFragment
 import com.baltazarstudio.regular.ui.entradas.EntradasFragment
 import com.baltazarstudio.regular.ui.movimentacao.MovimentacaoFragment
 import com.baltazarstudio.regular.ui.resumo.ResumoFragment
@@ -29,16 +28,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     
     
     var searchMenuItem: MenuItem? = null
+    var addMenuItem: MenuItem? = null
     
     /**
      *
@@ -110,9 +108,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     
                 toolbar.setTitle(R.string.activity_title_resumos)
             }
+            R.id.menu_drawer_dados -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_main, DadosBackupFragment())
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+        
+                toolbar.setTitle(R.string.activity_title_dados_backup)
+            }
         }
     
         searchMenuItem?.isVisible = item.itemId == R.id.menu_drawer_movimentacao
+        addMenuItem?.isVisible = item.itemId == R.id.menu_drawer_movimentacao
+        
         item.isChecked = true
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
@@ -121,6 +128,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         searchMenuItem = menu.findItem(R.id.action_pesquisar)
+        addMenuItem = menu.findItem(R.id.action_adicionar)
     
         val searchView = searchMenuItem!!.actionView as SearchView
         searchView.onActionViewCollapsed()
@@ -137,18 +145,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
         
         return true
-    }
-    
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_dados_backup -> {
-                startActivity(intentFor<DadosBackupActivity>())
-                if (searchMenuItem?.isVisible!!) {
-                    searchMenuItem?.collapseActionView()
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
     
     private fun setupFirebaseMessaging() {
