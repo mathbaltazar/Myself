@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.entradas.EntradasFragment">
+    tools:context=".ui.entradas.EntradasFragment"
+    tools:ignore="HardcodedText, ContentDescription">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_entradas"
@@ -20,6 +21,7 @@
         android:layout_marginTop="@dimen/text_size_16"
         android:text="Não há entradas registradas!"
         android:textAlignment="center"
+        android:textSize="@dimen/text_size_16"
         android:textStyle="italic" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -29,9 +31,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/off_primary"
         android:layout_marginEnd="@dimen/all_default_layout_offset_16"
         android:layout_marginBottom="@dimen/all_default_layout_offset_16"
+        android:backgroundTint="@color/off_primary"
         android:src="@drawable/ic_add" />
 
 </RelativeLayout>

@@ -7,7 +7,7 @@ object Events {
     
     open class UpdateRegistros
     open class UpdateDespesas
-    open class UpdateTelaEntradas
+    open class UpdateEntradas
     open class FiltrarRegistrosPelaDescricao
     open class HabilitarModoMultiSelecao
     open class DesabilitarModoMultiSelecao

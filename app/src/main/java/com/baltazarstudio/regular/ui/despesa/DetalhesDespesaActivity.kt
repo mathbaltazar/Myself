@@ -13,6 +13,7 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Despesa
+import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.model.exception.ModelException
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.observer.Trigger
@@ -136,7 +137,7 @@ class DetalhesDespesaActivity : AppCompatActivity() {
             
                     if (itens.isEmpty()) continue
             
-                    val section = RegistrosAdapterSection(adapter, ano, mes, itens)
+                    val section = RegistrosAdapterSection(adapter, ano, mes, itens as List<Movimento>)
                     section.disableMultiSelectMode()
                     
                     adapter.addSection(section)

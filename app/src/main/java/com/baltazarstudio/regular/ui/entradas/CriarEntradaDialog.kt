@@ -6,20 +6,25 @@ import android.view.WindowManager
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.model.Entrada
+import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.Utils
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.dialog_registrar_entrada.*
+import kotlinx.android.synthetic.main.dialog_criar_entrada.*
+import kotlinx.android.synthetic.main.dialog_registrar_movimento.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import org.jetbrains.anko.toast
 import java.math.BigDecimal
 
-class RegistrarEntradaDialog(context: Context) : Dialog(context) {
+class CriarEntradaDialog(context: Context) : Dialog(context) {
+    
+    private var isEdit: Boolean = false
+    private var idEntradaEmEdicao: Int? = null
     
     init {
-        setContentView(R.layout.dialog_registrar_entrada)
+        setContentView(R.layout.dialog_criar_entrada)
         setupView()
         setUpDimensions()
     }
@@ -28,7 +33,11 @@ class RegistrarEntradaDialog(context: Context) : Dialog(context) {
         
         dateinput_dialog_nova_entrada_data.setDate(Utils.getUTCCalendar())
 
-        textinput_dialog_nova_entrada_valor.apply { addTextChangedListener(CurrencyMask(this)) }
+        textinput_dialog_nova_entrada_valor.apply {
+            addTextChangedListener(CurrencyMask(this))
+            onFocusChange { v, hasFocus ->
+                if (hasFocus) (v as TextInputEditText).setSelection(v.length()) }
+        }
         
         button_dialog_nova_entrada_adicionar.setOnClickListener {
 
@@ -50,18 +59,17 @@ class RegistrarEntradaDialog(context: Context) : Dialog(context) {
                 novaEntrada.descricao = descricao
                 novaEntrada.data = dateinput_dialog_nova_entrada_data.getTime()
 
-                EntradaContext.getDAO(context).inserir(novaEntrada)
-                context.toast("Adicionado!")
+                if (isEdit) {
+                    novaEntrada.id = idEntradaEmEdicao
+                    EntradaContext.getDAO(context).alterar(novaEntrada)
+                } else {
+                    EntradaContext.getDAO(context).inserir(novaEntrada)
+                }
 
-                Trigger.launch(Events.UpdateTelaEntradas())
-                dismiss()
+                Trigger.launch(Events.Snack("Adicionado!"), Events.UpdateEntradas())
+                cancel()
             }
 
-        }
-
-        textinput_dialog_nova_entrada_valor.onFocusChange { v, hasFocus ->
-            if (hasFocus)
-                (v as TextInputEditText).setSelection(v.length())
         }
     }
 
@@ -79,4 +87,15 @@ class RegistrarEntradaDialog(context: Context) : Dialog(context) {
         return valor.isNotBlank() && Utils.unformatCurrency(valor).toBigDecimal() > BigDecimal.ZERO
     }
     
+    fun edit(entrada: Entrada) {
+        this.isEdit = true
+        this.idEntradaEmEdicao = entrada.id
+    
+        textinput_dialog_nova_entrada_descricao.setText(entrada.descricao)
+        textinput_dialog_nova_entrada_valor.setText(Utils.formatCurrency(entrada.valor))
+        dateinput_dialog_nova_entrada_data.setDate(entrada.data!!)
+    
+        button_dialog_nova_entrada_adicionar.text = "Salvar"
+        tv_dialog_nova_entrada_title.text = "Editar Entrada"
+    }
 }

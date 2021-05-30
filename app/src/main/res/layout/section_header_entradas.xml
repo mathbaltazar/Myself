@@ -5,16 +5,15 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/all_default_layout_offset_4"
     android:layout_marginTop="@dimen/all_default_layout_offset_16"
+    android:background="@drawable/background_round_section_header"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/background_round_section_header"
     android:orientation="horizontal"
     android:paddingHorizontal="@dimen/all_default_layout_offset_4"
     android:paddingVertical="6dp">
-    <!--android:background="@color/off_white"-->
 
     <TextView
-        android:id="@+id/tv_section_header_registros_title"
+        android:id="@+id/tv_section_header_entradas_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -22,7 +21,7 @@
         tools:text="ABRIL/2020" />
 
     <TextView
-        android:id="@+id/tv_section_header_registros_total"
+        android:id="@+id/tv_section_header_entradas_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
@@ -30,8 +29,9 @@
         tools:text="R$ 255,00" />
 
     <ImageView
-        android:id="@+id/iv_section_header_registros_expand"
+        android:id="@+id/iv_section_header_entradas_expand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_up" />
+        android:src="@drawable/ic_arrow_down"
+        tools:ignore="ContentDescription" />
 </LinearLayout>

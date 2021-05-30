@@ -76,7 +76,7 @@ class RegistrosFragment : Fragment() {
                     
                     if (itens.isEmpty()) continue
                     
-                    val section = RegistrosAdapterSection(adapter, ano, mes, itens)
+                    val section = RegistrosAdapterSection(adapter, ano, mes, itens as List<Movimento>)
                     adapter.addSection(section)
                     
                     section.setOnCheckableModeItemSelectedListener { count ->

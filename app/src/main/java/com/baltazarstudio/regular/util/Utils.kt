@@ -3,6 +3,7 @@ package com.baltazarstudio.regular.util
 import android.content.Context
 import android.graphics.Point
 import android.view.WindowManager
+import com.baltazarstudio.regular.model.IDateFilterable
 import com.baltazarstudio.regular.model.Movimento
 import java.text.NumberFormat
 import java.text.ParseException
@@ -96,21 +97,21 @@ class Utils {
             return size
         }
     
-        fun getAnosDisponiveis(itens: List<Movimento>): Collection<Int> {
-            val anos = itens.map { it.data?.formattedDate()?.substring(6) }
+        fun getAnosDisponiveis(itens: List<IDateFilterable>): Collection<Int> {
+            val anos = itens.map { it.getDate()?.formattedDate()?.substring(6) }
             return anos.distinct().map { it!!.toInt() }
         }
     
-        fun getMesDisponivelPorAno(itens: List<Movimento>, ano: Int): Collection<Int> {
-            val meses = itens.filter { it.data?.formattedDate()?.substring(6) == ano.toString() }.map {
-                it.data?.formattedDate()?.substring(3, 5)
+        fun getMesDisponivelPorAno(itens: List<IDateFilterable>, ano: Int): Collection<Int> {
+            val meses = itens.filter { it.getDate()?.formattedDate()?.substring(6) == ano.toString() }.map {
+                it.getDate()?.formattedDate()?.substring(3, 5)
             }
             return meses.distinct().map { it!!.toInt() }
         }
     
-        fun filtrarItensPorData(itens: List<Movimento>, mes: Int, ano: Int): List<Movimento> {
+        fun filtrarItensPorData(itens: List<IDateFilterable>, mes: Int, ano: Int): List<IDateFilterable> {
             return itens.filter {
-                it.data?.formattedDate()?.substring(6) == ano.toString() && it.data?.formattedDate()
+                it.getDate()?.formattedDate()?.substring(6) == ano.toString() && it.getDate()?.formattedDate()
                     ?.substring(3, 5)?.toInt() == mes
             }
         

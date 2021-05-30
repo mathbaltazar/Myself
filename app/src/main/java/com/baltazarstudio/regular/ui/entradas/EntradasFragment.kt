@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.model.Entrada
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
-import com.baltazarstudio.regular.ui.adapter.EntradasAdapter
+import com.baltazarstudio.regular.ui.adapter.EntradasAdapterSection
+import com.baltazarstudio.regular.util.Utils
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +27,7 @@ class EntradasFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mView = inflater.inflate(R.layout.fragment_entradas, container, false)
 
         setupView()
@@ -40,40 +40,41 @@ class EntradasFragment : Fragment() {
         
         disposables.add(Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe { t ->
-                if (t is Events.UpdateTelaEntradas) {
-                    loadEntradas()
+                if (t is Events.UpdateEntradas) {
+                    carregarEntradas()
                 }
             })
     }
 
     private fun setupView() {
-        loadEntradas()
+        carregarEntradas()
         
         mView.button_entradas_add.setOnClickListener {
-            val dialog = RegistrarEntradaDialog(mView.context)
+            val dialog = CriarEntradaDialog(mView.context)
             dialog.show()
         }
     }
     
-    private fun loadEntradas() {
+    private fun carregarEntradas() {
         val entradas = EntradaContext.getDAO(mView.context).getTodasEntradas()
         mView.tv_entradas_empty.visibility =
             if (entradas.isEmpty()) View.VISIBLE else View.GONE
-    
-        mView.rv_entradas.adapter = EntradasAdapter(mView.context, entradas)
-        (mView.rv_entradas.adapter as EntradasAdapter).setEntradaInterface(
-            object : EntradasAdapter.EntradaInterface {
-                override fun onAdded(entrada: Entrada) {
-                    mView.tv_entradas_empty.visibility = View.GONE
-                }
-                override fun onExcluded(entrada: Entrada) {
-                    if (mView.rv_entradas.adapter!!.itemCount == 0)
-                        mView.tv_entradas_empty.visibility = View.VISIBLE
-                }
+        
+        val adapter = SectionedRecyclerViewAdapter()
+        
+        for (ano in Utils.getAnosDisponiveis(entradas)) {
+            for (mes in Utils.getMesDisponivelPorAno(entradas, ano)) {
+                val itens = Utils.filtrarItensPorData(entradas, mes, ano)
+                
+                if (itens.isEmpty()) continue
+                
+                val section = EntradasAdapterSection(adapter, itens as List<Entrada>, mes, ano)
+                adapter.addSection(section)
             }
-        )
+        }
+    
+        mView.rv_entradas.adapter = adapter
         mView.rv_entradas.layoutManager = LinearLayoutManager(mView.context)
-        mView.rv_entradas.addItemDecoration(DividerItemDecoration(mView.context, RecyclerView.VERTICAL))
     }
     
     override fun onDetach() {

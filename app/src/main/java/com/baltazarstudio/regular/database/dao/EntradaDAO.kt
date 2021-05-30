@@ -42,6 +42,16 @@ class EntradaDAO(context: Context) : Database<Entrada>(context) {
         writableDatabase.execSQL(sql)
     }
     
+    fun alterar(entrada: Entrada) {
+        val sql = " UPDATE $TABELA SET " +
+                "  $DESCRICAO = '${entrada.descricao}' , " +
+                "  $VALOR = ${entrada.valor} , " +
+                "  $DATA = ${entrada.data}  " +
+                "  WHERE $TABLE_ID = ${entrada.id}"
+        
+        writableDatabase.execSQL(sql)
+    }
+    
     fun deletar(entrada: Entrada) {
         val sql = "DELETE FROM $TABELA WHERE $TABLE_ID = ${entrada.id}"
         
