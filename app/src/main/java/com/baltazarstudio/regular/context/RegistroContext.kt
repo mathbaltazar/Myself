@@ -1,19 +1,19 @@
 package com.baltazarstudio.regular.context
 
 import android.content.Context
-import com.baltazarstudio.regular.database.dao.MovimentoDAO
-import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.database.dao.RegistroDAO
+import com.baltazarstudio.regular.model.Registro
 
 abstract class RegistroContext {
     companion object {
         
-        private var mDAO: MovimentoDAO? = null
+        private var mDAO: RegistroDAO? = null
         
         var textoPesquisa: String? = null
-        var registrosParaExcluir: ArrayList<Movimento> = arrayListOf()
+        var registrosParaExcluir: ArrayList<Registro> = arrayListOf()
     
-        fun getDAO(context: Context): MovimentoDAO {
-            if (mDAO == null) mDAO = MovimentoDAO(context)
+        fun getDAO(context: Context): RegistroDAO {
+            if (mDAO == null) mDAO = RegistroDAO(context)
             return mDAO!!
         }
     

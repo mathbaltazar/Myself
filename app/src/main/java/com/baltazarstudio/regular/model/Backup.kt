@@ -1,6 +1,6 @@
 package com.baltazarstudio.regular.model
 
-class Configuracao {
+class Backup {
 
     var url: String? = null
     var porta: String? = null

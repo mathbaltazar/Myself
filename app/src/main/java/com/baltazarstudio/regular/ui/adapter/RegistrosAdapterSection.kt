@@ -1,11 +1,10 @@
 package com.baltazarstudio.regular.ui.adapter
 
-import android.annotation.SuppressLint
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.RegistroContext
-import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.model.Registro
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.ui.registros.DetalhesRegistroDialog
@@ -21,7 +20,7 @@ class RegistrosAdapterSection(
     private val adapter: SectionedRecyclerViewAdapter,
     private val ano: Int,
     private val mes: Int,
-    private val movimentos: List<Movimento>
+    private val registros: List<Registro>
 ) : Section(
     SectionParameters.builder().headerResourceId(R.layout.layout_section_header_registro)
         .itemResourceId(R.layout.layout_section_item_registro).build()
@@ -41,7 +40,7 @@ class RegistrosAdapterSection(
     fun disableMultiSelectMode() { multiSelectModeEnabled = false }
     
     override fun getContentItemsTotal(): Int {
-        return if (expanded) movimentos.size else 0
+        return if (expanded) registros.size else 0
     }
     
     override fun getHeaderViewHolder(view: View): RecyclerView.ViewHolder {
@@ -57,13 +56,13 @@ class RegistrosAdapterSection(
     }
     
     override fun onBindItemViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        (holder as ItemViewHolder).bindView(movimentos[position])
+        (holder as ItemViewHolder).bindView(registros[position])
     }
     
     private inner class HeaderViewHolder(headerView: View) : RecyclerView.ViewHolder(headerView) {
         fun bindView() {
             var total = 0.0
-            for (movimento in movimentos) total += movimento.valor
+            for (movimento in registros) total += movimento.valor
             itemView.tv_section_header_registros_title.text = Utils.getMesString(mes, ano)
             itemView.tv_section_header_registros_total.text = Utils.formatCurrency(total)
             
@@ -81,25 +80,32 @@ class RegistrosAdapterSection(
     
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         
-        fun bindView(movimento: Movimento) {
+        fun bindView(registro: Registro) {
             
-            itemView.tv_movimento_descricao.text = movimento.descricao
-            itemView.tv_movimento_valor.text = Utils.formatCurrency(movimento.valor)
-            itemView.tv_movimento_data.text = movimento.data!!.formattedDate()
+            itemView.tv_registro_descricao.text = registro.descricao
+            itemView.tv_registro_valor.text = Utils.formatCurrency(registro.valor)
+            itemView.tv_registro_data.text = registro.data!!.formattedDate()
+            
+            if (!registro.local.isNullOrBlank()) {
+                itemView.tv_registro_local.visibility = View.VISIBLE
+                itemView.tv_registro_local.text = registro.local
+            } else {
+                itemView.tv_registro_local.visibility = View.GONE
+            }
     
     
             if (!checkableMode) {
-                unselectItem(movimento)
+                unselectItem(registro)
             }
             
             itemView.setOnClickListener {
                 if (!checkableMode) {
-                    DetalhesRegistroDialog(itemView.context, movimento)
+                    DetalhesRegistroDialog(itemView.context, registro)
                 } else {
-                    if (!RegistroContext.registrosParaExcluir.contains(movimento)) {
-                        selectItem(movimento)
+                    if (!RegistroContext.registrosParaExcluir.contains(registro)) {
+                        selectItem(registro)
                     } else {
-                        unselectItem(movimento)
+                        unselectItem(registro)
                     }
                     
                     mOnCheckableModeItemSelectedListener(RegistroContext.registrosParaExcluir.size)
@@ -109,7 +115,7 @@ class RegistrosAdapterSection(
             itemView.setOnLongClickListener {
                 if (multiSelectModeEnabled) {
                     if (!checkableMode) {
-                        selectItem(movimento)
+                        selectItem(registro)
                         checkableMode = true
                         Trigger.launch(Events.HabilitarModoMultiSelecao())
                     }
@@ -120,14 +126,14 @@ class RegistrosAdapterSection(
             
         }
     
-        private fun selectItem(movimento: Movimento) {
+        private fun selectItem(registro: Registro) {
             itemView.setBackgroundResource(R.drawable.background_section_item_selected)
-            RegistroContext.registrosParaExcluir.add(movimento)
+            RegistroContext.registrosParaExcluir.add(registro)
         }
     
-        private fun unselectItem(movimento: Movimento) {
+        private fun unselectItem(registro: Registro) {
             itemView.setBackgroundResource(android.R.drawable.screen_background_light)
-            RegistroContext.registrosParaExcluir.remove(movimento)
+            RegistroContext.registrosParaExcluir.remove(registro)
         }
     }
     

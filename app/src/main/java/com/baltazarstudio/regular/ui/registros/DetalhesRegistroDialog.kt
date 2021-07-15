@@ -11,7 +11,7 @@ import androidx.appcompat.widget.PopupMenu
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.RegistroContext
-import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.model.Registro
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.ui.despesa.SelecionarDespesaDialog
@@ -20,10 +20,10 @@ import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.dialog_detalhes_movimento.*
 
 class DetalhesRegistroDialog(
-    context: Context, private var movimento: Movimento
+    context: Context, private var registro: Registro
 ) : Dialog(context) {
     
-    private var onEditedListener: (Movimento) -> Unit = {}
+    private var onEditedListener: (Registro) -> Unit = {}
     private var temDespesaAgregada: Boolean = false
     
     init {
@@ -42,8 +42,8 @@ class DetalhesRegistroDialog(
         
         button_detalhes_movimento_alterar.setOnClickListener {
             val dialog = CriarRegistroDialog(context)
-            dialog.edit(movimento) { movimento ->
-                this.movimento = movimento
+            dialog.edit(registro) { movimento ->
+                this.registro = movimento
                 bindData()
                 onEditedListener(movimento)
             }
@@ -54,7 +54,7 @@ class DetalhesRegistroDialog(
             AlertDialog.Builder(context).setTitle("Excluir")
                 .setMessage("Deseja realmente excluir este registro?")
                 .setPositiveButton("Excluir") { _, _ ->
-                    RegistroContext.getDAO(context).excluir(movimento)
+                    RegistroContext.getDAO(context).excluir(registro)
                     
                     Trigger.launch(
                         Events.Toast("Removido!"),
@@ -77,28 +77,28 @@ class DetalhesRegistroDialog(
                     0 -> {
                         
                         if (temDespesaAgregada) {
-                            movimento.referenciaDespesa = null
-                            RegistroContext.getDAO(context).alterar(movimento)
+                            registro.referenciaDespesa = null
+                            RegistroContext.getDAO(context).alterar(registro)
                             Trigger.launch(
                                 Events.Snack("Despesa desvinculada!"),
                                 Events.UpdateDespesas(),
                                 Events.UpdateRegistros()
                             )
-                            onEditedListener(movimento)
+                            onEditedListener(registro)
                             temDespesaAgregada = false
                             bindData()
                             
                         } else {
                             
                             val dialog = SelecionarDespesaDialog(context) { codigoDespesa ->
-                                movimento.referenciaDespesa = codigoDespesa
-                                RegistroContext.getDAO(context).alterar(movimento)
+                                registro.referenciaDespesa = codigoDespesa
+                                RegistroContext.getDAO(context).alterar(registro)
                                 Trigger.launch(
                                     Events.Snack("Despesa vinculada!"),
                                     Events.UpdateDespesas(),
                                     Events.UpdateRegistros()
                                 )
-                                onEditedListener(movimento)
+                                onEditedListener(registro)
                                 temDespesaAgregada = true
                                 bindData()
                             }
@@ -115,9 +115,9 @@ class DetalhesRegistroDialog(
     }
     
     private fun bindData() {
-        tv_detalhes_movimento_descricao.text = movimento.descricao
-        tv_detalhes_movimento_data.text = movimento.data?.formattedDate()
-        tv_detalhes_movimento_valor.text = Utils.formatCurrency(movimento.valor)
+        tv_detalhes_movimento_descricao.text = registro.descricao
+        tv_detalhes_movimento_data.text = registro.data?.formattedDate()
+        tv_detalhes_movimento_valor.text = Utils.formatCurrency(registro.valor)
         
         if (temDespesaAgregada) {
             tv_detalhes_movimento_referencia_despesa.visibility = View.VISIBLE
@@ -128,14 +128,14 @@ class DetalhesRegistroDialog(
     
     private fun verificarSeTemDespesaAgregada() {
         temDespesaAgregada =
-            if (movimento.referenciaDespesa != null && movimento.referenciaDespesa != 0) {
+            if (registro.referenciaDespesa != null && registro.referenciaDespesa != 0) {
                 val despesa = DespesaContext.getDAO(context)
-                    .getDespesaPorCodigo(movimento.referenciaDespesa!!)
+                    .getDespesaPorCodigo(registro.referenciaDespesa!!)
                 despesa != null
             } else false
     }
     
-    fun setOnEditedMovimento(onEditedListener: (Movimento) -> Unit) {
+    fun setOnEditedMovimento(onEditedListener: (Registro) -> Unit) {
         this.onEditedListener = onEditedListener
     }
 }

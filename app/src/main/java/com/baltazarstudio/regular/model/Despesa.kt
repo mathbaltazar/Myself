@@ -17,4 +17,5 @@ class Despesa {
             field = value
         }
     var diaVencimento: Int = 0
+    var arquivado: Int = 0
 }

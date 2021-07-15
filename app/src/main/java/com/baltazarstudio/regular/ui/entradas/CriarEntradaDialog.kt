@@ -6,16 +6,13 @@ import android.view.WindowManager
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.model.Entrada
-import com.baltazarstudio.regular.model.Movimento
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.util.CurrencyMask
 import com.baltazarstudio.regular.util.Utils
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_criar_entrada.*
-import kotlinx.android.synthetic.main.dialog_registrar_movimento.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
-import org.jetbrains.anko.toast
 import java.math.BigDecimal
 
 class CriarEntradaDialog(context: Context) : Dialog(context) {

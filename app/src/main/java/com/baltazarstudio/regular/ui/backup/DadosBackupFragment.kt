@@ -11,8 +11,8 @@ import com.baltazarstudio.regular.context.ConfigContext
 import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.EntradaContext
 import com.baltazarstudio.regular.context.RegistroContext
-import com.baltazarstudio.regular.database.dao.ConfiguracaoDAO
-import com.baltazarstudio.regular.model.Configuracao
+import com.baltazarstudio.regular.database.dao.BackupDAO
+import com.baltazarstudio.regular.model.Backup
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.service.BackupService
@@ -43,7 +43,7 @@ class DadosBackupFragment : Fragment() {
     }
     
     private lateinit var mView: View
-    private lateinit var mConfiguracao: Configuracao
+    private lateinit var mBackup: Backup
     private lateinit var httpClient: OkHttpClient
     
     override fun onCreateView(
@@ -58,10 +58,10 @@ class DadosBackupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mConfiguracao = ConfiguracaoDAO(mView.context).getUltimaConfiguracao()
+        mBackup = BackupDAO(mView.context).getUltimoBackup()
 
-        textinput_backup_url.setText(mConfiguracao.url ?: mUrl)
-        textinput_backup_porta.setText(mConfiguracao.porta ?: mPorta)
+        textinput_backup_url.setText(mBackup.url ?: mUrl)
+        textinput_backup_porta.setText(mBackup.porta ?: mPorta)
 
 
         button_backup_testar_conexao.setOnClickListener {
@@ -69,7 +69,7 @@ class DadosBackupFragment : Fragment() {
         }
 
         
-        val lastSync = mConfiguracao.dataUltimaSincronizacao
+        val lastSync = mBackup.dataUltimaSincronizacao
         if (lastSync != null && lastSync != 0L) {
             val data = Date(lastSync)
             tv_backup_teste_ultima_sincronizacao.text =
@@ -136,9 +136,9 @@ class DadosBackupFragment : Fragment() {
                     0
                 )
 
-                mConfiguracao.url = textinput_backup_url.text.toString()
-                mConfiguracao.porta = textinput_backup_porta.text.toString()
-                ConfiguracaoDAO(mView.context).salvarConfiguracao(mConfiguracao)
+                mBackup.url = textinput_backup_url.text.toString()
+                mBackup.porta = textinput_backup_porta.text.toString()
+                BackupDAO(mView.context).salvarConfiguracao(mBackup)
 
                 when (funcao) {
                     FUNCAO_RESTAURAR -> restaurarDadosDoServidor()
@@ -160,11 +160,11 @@ class DadosBackupFragment : Fragment() {
 
 
         val request = SincronizarDadosBackupDTO()
-        request.movimentos = RegistroContext.getDAO(mView.context).getTodosMovimentos()
+        request.registros = RegistroContext.getDAO(mView.context).getTodosRegistros()
         request.despesas = DespesaContext.getDAO(mView.context).getTodasDespesas()
         request.entradas = EntradaContext.getDAO(mView.context).getTodasEntradas()
-        request.configuracao = mConfiguracao
-        request.configuracao!!.dataUltimaSincronizacao = Calendar.getInstance().timeInMillis
+        request.backup = mBackup
+        request.backup!!.dataUltimaSincronizacao = Calendar.getInstance().timeInMillis
 
         val service = createBackupService()
         service.sincronizarDados(request).subscribeOn(Schedulers.io())
@@ -179,7 +179,7 @@ class DadosBackupFragment : Fragment() {
                     .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
                     .show()
     
-                val lastSync = mConfiguracao.dataUltimaSincronizacao
+                val lastSync = mBackup.dataUltimaSincronizacao
                 if (lastSync != null && lastSync != 0L) {
                     val data = Date(lastSync)
                     tv_backup_teste_ultima_sincronizacao.text =
@@ -211,10 +211,10 @@ class DadosBackupFragment : Fragment() {
                 button_backup_restaurar.isEnabled = true
 
                 val dto = t.body()!!
-                RegistroContext.getDAO(mView.context).restaurarMovimentos(dto.movimentos)
+                RegistroContext.getDAO(mView.context).restaurarRegistros(dto.registros)
                 DespesaContext.getDAO(mView.context).restaurarDespesas(dto.despesas)
                 EntradaContext.getDAO(mView.context).restaurarEntradas(dto.entradas)
-                ConfigContext.getDAO(mView.context).salvarConfiguracao(dto.configuracao)
+                ConfigContext.getDAO(mView.context).salvarConfiguracao(dto.backup)
                 
                 Trigger.launch(Events.Toast("Os dados do servidor foram restaurados!"))
 

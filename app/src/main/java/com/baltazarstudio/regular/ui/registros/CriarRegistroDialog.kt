@@ -5,7 +5,7 @@ import android.content.Context
 import android.view.WindowManager
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.RegistroContext
-import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.model.Registro
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.util.CurrencyMask
@@ -19,7 +19,7 @@ import java.math.BigDecimal
 
 class CriarRegistroDialog(context: Context) : Dialog(context) {
     
-    private lateinit var onEditedListener: (Movimento) -> Unit
+    private lateinit var onEditedListener: (Registro) -> Unit
     private var edit: Boolean = false
     private var idMovimentoEmEdicao: Int? = null
     
@@ -37,6 +37,7 @@ class CriarRegistroDialog(context: Context) : Dialog(context) {
         button_dialog_novo_movimento_adicionar.setOnClickListener {
             
             val descricao = textinput_dialog_novo_movimento_descricao.text.toString()
+            val local = textinput_dialog_novo_movimento_local.text.toString()
             val valor = textinput_dialog_novo_movimento_valor.text.toString()
             val data = dateinput_dialog_novo_movimento_data.text.toString()
             
@@ -53,10 +54,10 @@ class CriarRegistroDialog(context: Context) : Dialog(context) {
                 dateinput_dialog_novo_movimento_data.error = null
                 
                 
-                val movimento = Movimento()
-                movimento.descricao = descricao
+                val movimento = Registro()
+                movimento.descricao = descricao.trim()
                 movimento.valor = Utils.unformatCurrency(valor).toDouble()
-                //movimento.data = SimpleDateFormat("dd/MM/yyyy").parse(data).time
+                movimento.local = local.trim()
                 movimento.data = dateinput_dialog_novo_movimento_data.getTime()
                 
                 
@@ -92,16 +93,17 @@ class CriarRegistroDialog(context: Context) : Dialog(context) {
         window?.attributes = lp
     }
     
-    fun edit(movimento: Movimento, onEditedListener: (Movimento) -> Unit) {
+    fun edit(registro: Registro, onEditedListener: (Registro) -> Unit) {
         this.edit = true
-        this.idMovimentoEmEdicao = movimento.id
+        this.idMovimentoEmEdicao = registro.id
         this.onEditedListener = onEditedListener
         
-        textinput_dialog_novo_movimento_descricao.setText(movimento.descricao)
-        textinput_dialog_novo_movimento_descricao.setSelection(movimento.descricao?.length ?: 0)
-        textinput_dialog_novo_movimento_valor.setText(formatCurrency(movimento.valor))
-        dateinput_dialog_novo_movimento_data.setDate(movimento.data!!)
-        button_dialog_novo_movimento_adicionar.text = "Alterar"
+        textinput_dialog_novo_movimento_descricao.setText(registro.descricao)
+        textinput_dialog_novo_movimento_descricao.setSelection(registro.descricao?.length ?: 0)
+        textinput_dialog_novo_movimento_valor.setText(formatCurrency(registro.valor))
+        dateinput_dialog_novo_movimento_data.setDate(registro.data!!)
+//        button_dialog_novo_movimento_adicionar.text = "Alterar"
+        button_dialog_novo_movimento_adicionar.setImageResource(R.drawable.ic_check)
         tv_dialog_novo_movimento_title.text = "Alterar Registro"
     }
     

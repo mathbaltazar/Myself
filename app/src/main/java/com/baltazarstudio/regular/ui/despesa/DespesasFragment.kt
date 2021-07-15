@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
+import com.baltazarstudio.regular.model.enum.Boolean
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.ui.adapter.DespesasAdapter
@@ -64,6 +65,7 @@ class DespesasFragment : Fragment() {
     
     private fun carregarDespesas() {
         val despesas = DespesaContext.getDAO(mView.context).getTodasDespesas()
+            .filter { it.arquivado == Boolean.FALSE }
         
         if (despesas.isEmpty()) {
             mView.tv_despesas_sem_depesas.visibility = View.VISIBLE

@@ -59,6 +59,7 @@ class MovimentacaoFragment : Fragment() {
             }
     
             activity.searchMenuItem?.isVisible = item.itemId == R.id.bottom_navigation_registros
+            activity.archiveMenuItem?.isVisible = item.itemId == R.id.bottom_navigation_despesas
             true
         }
         

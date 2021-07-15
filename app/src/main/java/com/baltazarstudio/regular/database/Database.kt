@@ -4,19 +4,19 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.baltazarstudio.regular.database.dao.ConfiguracaoDAO
+import com.baltazarstudio.regular.database.dao.BackupDAO
 import com.baltazarstudio.regular.database.dao.DespesaDAO
 import com.baltazarstudio.regular.database.dao.EntradaDAO
-import com.baltazarstudio.regular.database.dao.MovimentoDAO
+import com.baltazarstudio.regular.database.dao.RegistroDAO
 
 abstract class Database<T>(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        MovimentoDAO.onCreate(db)
+        RegistroDAO.onCreate(db)
         EntradaDAO.onCreate(db)
         DespesaDAO.onCreate(db)
-        ConfiguracaoDAO.onCreate(db)
+        BackupDAO.onCreate(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { }

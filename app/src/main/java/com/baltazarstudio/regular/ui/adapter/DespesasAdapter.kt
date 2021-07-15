@@ -1,9 +1,10 @@
 package com.baltazarstudio.regular.ui.adapter
 
-import android.app.Activity
-import android.app.ActivityOptions
 import android.content.Context
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
@@ -11,24 +12,20 @@ import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.DespesaContext
 import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Despesa
+import com.baltazarstudio.regular.model.enum.Boolean
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.observer.Trigger
-import com.baltazarstudio.regular.ui.despesa.CriarDespesaDialog
-import com.baltazarstudio.regular.ui.despesa.DetalhesDespesaActivity
-import com.baltazarstudio.regular.ui.despesa.RegistrarDespesaDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_section_item_despesa.view.*
-import org.jetbrains.anko.startActivity
-import java.util.*
 
-class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>, val onDespesaItemClickListener: () -> Unit)
+class DespesasAdapter(context: Context, private val listaDespesas: List<Despesa>, val onDespesaItemClickListener: () -> Unit)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
     private val layoutInflater = LayoutInflater.from(context)
     
     override fun getItemCount(): Int {
-        return despesas.size
+        return listaDespesas.size
     }
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -43,7 +40,7 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
     
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindView(position: Int) {
-            val despesa = despesas[position]
+            val despesa = listaDespesas[position]
             
             itemView.setOnClickListener {
                 DespesaContext.despesaDetalhada = despesa
@@ -77,9 +74,11 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             itemView.iv_section_item_despesas_opcoes.setOnClickListener {
                 val popupMenu = PopupMenu(itemView.context, it)
                 popupMenu.menu.add(Menu.NONE, 0, Menu.NONE, "Excluir")
+                popupMenu.menu.add(Menu.NONE, 1, Menu.NONE, "Arquivar")
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
-                        1 -> excluirDepesa(despesa)
+                        0 -> excluirDepesa(despesa)
+                        1 -> arquivar(despesa)
                     }
                     false
                 }
@@ -87,19 +86,26 @@ class DespesasAdapter(context: Context, private val despesas: ArrayList<Despesa>
             }
             
             // ESCONDER ÚLTIMO DIVIDER
-            if (despesa == despesas.last()) {
+            if (despesa == listaDespesas.last()) {
                 itemView.divider_section_item_despesas.visibility = View.GONE
             }
+        }
+    
+        private fun arquivar(despesa: Despesa) {
+            despesa.arquivado = Boolean.TRUE
+            
+            DespesaContext.getDAO(itemView.context).alterar(despesa)
+            Trigger.launch(Events.Snack("Despesa arquivada"), Events.UpdateDespesas())
         }
     
         private fun excluirDepesa(despesa: Despesa) {
             AlertDialog.Builder(itemView.context).setTitle("Excluir")
                 .setMessage("Deseja realmente deletar esta despesa?")
                 .setPositiveButton("Excluir") { _, _ ->
+                    
                     DespesaContext.getDAO(itemView.context).deletar(despesa)
-                    Trigger.launch(Events.Toast("Removido!"))
-                    //Trigger.launch(Events.UpdateDespesas())
-                    notifyItemRemoved(adapterPosition)
+                    Trigger.launch(Events.Toast("Removido!"), Events.UpdateDespesas())
+                    
                 }.setNegativeButton("Cancelar", null)
                 .show()
         }

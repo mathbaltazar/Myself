@@ -30,6 +30,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     
     var searchMenuItem: MenuItem? = null
     var addMenuItem: MenuItem? = null
+    var archiveMenuItem: MenuItem? = null
     
     /**
      *
@@ -63,9 +65,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * BUGS ---> (DONE) NOVO DESIGN DESPESA: NOVA TELA PARA DETALHES DA DESPESA (TENTAR "ICONIFICAR")
      * BUGS ---> (DONE) TRANSFERIR BACKUP PARA MENU LATERAL
      * BUGS ---> (DONE) EDITAR ENTRADAS, ELABORAR NOVO LAYOUT
-     * BUGS ---> REFORMULAÇÃO DO BANCO DE DADOS: REUTILIZAÇÃO DE PRIMARY KEY COM BACKEND (VER LINK NO CELULAR)
-     * E NOVO PARAMETRO "STATUS" PARA A ENTITY "REGISTRO"
-     * BUGS ---> OTIMIZAR COMUNICAÇÃO DA SINCRONIZAÇÃO DE DADOS COM BACKEND
+     *
+     * - (DONE) Implementar campo Local (opcional) nos registros e incluir como filtro de pesquisa
+     * - (DONE) Implementar arquivamento de despesas
+     * - Sugestão de valores do registro da despesa, baseados nos valores das despesas já inseridas
+     * - Variação escrita de datas (Ex.: último registro: Hoje/Ontem etc...)
      */
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,12 +117,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .replace(R.id.fragment_container_main, DadosBackupFragment())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
         
-                toolbar.setTitle(R.string.activity_title_dados_backup)
+                toolbar.setTitle(R.string.activity_title_backup)
             }
         }
     
         searchMenuItem?.isVisible = item.itemId == R.id.menu_drawer_movimentacao
         addMenuItem?.isVisible = item.itemId == R.id.menu_drawer_movimentacao
+        archiveMenuItem?.isVisible = item.itemId == R.id.menu_drawer_movimentacao
         
         item.isChecked = true
         drawer_layout.closeDrawer(GravityCompat.START)
@@ -129,6 +134,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         menuInflater.inflate(R.menu.menu_main, menu)
         searchMenuItem = menu.findItem(R.id.action_pesquisar)
         addMenuItem = menu.findItem(R.id.action_adicionar)
+        archiveMenuItem = menu.findItem(R.id.action_ver_arquivadas)
     
         val searchView = searchMenuItem!!.actionView as SearchView
         searchView.onActionViewCollapsed()
@@ -145,6 +151,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
         
         return true
+    }
+    
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_ver_arquivadas) {
+            startActivity(intentFor<DespesaArquivadaActivity>())
+        }
+        
+        return super.onOptionsItemSelected(item)
     }
     
     private fun setupFirebaseMessaging() {

@@ -9,12 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.RegistroContext
-import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.model.Registro
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.ui.adapter.RegistrosAdapterSection
 import com.baltazarstudio.regular.util.Utils
-import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -56,27 +55,22 @@ class RegistrosFragment : Fragment() {
     }
     
     private fun carregarRegistros() {
-        val mDAO = RegistroContext.getDAO(mView.context)
-        val itensMovimentos: List<Movimento>
-        if (RegistroContext.textoPesquisa.isNullOrBlank()) {
-            itensMovimentos = mDAO.getTodosMovimentos()
-        } else {
-            itensMovimentos = mDAO.getTodosMovimentos(RegistroContext.textoPesquisa!!.trim())
-        }
+        val itensRegistros =
+            RegistroContext.run { getDAO(mView.context).getTodosRegistros(textoPesquisa) }
         
-        if (itensMovimentos.isNotEmpty()) {
+        if (itensRegistros.isNotEmpty()) {
             mView.tv_registros_sem_registros.visibility = View.GONE
             mView.rv_registros.visibility = View.VISIBLE
             
             val adapter = SectionedRecyclerViewAdapter()
             
-            for (ano in Utils.getAnosDisponiveis(itensMovimentos)) {
-                for (mes in Utils.getMesDisponivelPorAno(itensMovimentos, ano)) {
-                    val itens = Utils.filtrarItensPorData(itensMovimentos, mes, ano)
+            for (ano in Utils.getAnosDisponiveis(itensRegistros)) {
+                for (mes in Utils.getMesDisponivelPorAno(itensRegistros, ano)) {
+                    val itens = Utils.filtrarItensPorData(itensRegistros, mes, ano)
                     
                     if (itens.isEmpty()) continue
                     
-                    val section = RegistrosAdapterSection(adapter, ano, mes, itens as List<Movimento>)
+                    val section = RegistrosAdapterSection(adapter, ano, mes, itens as List<Registro>)
                     adapter.addSection(section)
                     
                     section.setOnCheckableModeItemSelectedListener { count ->

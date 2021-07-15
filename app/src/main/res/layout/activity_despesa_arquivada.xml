@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.DespesaArquivadaActivity">
+
+    <TextView
+        android:id="@+id/tv_despesa_arquivada_nenhum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/all_default_layout_offset_8"
+        android:text="Não há despesas arquivadas"
+        android:textAlignment="center" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_despesas_arquivadas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/all_default_layout_offset_4"
+        tools:itemCount="3"
+        tools:listitem="@layout/layout_section_item_despesa_arquivada" />
+
+</LinearLayout>

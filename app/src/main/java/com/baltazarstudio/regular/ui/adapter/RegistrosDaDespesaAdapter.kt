@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.baltazarstudio.regular.R
-import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.model.Registro
 import com.baltazarstudio.regular.ui.registros.DetalhesRegistroDialog
 import com.baltazarstudio.regular.util.Utils
 import com.baltazarstudio.regular.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_section_item_registro.view.*
 
-class RegistrosDaDespesaAdapter(context: Context, private val movimentos: ArrayList<Movimento>)
+class RegistrosDaDespesaAdapter(context: Context, private val registros: ArrayList<Registro>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
     private val layoutInflater = LayoutInflater.from(context)
@@ -23,7 +23,7 @@ class RegistrosDaDespesaAdapter(context: Context, private val movimentos: ArrayL
     }
     
     override fun getItemCount(): Int {
-        return movimentos.size
+        return registros.size
     }
     
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -33,16 +33,16 @@ class RegistrosDaDespesaAdapter(context: Context, private val movimentos: ArrayL
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         
         fun bindView(position: Int) {
-            val movimento = movimentos[position]
+            val movimento = registros[position]
             
-            itemView.tv_movimento_descricao.text = movimento.descricao
-            itemView.tv_movimento_valor.text = Utils.formatCurrency(movimento.valor)
-            itemView.tv_movimento_data.text = movimento.data!!.formattedDate()
+            itemView.tv_registro_descricao.text = movimento.descricao
+            itemView.tv_registro_valor.text = Utils.formatCurrency(movimento.valor)
+            itemView.tv_registro_data.text = movimento.data!!.formattedDate()
             
             itemView.setOnClickListener {
                 val dialog = DetalhesRegistroDialog(itemView.context, movimento)
                 dialog.setOnEditedMovimento {
-                    movimentos[position] = it
+                    registros[position] = it
                     notifyItemChanged(position)
                 }
                 dialog.show()

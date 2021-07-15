@@ -6,7 +6,7 @@ import android.view.View
 import com.baltazarstudio.regular.R
 import com.baltazarstudio.regular.context.RegistroContext
 import com.baltazarstudio.regular.model.Despesa
-import com.baltazarstudio.regular.model.Movimento
+import com.baltazarstudio.regular.model.Registro
 import com.baltazarstudio.regular.observer.Trigger
 import com.baltazarstudio.regular.observer.Events
 import com.baltazarstudio.regular.util.CurrencyMask
@@ -84,7 +84,7 @@ class RegistrarDespesaDialog(context: Context, private val despesa: Despesa) : D
             }
             
             // Criação do registro a partir da despesa
-            val movimento = Movimento()
+            val movimento = Registro()
             movimento.descricao = despesa.nome
             movimento.valor = Utils.unformatCurrency(valor).toDouble()
             

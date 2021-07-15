@@ -33,15 +33,15 @@ class ResumoFragment : Fragment() {
     private fun montarMovimentos(view: View) {
         val dao = RegistroContext.getDAO(view.context)
         
-        val quant = dao.getQuantidadeMovimentos()
+        val quant = dao.getQuantidadeRegistros()
         view.tv_resumo_movimentos_quantidade_registros.text = quant.toString()
         
-        val total = dao.getTotalValorMovimentos()
+        val total = dao.getTotalValorRegistros()
         view.tv_resumo_movimentos_total_gastos.text = Utils.formatCurrency(total)
         
-        view.tv_resumo_movimentos_total_gastos_7_dias.text = Utils.formatCurrency(dao.getTotalValorMovimentosPorDia(7))
-        view.tv_resumo_movimentos_total_gastos_30_dias.text = Utils.formatCurrency(dao.getTotalValorMovimentosPorDia(30))
-        view.tv_resumo_movimentos_total_gastos_3_meses.text = Utils.formatCurrency(dao.getTotalValorMovimentosPorDia(90))
+        view.tv_resumo_movimentos_total_gastos_7_dias.text = Utils.formatCurrency(dao.getTotalValorRegistrosPorDia(7))
+        view.tv_resumo_movimentos_total_gastos_30_dias.text = Utils.formatCurrency(dao.getTotalValorRegistrosPorDia(30))
+        view.tv_resumo_movimentos_total_gastos_3_meses.text = Utils.formatCurrency(dao.getTotalValorRegistrosPorDia(90))
     }
     
     private fun montarDespesas(view: View) {

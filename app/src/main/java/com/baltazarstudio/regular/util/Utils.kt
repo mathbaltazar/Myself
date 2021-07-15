@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Point
 import android.view.WindowManager
 import com.baltazarstudio.regular.model.IDateFilterable
-import com.baltazarstudio.regular.model.Movimento
 import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat

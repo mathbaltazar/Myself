@@ -12,8 +12,13 @@
 
     <item
         android:id="@+id/action_adicionar"
-        android:title="@string/adicionar"
         android:icon="@drawable/ic_add"
+        android:title="@string/adicionar"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_ver_arquivadas"
+        android:icon="@drawable/ic_add"
+        android:title="@string/ver_arquivadas"
+        android:visible="false" />
 </menu>
