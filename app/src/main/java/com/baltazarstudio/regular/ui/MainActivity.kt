@@ -70,6 +70,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * - (DONE) Implementar arquivamento de despesas
      * - Sugestão de valores do registro da despesa, baseados nos valores das despesas já inseridas
      * - Variação escrita de datas (Ex.: último registro: Hoje/Ontem etc...)
+     * - Nova cor app
+     * - Agora deployed, implementar a lógica "local" e "nuvem"
+     * - Elaborar sublayout para teste (FLAVORS???)
      */
     
     override fun onCreate(savedInstanceState: Bundle?) {
