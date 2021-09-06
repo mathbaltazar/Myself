@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.baltazarstudio.myself">
+    package="com.com.myself">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.baltazarstudio.myself.application.Application"
+        android:name="br.com.myself.application.Application"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.baltazarstudio.myself.ui.DespesaArquivadaActivity"></activity>
+        <activity android:name="br.com.myself.ui.DespesaArquivadaActivity"></activity>
 
-        <service android:name="com.baltazarstudio.myself.notification.Notification">
+        <service android:name="br.com.myself.notification.Notification">
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
                 android:resource="@drawable/notification_icon" />
@@ -23,9 +23,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name="com.baltazarstudio.myself.ui.despesa.DetalhesDespesaActivity" />
+        <activity android:name="br.com.myself.ui.despesa.DetalhesDespesaActivity" />
         <activity
-            android:name="com.baltazarstudio.myself.ui.MainActivity"
+            android:name="br.com.myself.ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

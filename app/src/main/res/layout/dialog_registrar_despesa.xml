@@ -88,7 +88,7 @@
         tools:visibility="visible"
         android:visibility="gone">
 
-        <com.baltazarstudio.myself.components.DateInputText
+        <br.com.myself.components.DateInputText
             android:id="@+id/dateinput_dialog_registrar_despesa_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
