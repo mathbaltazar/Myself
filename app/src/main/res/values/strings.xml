@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Regular</string>
+    <string name="app_name">Myself</string>
     <string name="activity_title_meus_registros">Meus Registros</string>
     <string name="activity_title_entradas">Entradas</string>
     <string name="activity_title_resumos">Resumos</string>
