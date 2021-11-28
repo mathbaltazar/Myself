@@ -41,7 +41,7 @@ class CriarRegistroDialog(context: Context) : Dialog(context) {
         button_dialog_novo_movimento_adicionar.setOnClickListener {
             
             val descricao = textinput_dialog_novo_movimento_descricao.text.toString()
-            val local = textinput_dialog_novo_movimento_local.text.toString()
+            val outros = textinput_dialog_novo_movimento_outros.text.toString()
             val valor = textinput_dialog_novo_movimento_valor.text.toString()
             val data = dateinput_dialog_novo_movimento_data.text.toString()
             
@@ -61,7 +61,7 @@ class CriarRegistroDialog(context: Context) : Dialog(context) {
                 val movimento = Registro()
                 movimento.descricao = descricao.trim()
                 movimento.valor = Utils.unformatCurrency(valor).toDouble()
-                movimento.local = local.trim()
+                movimento.outros = outros.trim()
                 movimento.data = dateinput_dialog_novo_movimento_data.getTime()
                 
                 

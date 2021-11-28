@@ -86,11 +86,11 @@ class RegistrosAdapterSection(
             itemView.tv_registro_valor.text = Utils.formatCurrency(registro.valor)
             itemView.tv_registro_data.text = registro.data!!.formattedDate()
             
-            if (!registro.local.isNullOrBlank()) {
-                itemView.tv_registro_local.visibility = View.VISIBLE
-                itemView.tv_registro_local.text = registro.local
+            if (!registro.outros.isNullOrBlank()) {
+                itemView.tv_registro_outros.visibility = View.VISIBLE
+                itemView.tv_registro_outros.text = registro.outros
             } else {
-                itemView.tv_registro_local.visibility = View.GONE
+                itemView.tv_registro_outros.visibility = View.GONE
             }
     
     

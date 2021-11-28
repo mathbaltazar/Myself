@@ -67,13 +67,13 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Local"
+        android:hint="Outros"
         android:padding="@dimen/all_default_layout_offset_4"
         app:endIconDrawable="@drawable/ic_location"
         app:endIconMode="custom">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textinput_dialog_novo_movimento_local"
+            android:id="@+id/textinput_dialog_novo_movimento_outros"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapSentences"

@@ -47,12 +47,11 @@
             tools:text="R$ 45,00" />
 
         <TextView
-            android:id="@+id/tv_registro_local"
+            android:id="@+id/tv_registro_outros"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center|end"
             android:textStyle="italic"
-            app:drawableEndCompat="@drawable/ic_location"
             tools:text="Boutique do centro" />
 
     </LinearLayout>

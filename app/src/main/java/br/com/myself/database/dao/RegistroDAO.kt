@@ -81,7 +81,7 @@ class RegistroDAO(context: Context) : Database<Registro>(context) {
                 " VALUES (?,?,?,?,?)")
     
         insert.bindString(1, registro.descricao)
-        insert.bindString(2, registro.local)
+        insert.bindString(2, registro.outros)
         insert.bindDouble(3, registro.valor)
         registro.data?.let { insert.bindLong(4, it) } ?: insert.bindNull(4)
         registro.referenciaDespesa?.let { insert.bindLong(5, it.toLong()) } ?: insert.bindNull(5)
@@ -93,7 +93,7 @@ class RegistroDAO(context: Context) : Database<Registro>(context) {
         val queryBuilder = StringBuilder()
         queryBuilder.append(" UPDATE $TABELA SET ")
         queryBuilder.append(" $DESCRICAO = '${registro.descricao}', ")
-        queryBuilder.append(" $LOCAL = '${registro.local}', ")
+        queryBuilder.append(" $LOCAL = '${registro.outros}', ")
         queryBuilder.append(" $VALOR = ${registro.valor}, ")
         queryBuilder.append(" $DATA = ${registro.data}, ")
         queryBuilder.append(" $REFERENCIA_DESPESA = ? ")
@@ -116,7 +116,7 @@ class RegistroDAO(context: Context) : Database<Registro>(context) {
     override fun bind(cursor: Cursor, elemento: Registro) {
         elemento.id = cursor.getInt(cursor.getColumnIndex(TABLE_ID))
         elemento.descricao = cursor.getString(cursor.getColumnIndex(DESCRICAO))
-        elemento.local = cursor.getString(cursor.getColumnIndex(LOCAL))
+        elemento.outros = cursor.getString(cursor.getColumnIndex(LOCAL))
         elemento.data = cursor.getLong(cursor.getColumnIndex(DATA))
         elemento.valor = cursor.getDouble(cursor.getColumnIndex(VALOR))
         elemento.referenciaDespesa = cursor.getInt(cursor.getColumnIndex(REFERENCIA_DESPESA))
@@ -138,7 +138,7 @@ class RegistroDAO(context: Context) : Database<Registro>(context) {
     
             registros.forEach { registro ->
                 stmt.bindString(1, registro.descricao)
-                stmt.bindString(2, registro.local)
+                stmt.bindString(2, registro.outros)
                 stmt.bindDouble(3, registro.valor)
                 registro.data?.let { stmt.bindLong(4, it) } ?: stmt.bindNull(4)
                 registro.referenciaDespesa?.let { stmt.bindLong(5, it.toLong()) } ?: stmt.bindNull(5)

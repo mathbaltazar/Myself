@@ -6,7 +6,7 @@ class Registro : IDateFilterable {
     
     var id: Int? = null
     var descricao: String? = null
-    var local: String? = null
+    var outros: String? = null
     var data: Long? = 0
     var valor: Double = 0.0
     var referenciaDespesa: Int? = null
