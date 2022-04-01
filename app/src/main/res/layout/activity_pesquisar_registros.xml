@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:ignore="ContentDescription,HardcodedText">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/backgroung_gradient_app_color"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/button_dialog_pesquisar_registros_fechar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/all_default_layout_offset_8"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/all_default_layout_offset_8"
+            app:srcCompat="@drawable/ic_close"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/textview_financas_titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="@dimen/all_default_layout_offset_16"
+            android:text="Pesquisa de Registros"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_dialog_pesquisar_registros_busca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:helperText="Resultados: 0"
+        app:boxBackgroundColor="@android:color/white"
+        app:endIconDrawable="@drawable/ic_search"
+        app:endIconMode="custom">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_dialog_pesquisar_registros_busca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/all_default_layout_offset_8"
+            android:hint="Digite a sua busca..."
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_dialog_pesquisar_registros_sem_resultados"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/all_default_layout_offset_4"
+        android:text="Sem resultados."
+        android:textAlignment="center" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_dialog_pesquisar_registros_resultados_busca"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/all_default_layout_offset_8" />
+
+</LinearLayout>

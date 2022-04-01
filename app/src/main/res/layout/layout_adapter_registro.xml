@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/all_default_layout_offset_4"
+    android:layout_marginVertical="@dimen/all_default_layout_offset_2"
+    android:background="@drawable/background_section_item_selected"
+    android:clickable="true"
+    android:focusable="true"
+    android:layoutDirection="ltr"
+    app:cardElevation="@dimen/all_default_layout_offset_2"
+    app:contentPadding="@dimen/all_default_layout_offset_8"
+    tools:ignore="ContentDescription">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:alignItems="stretch">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/all_default_layout_offset_2"
+            app:alignItems="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_flexGrow="1">
+
+                <TextView
+                    android:id="@+id/tv_registro_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_10"
+                    tools:text="12/05/2020" />
+
+                <TextView
+                    android:id="@+id/tv_registro_descricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_20"
+                    android:textStyle="bold"
+                    tools:text="Supermercado" />
+
+                <TextView
+                    android:id="@+id/tv_registro_outros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    tools:text="Outros textos do registro" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_registro_valor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/all_default_layout_offset_4"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_24"
+                tools:text="R$ 45,00" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_icon_registro_item_despesa_atrelada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_despesa"
+                android:visibility="invisible"
+                app:tint="@color/colorPrimary"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/iv_icon_registro_item_anexo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_anexo"
+                android:visibility="invisible"
+                app:tint="@color/colorPrimary"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+    </com.google.android.flexbox.FlexboxLayout>
+</com.google.android.material.card.MaterialCardView>

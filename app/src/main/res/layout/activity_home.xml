@@ -1,0 +1,113 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroung_gradient_app_color"
+    android:orientation="vertical"
+    tools:context="br.com.myself.ui.StartActivity"
+    tools:ignore="ContentDescription,HardcodedText,UseCompoundDrawables">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/all_default_layout_offset_16"
+            android:text="myself"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:gravity="center"
+            android:text="Meus controles"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:alignItems="center"
+            app:flexDirection="column"
+            app:justifyContent="space_evenly">
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:text="Finanças"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_registros"
+                app:iconGravity="textTop"
+                app:iconPadding="@dimen/all_default_layout_offset_16"
+                app:iconSize="48dp"
+                app:iconTint="@color/white"
+                app:strokeColor="@color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:text="Crises"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_despesa"
+                app:iconGravity="textTop"
+                app:iconPadding="@dimen/all_default_layout_offset_16"
+                app:iconSize="48dp"
+                app:iconTint="@color/white"
+                app:strokeColor="@color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:text="Dados"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_drawer_backup"
+                app:iconGravity="textTop"
+                app:iconPadding="@dimen/all_default_layout_offset_16"
+                app:iconSize="48dp"
+                app:iconTint="@color/white"
+                app:strokeColor="@color/white" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:gravity="center"
+            android:text="Desenvolvido por"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Matheus Baltazar"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="64dp" />
+    </LinearLayout>
+</ScrollView>
