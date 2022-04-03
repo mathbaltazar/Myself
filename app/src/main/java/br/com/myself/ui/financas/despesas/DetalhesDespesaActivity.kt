@@ -1,6 +1,7 @@
-package br.com.myself.ui.financas.despesa
+package br.com.myself.ui.financas.despesas
 
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.Menu
@@ -13,17 +14,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.context.DespesaContext
-import br.com.myself.context.RegistroContext
-import br.com.myself.model.Despesa
+import br.com.myself.model.entity.Despesa
+import br.com.myself.model.repository.RegistroRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
-import br.com.myself.ui.adapter.RegistrosAdapterSection
+import br.com.myself.ui.adapter.RegistroAdapter
+import br.com.myself.util.AdapterClickListener
+import br.com.myself.util.Async
+import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_detalhes_despesa.*
+import org.jetbrains.anko.sdk27.coroutines.onFocusChange
+import org.jetbrains.anko.toast
 import java.math.BigDecimal
 
 
@@ -33,7 +38,9 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         private const val MENU_ITEMID_EXCLUIR: Int = 0
     }
     
-    private val despesa: Despesa = DespesaContext.despesasDataView.despesaDetalhada!!
+    private val despesa: Despesa = DespesaContext.getDataView(this).despesaDetalhada!!
+    
+    private val registroRepository = RegistroRepository(this)
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,61 +52,72 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     }
     
     private fun setUpView() {
+        with(et_detalhes_despesa_valor) {
+            addTextChangedListener(CurrencyMask(this))
+            onFocusChange { _, hasFocus ->
+                if (hasFocus) setSelection(length())
+            }
+        }
+        
         et_detalhes_despesa_vencimento.setAdapter(obterAdapter())
         et_detalhes_despesa_vencimento.setOnItemClickListener { _, _, position, _ ->
             despesa.diaVencimento = position
         }
     
         button_detalhes_despesa_adicionar_registro.setOnClickListener {
-            val dialog =
-                RegistrarDespesaDialog(this, despesa)
-            dialog.setOnDismissListener {
-                carregarRegistros()
-            }
-            dialog.show()
+            val dialog = RegistrarDespesaDialog(despesa, registroRepository)
+            dialog.onDismiss(object : DialogInterface {
+                override fun dismiss() { carregarRegistros() }
+                override fun cancel() {}
+            })
+            dialog.show(supportFragmentManager, null)
         }
     }
     
     private fun bindView() {
         et_detalhes_despesa_nome.setText(despesa.nome)
         et_detalhes_despesa_nome.setSelection(despesa.nome!!.length)
+       
         et_detalhes_despesa_valor.setText(Utils.formatCurrency(despesa.valor))
-        
+    
         with(et_detalhes_despesa_vencimento) {
             setText(adapter.getItem(despesa.diaVencimento).toString(), false)
         }
         
-        rv_detalhes_despesa_registros.adapter = SectionedRecyclerViewAdapter()
+        
+        val adapter = RegistroAdapter()
+        adapter.setClickListener(AdapterClickListener(
+            onLongClick = { registro ->
+                var msg = "Descrição: ${registro.descricao}"
+                msg += "\nValor: ${Utils.formatCurrency(registro.valor)}"
+        
+                AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
+                    .setPositiveButton("Excluir") { _, _ ->
+                        Async.doInBackground({ registroRepository.excluirRegistro(registro) }, {
+                            toast("Excluído!")
+                            Trigger.launch(Events.UpdateRegistros)
+                    
+                            carregarRegistros()
+                        })
+                    }.setNegativeButton("Cancelar", null).show()
+            }))
+        rv_detalhes_despesa_registros.adapter = adapter
         rv_detalhes_despesa_registros.layoutManager = LinearLayoutManager(this)
         
         carregarRegistros()
     }
     
     private fun carregarRegistros() {
-        val registros = RegistroContext.getDAO(this).getRegistrosFiltradosPelaDespesa(despesa.id)
-        
-        if (registros.isEmpty()) {
-            tv_detalhes_despesa_sem_registros.visibility = View.VISIBLE
-            rv_detalhes_despesa_registros.visibility = View.GONE
-        } else {
-            tv_detalhes_despesa_sem_registros.visibility = View.GONE
-            rv_detalhes_despesa_registros.visibility = View.VISIBLE
+        Async.doInBackground({ registroRepository.pesquisarRegistros(despesa.id) }, { registros ->
     
-            val mesesPossiveis = registros.map { it.referencia_mes_ano }.distinct()
     
-            val adapter = rv_detalhes_despesa_registros.adapter as SectionedRecyclerViewAdapter
-            adapter.removeAllSections()
-            adapter.notifyDataSetChanged()
+            tv_detalhes_despesa_sem_registros.visibility =
+                if (registros.isEmpty()) View.VISIBLE else View.GONE
             
-            mesesPossiveis.forEach {
-                val section = RegistrosAdapterSection(
-                    adapter,
-                    registros.filter { registro -> registro.referencia_mes_ano == it },
-                    it!!
-                )
-                adapter.addSection(section)
-            }
-        }
+            (rv_detalhes_despesa_registros.adapter as RegistroAdapter).submitList(registros)
+            
+            
+        })
     }
     
     private fun obterAdapter(): ArrayAdapter<String> {
@@ -113,16 +131,16 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     }
     
     private fun excluirDepesa() {
-        var mensagem = "Nome: ${despesa.nome}"
-        mensagem += "\nValor: ${Utils.formatCurrency(despesa.valor)}"
-        if (despesa.diaVencimento != 0) mensagem += "\nVencimento: ${despesa.diaVencimento}"
+        var msg = "Nome: ${despesa.nome}"
+        msg += "\nValor: ${Utils.formatCurrency(despesa.valor)}"
+        if (despesa.diaVencimento != 0) msg += "\nVencimento: ${despesa.diaVencimento}"
     
-        AlertDialog.Builder(this).setTitle("Excluir despesa?")
-            .setMessage(mensagem)
+        AlertDialog.Builder(this).setTitle("Excluir despesa")
+            .setMessage(msg)
             .setPositiveButton("Excluir") { _, _ ->
                 DespesaContext.getDAO(this).deletar(despesa)
                 DespesaContext.removerDespesa(despesa)
-                Trigger.launch(Events.Toast("Removido!"), Events.UpdateDespesas())
+                Trigger.launch(Events.Toast("Removido!"), Events.UpdateDespesas)
                 finish()
             }.setNegativeButton("Cancelar", null)
             .show()
@@ -147,8 +165,9 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         this.despesa.nome = nome
         this.despesa.valor = valor
         // Vencimento já é atribuído na seleção, validação desnecessária
+        
         DespesaContext.getDAO(this).alterar(this.despesa)
-        Trigger.launch(Events.UpdateDespesas())
+        Trigger.launch(Events.UpdateDespesas)
         
         return true
     }
@@ -156,6 +175,8 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add(Menu.NONE,
             MENU_ITEMID_EXCLUIR, Menu.NONE, "Excluir")
+            .setIcon(R.drawable.ic_delete)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         return super.onCreateOptionsMenu(menu)
     }
     
@@ -176,6 +197,7 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     }
     
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        // TODO View.clearFocus() não está funcionando
         if (ev.action == MotionEvent.ACTION_DOWN) {
             val view = currentFocus
             

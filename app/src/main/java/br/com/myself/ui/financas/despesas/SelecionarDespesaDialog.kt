@@ -1,10 +1,9 @@
-package br.com.myself.ui.financas.despesa
+package br.com.myself.ui.financas.despesas
 
 import android.app.Dialog
 import android.content.Context
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.context.DespesaContext
@@ -21,7 +20,7 @@ class SelecionarDespesaDialog(context: Context, onItemSelected: (Long) -> Unit) 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.dialog_selecionar_despesa)
     
-        val despesas = DespesaContext.getDAO(context).getTodasDespesas()
+        val despesas = DespesaContext.getDataView(context).despesas
         
         if (despesas.isEmpty()) {
             tv_dialog_selecionar_despesa_sem_despesa.visibility = View.VISIBLE

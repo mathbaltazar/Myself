@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="all_default_layout_offset_4">4dp</dimen>
     <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
-    <dimen name="text_size_24">24sp</dimen>
-    <dimen name="all_default_layout_offset_8">8dp</dimen>
     <dimen name="text_size_18">18sp</dimen>
-    <dimen name="all_default_layout_offset_16">16dp</dimen>
-    <dimen name="text_size_36">36sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
     <dimen name="text_size_30">30sp</dimen>
-    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_36">36sp</dimen>
     <dimen name="all_default_layout_offset_2">2dp</dimen>
+    <dimen name="all_default_layout_offset_4">4dp</dimen>
+    <dimen name="all_default_layout_offset_8">8dp</dimen>
+    <dimen name="all_default_layout_offset_16">16dp</dimen>
+    <dimen name="all_default_layout_offset_32">32dp</dimen>
 </resources>

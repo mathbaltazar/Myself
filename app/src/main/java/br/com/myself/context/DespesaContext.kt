@@ -1,13 +1,23 @@
 package br.com.myself.context
 
 import android.content.Context
-import br.com.myself.database.dao.DespesaDAO
-import br.com.myself.model.Despesa
+import br.com.myself.model.dao.DespesaDAO
+import br.com.myself.model.entity.Despesa
+import br.com.myself.ui.financas.despesas.DespesasFragment
 
 abstract class DespesaContext {
     companion object {
-        val DETALHES_DESPESA_REQUEST_CODE: Int = 12
+        private val despesasDataView = DespesasFragment.DespesaDataViewObject()
+        private var loaded:Boolean = false
         
+        fun getDataView(context: Context): DespesasFragment.DespesaDataViewObject {
+            if (!loaded) {
+                obterDespesas(context)
+                loaded = true
+            }
+            return despesasDataView
+        }
+    
         private var mDao: DespesaDAO? = null
         
         fun getDAO(context: Context): DespesaDAO {
@@ -15,7 +25,20 @@ abstract class DespesaContext {
                 DespesaDAO(context)
             return mDao!!
         }
-        
-        var despesaDetalhada: Despesa? = null
+    
+        fun obterDespesas(context: Context) {
+            despesasDataView.despesas.clear()
+            despesasDataView.despesas.addAll(getDAO(context).getTodasDespesas())
+        }
+    
+        fun atualizarDespesa(despesa: Despesa) {
+            despesasDataView.despesas.add(despesa)
+            despesasDataView.despesas.sortByDescending { it.id }
+        }
+    
+        fun removerDespesa(despesa: Despesa) {
+            despesasDataView.despesas.remove(despesa)
+        }
+    
     }
 }

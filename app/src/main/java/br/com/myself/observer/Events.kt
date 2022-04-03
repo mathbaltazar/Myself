@@ -1,14 +1,22 @@
 package br.com.myself.observer
 
-object Events {
+import android.view.View
+import br.com.myself.model.entity.Despesa
+import br.com.myself.model.entity.Entrada
+import br.com.myself.model.entity.Registro
+
+open class Events {
     
-    open class Toast(val message: String)
-    open class Snack(val message: String)
+    class Toast(val message: String)
+    class Snack(val view: View, val message: String)
     
-    open class UpdateRegistros
-    open class UpdateDespesas
-    open class UpdateEntradas
-    open class FiltrarRegistrosPelaDescricao
-    open class HabilitarModoMultiSelecao
-    open class DesabilitarModoMultiSelecao
+    object UpdateRegistros
+    object UpdateEntradas
+    object UpdateDespesas
+    class EditarRegistro(val registro: Registro)
+    class AtualizarDetalhesRegistro(val registro: Registro)
+    
+    open class EditarEntrada(val entrada: Entrada)
+    open class RegistrarDespesa(val despesa: Despesa)
+    object UpdateCrises
 }

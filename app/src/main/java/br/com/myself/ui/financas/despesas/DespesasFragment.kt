@@ -1,6 +1,5 @@
-package br.com.myself.ui.financas.despesa
+package br.com.myself.ui.financas.despesas
 
-import android.app.ActivityOptions
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.context.DespesaContext
-import br.com.myself.model.Despesa
+import br.com.myself.model.entity.Despesa
+import br.com.myself.model.repository.DespesaRepository
+import br.com.myself.model.repository.RegistroRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
 import br.com.myself.ui.adapter.DespesasAdapter
@@ -18,9 +19,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_despesas.view.*
-import org.jetbrains.anko.support.v4.intentFor
 
-class DespesasFragment : Fragment() {
+class DespesasFragment(
+    /*TODO Implementar... */ private val despesaRepository: DespesaRepository,
+    private val registroRepository: RegistroRepository
+) : Fragment() {
     
     private val disposables: CompositeDisposable = CompositeDisposable()
     private lateinit var mView: View
@@ -51,7 +54,7 @@ class DespesasFragment : Fragment() {
         }
     
         mView.rv_despesas.layoutManager = LinearLayoutManager(mView.context)
-        mView.rv_despesas.adapter = DespesasAdapter(mView.context)
+        mView.rv_despesas.adapter = DespesasAdapter(requireContext())
         
         DespesaContext.obterDespesas(mView.context)
         
@@ -62,7 +65,7 @@ class DespesasFragment : Fragment() {
     }
     
     private fun carregarDespesas() {
-        val despesas = DespesaContext.despesasDataView.despesas
+        val despesas = DespesaContext.getDataView(mView.context).despesas
         
         if (despesas.isEmpty()) {
             mView.tv_despesas_sem_depesas.visibility = View.VISIBLE
@@ -81,6 +84,10 @@ class DespesasFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread()).subscribe { t ->
                     when (t) {
                         is Events.UpdateDespesas -> carregarDespesas()
+                        is Events.RegistrarDespesa -> {
+                            val dialog = RegistrarDespesaDialog(t.despesa, registroRepository)
+                            dialog.show(childFragmentManager, null)
+                        }
                     }
                 })
     }

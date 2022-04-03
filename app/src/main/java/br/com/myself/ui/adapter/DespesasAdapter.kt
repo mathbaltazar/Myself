@@ -1,28 +1,27 @@
 package br.com.myself.ui.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
-import com.com.myself.R
+import br.com.myself.R
 import br.com.myself.context.DespesaContext
-import br.com.myself.context.RegistroContext
-import br.com.myself.model.Despesa
-import br.com.myself.model.enum.Boolean
+import br.com.myself.model.entity.Despesa
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
+import br.com.myself.ui.financas.despesas.DetalhesDespesaActivity
 import br.com.myself.util.Utils
-import br.com.myself.util.Utils.Companion.formattedDate
-import kotlinx.android.synthetic.main.layout_section_item_despesa.view.*
+import kotlinx.android.synthetic.main.adapter_despesas_item.view.*
 
-class DespesasAdapter(context: Context, private val listaDespesas: List<Despesa>, val onDespesaItemClickListener: () -> Unit)
+class DespesasAdapter(context: Context)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
     private val layoutInflater = LayoutInflater.from(context)
+    private val listaDespesas = DespesaContext.getDataView(context).despesas
     
     override fun getItemCount(): Int {
         return listaDespesas.size
@@ -30,82 +29,91 @@ class DespesasAdapter(context: Context, private val listaDespesas: List<Despesa>
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ItemViewHolder(
-            layoutInflater.inflate(R.layout.layout_section_item_despesa, parent, false)
+            layoutInflater.inflate(R.layout.adapter_despesas_item, parent, false)
         )
     }
     
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as ItemViewHolder).bindView(position)
+        (holder as ItemViewHolder).bindView(listaDespesas[position], this)
     }
     
-    private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindView(position: Int) {
-            val despesa = listaDespesas[position]
+    private class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var expanded: Boolean = false
+        
+        fun bindView(despesa: Despesa, adapter: DespesasAdapter) {
             
-            itemView.setOnClickListener {
-                DespesaContext.despesaDetalhada = despesa
-                
-                onDespesaItemClickListener()
+            itemView.ll_adapter_despesas_item_container.setOnClickListener {
+                expanded = !expanded
+                adapter.notifyDataSetChanged()
             }
             
             // NOME
-            itemView.tv_section_item_despesas_nome.text = despesa.nome
+            itemView.tv_adapter_despesas_item_nome.text = despesa.nome
             
             // ULTIMO REGISTRO
-            val ultimoRegistro = RegistroContext.getDAO(itemView.context).getUltimoRegistro(despesa.codigo!!)
-            if (ultimoRegistro == 0L) {
-                itemView.tv_section_item_despesas_ultimo_registro.text = "Não há registros."
-            } else {
-                itemView.tv_section_item_despesas_ultimo_registro.text = "Último registro: ${ultimoRegistro.formattedDate()}"
-            }
+            /*val ultimoRegistro = RegistroContext.getDAO(itemView.context).getDataUltimoRegistro(despesa.id)
+            itemView.tv_adapter_despesas_item_ultimo_registro.text =
+                if (ultimoRegistro == 0L) "Não há registros."
+                else "Último registro: ${ultimoRegistro.formattedDate()}"*/
             
             // DIA VENCIMENTO
             if (despesa.diaVencimento != 0) {
-                itemView.ll_section_item_despesas_vencimento.visibility = View.VISIBLE
-                itemView.tv_section_item_despesas_dia_vencimento.text = despesa.diaVencimento.toString()
+                itemView.ll_adapter_despesas_item_vencimento.visibility = View.VISIBLE
+                itemView.tv_adapter_despesas_item_dia_vencimento.text = despesa.diaVencimento.toString()
             } else {
-                itemView.ll_section_item_despesas_vencimento.visibility = View.GONE
+                itemView.ll_adapter_despesas_item_vencimento.visibility = View.GONE
             }
     
             // VALOR
-            itemView.tv_section_item_despesas_valor.text = Utils.formatCurrency(despesa.valor)
-            
-            // OPÇOES
-            itemView.iv_section_item_despesas_opcoes.setOnClickListener {
-                val popupMenu = PopupMenu(itemView.context, it)
-                popupMenu.menu.add(Menu.NONE, 0, Menu.NONE, "Excluir")
-                popupMenu.menu.add(Menu.NONE, 1, Menu.NONE, "Arquivar")
-                popupMenu.setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        0 -> excluirDepesa(despesa)
-                        1 -> arquivar(despesa)
-                    }
-                    false
-                }
-                popupMenu.show()
+            if (despesa.valor > 0.0) {
+                itemView.tv_adapter_despesas_item_valor.text = Utils.formatCurrency(despesa.valor)
+            } else {
+                itemView.tv_adapter_despesas_item_valor.visibility = View.GONE
             }
-            
-            // ESCONDER ÚLTIMO DIVIDER
-            if (despesa == listaDespesas.last()) {
-                itemView.divider_section_item_despesas.visibility = View.GONE
-            }
-        }
     
-        private fun arquivar(despesa: Despesa) {
-            despesa.arquivado = Boolean.TRUE
             
-            DespesaContext.getDAO(itemView.context).alterar(despesa)
-            Trigger.launch(Events.Snack("Despesa arquivada"), Events.UpdateDespesas())
+            // lAYOUT EXPANDIDO
+            if (expanded) {
+                itemView.iv_adapter_despesas_item_expanded.setImageResource(R.drawable.ic_arrow_up) // SETA
+                itemView.layout_adapter_despesas_item_acoes.visibility = View.VISIBLE // BOTÕES
+                itemView.divider_adapter_despesas_item.visibility = View.VISIBLE // DIVIDER
+            } else {
+                itemView.iv_adapter_despesas_item_expanded.setImageResource(R.drawable.ic_arrow_down) // SETA
+                itemView.layout_adapter_despesas_item_acoes.visibility = View.GONE // BOTÕES
+                itemView.divider_adapter_despesas_item.visibility = View.GONE // DIVIDER
+            }
+            
+            // BOTÃO DE AÇÃO EXCLUIR
+            itemView.button_adapter_despesas_item_excluir.setOnClickListener {
+                excluirDepesa(despesa)
+            }
+            
+            // BOTÃO DE AÇÃO DETALHES
+            itemView.button_adapter_despesas_item_detalhes.setOnClickListener {
+                DespesaContext.getDataView(it.context).despesaDetalhada = despesa
+                itemView.context.startActivity(Intent(itemView.context, DetalhesDespesaActivity::class.java))
+            }
+            
+            // BOTÃO DE AÇÃO REGISTRAR
+            itemView.button_adapter_despesas_item_registrar.setOnClickListener {
+                Trigger.launch(Events.RegistrarDespesa(despesa))
+            }
         }
     
         private fun excluirDepesa(despesa: Despesa) {
-            AlertDialog.Builder(itemView.context).setTitle("Excluir")
-                .setMessage("Deseja realmente deletar esta despesa?")
+            var mensagem = "Nome: ${despesa.nome}"
+            mensagem += "\nValor: ${Utils.formatCurrency(despesa.valor)}"
+            if (despesa.diaVencimento != 0) mensagem += "\nVencimento: ${despesa.diaVencimento}"
+            
+            AlertDialog.Builder(itemView.context).setTitle("Excluir despesa?")
+                .setMessage(mensagem)
                 .setPositiveButton("Excluir") { _, _ ->
                     
                     DespesaContext.getDAO(itemView.context).deletar(despesa)
-                    Trigger.launch(Events.Toast("Removido!"), Events.UpdateDespesas())
-                    
+                    DespesaContext.removerDespesa(despesa)
+    
+                    Toast.makeText(itemView.context, "Removido!", Toast.LENGTH_SHORT).show()
+                    Trigger.launch(Events.UpdateDespesas)
                 }.setNegativeButton("Cancelar", null)
                 .show()
         }

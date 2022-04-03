@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/all_default_layout_offset_4">
+    android:padding="@dimen/all_default_layout_offset_4"
+    tools:ignore="HardcodedText">
 
     <TextView
         android:layout_width="match_parent"
@@ -23,15 +24,16 @@
         android:background="@color/off_white" />
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_width="match_parent"
+        app:boxBackgroundColor="@color/white"
         android:layout_height="wrap_content"
         android:hint="Descrição"
         android:padding="@dimen/all_default_layout_offset_4"
-        app:endIconDrawable="@drawable/ic_edit"
-        app:endIconMode="custom">
+        app:startIconDrawable="@drawable/ic_edit"
 
-        <com.google.android.material.textfield.TextInputEditText
+        app:startIconCheckable="true">
+    <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textinput_bottom_sheet_registro_descricao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,13 +42,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_width="match_parent"
+        app:boxBackgroundColor="@color/white"
         android:layout_height="wrap_content"
         android:hint="Valor"
         android:padding="@dimen/all_default_layout_offset_4"
-        app:endIconDrawable="@drawable/ic_money"
-        app:endIconMode="custom">
+        app:startIconDrawable="@drawable/ic_money">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textinput_bottom_sheet_registro_valor"
@@ -57,13 +59,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:boxBackgroundColor="@color/white"
         android:hint="Outros"
         android:padding="@dimen/all_default_layout_offset_4"
-        app:endIconDrawable="@drawable/ic_info"
-        app:endIconMode="custom">
+        app:startIconDrawable="@drawable/ic_info">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textinput_bottom_sheet_registro_outros"
@@ -73,22 +75,18 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Data"
         android:padding="@dimen/all_default_layout_offset_4"
-        app:counterMaxLength="10"
-        app:endIconDrawable="@drawable/ic_calendar"
-        app:endIconMode="custom">
+        app:boxBackgroundColor="@color/white"
+        app:startIconDrawable="@drawable/ic_calendar">
 
-        <br.com.myself.components.DateInputText
-            android:id="@+id/dateinput_bottom_sheet_registro_data"
+        <br.com.myself.components.CalendarPickerEditText
+            android:id="@+id/calendar_picker_bottom_sheet_registro_data"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="10"
-            tools:text="19/06/2021" />
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <View
@@ -99,22 +97,15 @@
 
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/button_bottom_sheet_registro_adicionar"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/all_default_layout_offset_4"
+        android:background="@drawable/backgroung_rounded_gradient_app_color"
+        android:text="Salvar"
+        android:textSize="18sp"
         app:backgroundTint="@null"
-        android:background="@drawable/backgroung_gradient_app_color"
-        android:text="Adicionar"
-        android:textSize="18sp" />
-
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/all_default_layout_offset_8"
-        android:src="@drawable/ic_add"
-        app:backgroundTint="@color/colorPrimary"
-        app:tint="@android:color/white" />-->
+        app:elevation="@dimen/all_default_layout_offset_8" />
 
 </LinearLayout>

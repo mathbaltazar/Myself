@@ -1,12 +1,17 @@
-package br.com.myself.model
+package br.com.myself.model.entity
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 class Crise {
     
-    var id: Long? = null
-    var data: Long? = null
-    var observacoes: String? = null
-    var horario1: String? = null
-    var horario2: String? = null
+    @PrimaryKey(autoGenerate = true) var id: Long? = null
+    @ColumnInfo var data: Long? = null
+    @ColumnInfo var observacoes: String? = null
+    @ColumnInfo var horario1: String? = null
+    @ColumnInfo var horario2: String? = null
     //var arquivos ???
 
     

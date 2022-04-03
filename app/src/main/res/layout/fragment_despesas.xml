@@ -5,23 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:ignore="HardcodedText"
-    tools:context="br.com.myself.ui.movimentacao.MovimentacaoFragment">
+    tools:ignore="HardcodedText,ContentDescription">
 
-    <LinearLayout
+    <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        app:alignItems="center"
+        app:flexDirection="column">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/all_default_layout_offset_8"
+                android:layout_marginStart="@dimen/all_default_layout_offset_8"
                 android:text="Resumo das Despesas"
                 android:textAllCaps="true"
                 android:textStyle="bold" />
@@ -40,7 +41,7 @@
 
         <TextView
             android:id="@+id/tv_despesas_sem_depesas"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/all_default_layout_offset_4"
             android:text="Não há despesas registradas."
@@ -51,13 +52,24 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_despesas"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            tools:listitem="@layout/layout_section_item_despesa"
-            tools:itemCount="3"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:padding="@dimen/all_default_layout_offset_4"
+            tools:listitem="@layout/adapter_despesas_item"
+            tools:itemCount="3"/>
 
-    </LinearLayout>
+    </com.google.android.flexbox.FlexboxLayout>
 
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_despesas_adicionar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_fab_add"
+        app:backgroundTint="@color/colorAccent"
+        app:tint="@android:color/white"
+        android:layout_margin="@dimen/all_default_layout_offset_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_despesas_info"
@@ -94,4 +106,5 @@
                 tools:ignore="ContentDescription" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

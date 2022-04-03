@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    app:flexDirection="column"
     tools:ignore="HardcodedText">
 
     <TextView
         android:id="@+id/tv_dialog_registrar_despesa_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/backgroung_gradient_app_color"
         android:padding="@dimen/all_default_layout_offset_8"
-        android:text="Nova Despesa"
-        android:textAllCaps="true"
-        android:textSize="@dimen/text_size_18"
+        android:text="DESPESA"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_16"
         android:textStyle="bold" />
 
     <View
@@ -22,39 +25,44 @@
         android:layout_height="1.5dp"
         android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
         android:background="@color/off_white" />
-
+<!--
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
         android:layout_marginTop="@dimen/all_default_layout_offset_8"
-        android:text="Nome" />
+        android:text="Nome" />-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_dialog_criar_despesa_nome"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/all_default_layout_offset_8">
+        android:hint="Nome"
+        app:startIconDrawable="@drawable/ic_edit"
+        app:expandedHintEnabled="false"
+        app:boxBackgroundColor="@android:color/white"
+        android:layout_margin="@dimen/all_default_layout_offset_8">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_dialog_criar_despesa_nome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
-
+<!--
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-        android:text="Valor" />
+        android:text="Valor" />-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_dialog_criar_despesa_valor"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
+        app:startIconDrawable="@drawable/ic_money"
+        app:boxBackgroundColor="@android:color/white"
+        android:hint="Valor"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/all_default_layout_offset_8">
+        android:layout_margin="@dimen/all_default_layout_offset_8">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_dialog_criar_despesa_valor"
@@ -64,25 +72,18 @@
             android:text="R$ 0,00" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-        android:text="Vencimento" />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_dialog_despesa_dia_vencimento"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            app:boxBackgroundColor="@android:color/white"
             android:layout_height="wrap_content"
+            android:hint="Vencimento"
+            android:layout_margin="@dimen/all_default_layout_offset_8"
+            app:startIconDrawable="@drawable/ic_calendar"
             android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-            android:enabled="false"
             app:endIconMode="dropdown_menu">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -90,24 +91,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:text="01" />
+                tools:text="Sem vencimento" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/chk_dialog_despesa_sem_vencimento"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/vencimento"
-            android:textSize="@dimen/text_size_16" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/button_dialog_despesa_cadastrar"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_dialog_despesa_salvar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset_8"
-        android:backgroundTint="@color/off_primary"
-        android:text="Cadastrar Despesa"
-        android:textColor="@android:color/black" />
-</LinearLayout>
+        app:backgroundTint="@color/colorAccent"
+        android:text="Salvar" />
+</com.google.android.flexbox.FlexboxLayout>

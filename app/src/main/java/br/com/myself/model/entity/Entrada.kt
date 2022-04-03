@@ -1,22 +1,14 @@
-package br.com.myself.model
+package br.com.myself.model.entity
 
-import br.com.myself.util.IDateFilterable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.util.*
 
-class Entrada : IDateFilterable {
-    
-    var id: Long? = null
-    var fonte: String? = null
-    var data: Long? = 0
-    var valor: Double = 0.0
-    var referencia_ano_mes: String? = null
-    
-    override fun getDate(): Long? {
-        return data
-    }
-    
-    override fun toString(): String {
-        return "Entrada(id=$id, fonte=$fonte, data=$data, valor=$valor, referencia_ano_mes=$referencia_ano_mes)"
-    }
-    
-    
-}
+@Entity
+data class Entrada(
+    @PrimaryKey(autoGenerate = true) var id: Long? = null,
+    @ColumnInfo var descricao: String,
+    @ColumnInfo var data: Calendar,
+    @ColumnInfo var valor: Double = 0.0
+)

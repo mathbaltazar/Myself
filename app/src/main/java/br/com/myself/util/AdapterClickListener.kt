@@ -1,13 +1,5 @@
 package br.com.myself.util
 
-import androidx.recyclerview.widget.RecyclerView
-
-class AdapterClickListenerWrapper(adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>) {
-    
-    val onClick = {}
-    
-    init {
-    
-    }
-    
-}
+class AdapterClickListener<T>(
+    val onClick: (T) -> Unit = {}, val onLongClick: (T) -> Unit = {}
+)

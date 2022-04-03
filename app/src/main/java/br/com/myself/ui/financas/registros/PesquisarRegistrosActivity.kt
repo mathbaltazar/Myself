@@ -1,7 +1,7 @@
 package br.com.myself.ui.financas.registros
 
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,19 +16,15 @@ import br.com.myself.util.Async
 import br.com.myself.util.Utils
 import kotlinx.android.synthetic.main.activity_pesquisar_registros.*
 
-class PesquisarRegistrosDialog : AppCompatActivity() {
+class PesquisarRegistrosActivity : AppCompatActivity() {
     
-    private val registroRepository = RegistroRepository(applicationContext)
+    private val registroRepository by lazy { RegistroRepository(applicationContext) }
     
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pesquisar_registros)
-    
-    
-        button_dialog_pesquisar_registros_fechar.setOnClickListener {
-            finish()
-        }
-    
+        setSupportActionBar(toolbar_pesquisar_registro)
+        
         val adapter = RegistroAdapter()
         adapter.setClickListener(AdapterClickListener(
             onClick = {
@@ -51,20 +47,41 @@ class PesquisarRegistrosDialog : AppCompatActivity() {
         rv_dialog_pesquisar_registros_resultados_busca.adapter = adapter
     
         til_dialog_pesquisar_registros_busca.setEndIconOnClickListener {
-            val busca = et_dialog_pesquisar_registros_busca.text.toString()
+            buscar(til_dialog_pesquisar_registros_busca.editText?.text.toString())
+        }
         
-            if (!busca.isBlank()) {
-                Async.doInBackground({ registroRepository.pesquisarRegistros(busca) }, { resultadoBusca ->
-                    til_dialog_pesquisar_registros_busca.helperText =
-                        "Resultados: ${resultadoBusca.size}"
-                
-                    adapter.submitList(resultadoBusca)
-                
+        til_dialog_pesquisar_registros_busca.editText?.setOnEditorActionListener { v, _, _ ->
+            buscar(v.text.toString())
+        }
+    }
+    
+    private fun buscar(busca: String): Boolean {
+        if (!busca.isBlank()) {
+            Async.doInBackground({ registroRepository.pesquisarRegistros(busca) },
+                { resultadoBusca ->
+                    toolbar_pesquisar_registro.subtitle = "Resultados: ${resultadoBusca.size}"
+            
+                    (rv_dialog_pesquisar_registros_resultados_busca.adapter as RegistroAdapter)
+                        .submitList(resultadoBusca)
+            
                     tv_dialog_pesquisar_registros_sem_resultados.visibility =
                         if (resultadoBusca.isEmpty()) View.VISIBLE else View.GONE
                 })
-            }
+        } else {
+            (rv_dialog_pesquisar_registros_resultados_busca.adapter as RegistroAdapter)
+                .submitList(null)
+            tv_dialog_pesquisar_registros_sem_resultados.visibility = View.VISIBLE
+            toolbar_pesquisar_registro.subtitle = "Resultados: 0"
         }
-    
+        
+        return true
     }
+    
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return super.onContextItemSelected(item)
+    }
+    
 }

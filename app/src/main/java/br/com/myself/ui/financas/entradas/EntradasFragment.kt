@@ -1,4 +1,4 @@
-package br.com.myself.ui.entradas
+package br.com.myself.ui.financas.entradas
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,18 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.com.myself.R
-import br.com.myself.context.EntradaContext
-import br.com.myself.model.Entrada
+import br.com.myself.R
+import br.com.myself.model.dao.EntradaDAO
+import br.com.myself.model.entity.Entrada
 import br.com.myself.observer.Trigger
 import br.com.myself.observer.Events
-import br.com.myself.ui.adapter.EntradasAdapterSection
-import br.com.myself.util.Utils
-import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
+import br.com.myself.ui.adapter.EntradaAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_entradas.*
 import kotlinx.android.synthetic.main.fragment_entradas.view.*
+import java.util.ArrayList
 
 class EntradasFragment : Fragment() {
     
@@ -29,63 +29,58 @@ class EntradasFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         mView = inflater.inflate(R.layout.fragment_entradas, container, false)
-
-        setupView()
-
+        
         return mView
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    
+        val adapter = EntradaAdapter()
+        mView.rv_entradas.adapter = adapter
+        mView.rv_entradas.layoutManager = LinearLayoutManager(mView.context)
         
+        carregarEntradas()
+    
+        view.button_entradas_add.setOnClickListener {
+            iniciarDialogCriarEntrada()
+        }
+        
+        registerObservables()
+        
+    }
+    
+    private fun registerObservables() {
         disposables.add(
             Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe { t ->
-                if (t is Events.UpdateEntradas) {
-                    carregarEntradas()
-                }
-            })
-    }
-
-    private fun setupView() {
-        carregarEntradas()
-        
-        mView.button_entradas_add.setOnClickListener {
-            val dialog =
-                CriarEntradaDialog(mView.context)
-            dialog.show()
-        }
+                .subscribe { t ->
+                    when (t) {
+                        is Events.UpdateEntradas -> carregarEntradas()
+                        is Events.EditarEntrada -> iniciarDialogCriarEntrada(t.entrada)
+                    }
+                })
     }
     
     private fun carregarEntradas() {
-        val entradas = EntradaContext.getDAO(mView.context).getTodasEntradas()
+        val entradas = EntradaDAO(requireContext()).getTodasEntradas()
+        
         mView.tv_entradas_empty.visibility =
             if (entradas.isEmpty()) View.VISIBLE else View.GONE
-        
-        val adapter = SectionedRecyclerViewAdapter()
-        
-        for (ano in Utils.getAnosDisponiveis(entradas)) {
-            for (mes in Utils.getMesDisponivelPorAno(entradas, ano)) {
-                val itens = Utils.filtrarItensPorData(entradas, mes, ano)
-                
-                if (itens.isEmpty()) continue
-                
-                val section = EntradasAdapterSection(
-                    adapter,
-                    itens as List<Entrada>,
-                    mes,
-                    ano
-                )
-                adapter.addSection(section)
-            }
-        }
-    
-        mView.rv_entradas.adapter = adapter
-        mView.rv_entradas.layoutManager = LinearLayoutManager(mView.context)
+        (rv_entradas.adapter as EntradaAdapter).submitList(entradas)
     }
     
-    override fun onDetach() {
-        super.onDetach()
+    private fun iniciarDialogCriarEntrada(entrada: Entrada? = null) {
+        val dialog = CriarEntradaDialog(entrada)
+        dialog.show(childFragmentManager, null)
+    }
+    
+    override fun onDestroyView() {
         disposables.clear()
+        super.onDestroyView()
+    }
+    
+    class EntradaDataViewObject {
+        var referencia_ano_mes: String = ""
+        var entradas: ArrayList<Entrada> = arrayListOf()
     }
 }

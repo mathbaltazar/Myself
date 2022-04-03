@@ -1,4 +1,4 @@
-package br.com.myself.model
+package br.com.myself.model.entity
 
 class Backup {
 

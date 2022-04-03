@@ -1,20 +1,31 @@
-package br.com.myself.database.dao
+package br.com.myself.model.dao
 
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import br.com.myself.database.Database
-import br.com.myself.model.Despesa
-import java.lang.StringBuilder
-import kotlin.collections.ArrayList
+import android.database.sqlite.SQLiteStatement
+import br.com.myself.model.database.Database
+import br.com.myself.model.entity.Despesa
 
 class DespesaDAO(context: Context) : Database<Despesa>(context) {
     
+    private val compiledInsert: SQLiteStatement
+    private val compiledUpdate: SQLiteStatement
+    
+    init {
+        compiledInsert = writableDatabase.compileStatement(" INSERT INTO $TAB_DESPESA " +
+                " ($NOME, $VALOR, $DIA_VENCIMENTO) " +
+                " VALUES (?,?,?)")
+    
+        compiledUpdate = writableDatabase.compileStatement(" UPDATE $TAB_DESPESA SET " +
+                " $NOME = ? , $VALOR = ? , $DIA_VENCIMENTO = ?  WHERE $ID = ? ")
+    }
+    
     override fun bind(cursor: Cursor, elemento: Despesa) {
-        elemento.id = cursor.getLong(cursor.getColumnIndex(ID))
-        elemento.nome = cursor.getString(cursor.getColumnIndex(NOME))
-        elemento.valor = cursor.getDouble(cursor.getColumnIndex(VALOR))
-        elemento.diaVencimento = cursor.getInt(cursor.getColumnIndex(DIA_VENCIMENTO))
+        elemento.id = cursor.getLong(cursor.getColumnIndexOrThrow(ID))
+        elemento.nome = cursor.getString(cursor.getColumnIndexOrThrow(NOME))
+        elemento.valor = cursor.getDouble(cursor.getColumnIndexOrThrow(VALOR))
+        elemento.diaVencimento = cursor.getInt(cursor.getColumnIndexOrThrow(DIA_VENCIMENTO))
     }
     
     fun getTodasDespesas(): ArrayList<Despesa> {
@@ -32,25 +43,29 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
         return despesas
     }
     
-    fun inserir(despesa: Despesa) {
-        val insert =
-            StringBuilder(" INSERT INTO $TAB_DESPESA ")
-        insert.append(" ($NOME, $VALOR, $DIA_VENCIMENTO) ")
-        insert.append(" VALUES ")
-        insert.append(" ('${despesa.nome}', ${despesa.valor}, ${despesa.diaVencimento}) ")
+    fun inserir(despesa: Despesa): Long {
+        compiledInsert.clearBindings()
+        compiledInsert.bindString(1, despesa.nome)
+        compiledInsert.bindDouble(2, despesa.valor)
+        compiledInsert.bindLong(3, despesa.diaVencimento.toLong())
         
-        writableDatabase.execSQL(insert.toString())
+        return compiledInsert.executeInsert()
     }
     
     fun alterar(despesa: Despesa) {
-        val update = StringBuilder()
-        update.append("UPDATE $TAB_DESPESA SET")
-        update.append(" $NOME = '${despesa.nome}' ")
-        update.append(", $VALOR = ${despesa.valor} ")
-        update.append(", $DIA_VENCIMENTO = ${despesa.diaVencimento} ")
-        update.append(" WHERE $ID = ${despesa.id}")
+        compiledUpdate.clearBindings()
+        compiledUpdate.bindString(1, despesa.nome)
+        compiledUpdate.bindDouble(2, despesa.valor)
+        compiledUpdate.bindLong(3, despesa.diaVencimento.toLong())
+        compiledUpdate.bindLong(4, despesa.id)
         
-        writableDatabase.execSQL(update.toString())
+        compiledUpdate.executeUpdateDelete()
+    }
+    
+    fun deletar(despesa: Despesa) {
+        val sql = "DELETE FROM $TAB_DESPESA WHERE $ID = ${despesa.id}"
+        
+        writableDatabase.execSQL(sql)
     }
     
     fun restaurarDespesas(despesas: List<Despesa>?) {
@@ -82,77 +97,6 @@ class DespesaDAO(context: Context) : Database<Despesa>(context) {
         }
         
         db.endTransaction()
-    }
-    
-    fun deletar(despesa: Despesa) {
-        val sql = "DELETE FROM $TAB_DESPESA WHERE $ID = ${despesa.id}"
-        
-        writableDatabase.execSQL(sql)
-    }
-    
-    fun getDespesaPorCodigo(id: Long): Despesa? {
-        val query = "SELECT * FROM $TAB_DESPESA WHERE $ID = $id"
-        
-        val cursor = readableDatabase.rawQuery(query, null)
-        
-        if (cursor.moveToNext()) {
-            val despesa = Despesa()
-            bind(cursor, despesa)
-            cursor.close()
-            return despesa
-        }
-        
-        cursor.close()
-        return null
-    }
-    
-    fun getQuantidadeDespesas(): Int {
-        val sql = "SELECT COUNT(*) FROM $TAB_DESPESA"
-        
-        val cursor = readableDatabase.rawQuery(sql, null)
-        cursor.moveToNext()
-        val count = cursor.getInt(0)
-        cursor.close()
-        return count
-    }
-    
-    fun getValorTotalDespesas(): Double {
-        val sql = "SELECT SUM($VALOR) FROM $TAB_DESPESA"
-        
-        val cursor = readableDatabase.rawQuery(sql, null)
-        cursor.moveToNext()
-        val total = cursor.getDouble(0)
-        cursor.close()
-        return total
-    }
-    
-    fun getTotalPagoDespesas(): Double {
-        val sql = "SELECT SUM($VALOR) FROM ${RegistroDAO.TAB_REGISTRO} WHERE ${RegistroDAO.FK_DESPESA} <> 0"
-    
-        val cursor = readableDatabase.rawQuery(sql, null)
-        cursor.moveToNext()
-        val total = cursor.getDouble(0)
-        cursor.close()
-        return total
-    }
-    
-    fun atualizarValor(despesa: Despesa) {
-        val sql = "UPDATE $TAB_DESPESA SET $VALOR = ${despesa.valor} WHERE $ID = ${despesa.id}"
-        
-        writableDatabase.execSQL(sql)
-    }
-    
-    fun atualizarNome(despesa: Despesa) {
-        val sql = "UPDATE $TAB_DESPESA SET $NOME = '${despesa.nome}' WHERE $ID = ${despesa.id}"
-    
-        writableDatabase.execSQL(sql)
-    }
-    
-    fun atualizarDiaVencimento(despesa: Despesa) {
-        val sql =
-            "UPDATE $TAB_DESPESA SET $DIA_VENCIMENTO = ${despesa.diaVencimento} WHERE $ID = ${despesa.id}"
-    
-        writableDatabase.execSQL(sql)
     }
     
     companion object {

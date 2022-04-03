@@ -1,16 +1,14 @@
-package br.com.myself.model
+package br.com.myself.model.entity
 
-import br.com.myself.model.exception.ModelException
-import java.math.BigDecimal
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 class Despesa {
-    var id: Long = 0
-    var nome: String? = null
-    var valor: Double = 0.0
-    var diaVencimento: Int = 0
+    @PrimaryKey(autoGenerate = true) var id: Long = 0
+    @ColumnInfo var nome: String? = null
+    @ColumnInfo var valor: Double = 0.0
+    @ColumnInfo var diaVencimento: Int = 0
     
-    
-    override fun toString(): String {
-        return "Despesa(id=$id, nome=$nome, valor=$valor, diaVencimento=$diaVencimento)"
-    }
 }

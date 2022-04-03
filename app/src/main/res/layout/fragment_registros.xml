@@ -5,37 +5,202 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:ignore="ContentDescription">
+    tools:ignore="ContentDescription,HardcodedText">
 
-    <TextView
-        android:id="@+id/tv_registros_sem_registros"
+    <!--PAINEL DADOS E AÇÕES-->
+    <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/all_default_layout_offset_16"
-        android:text="Não há registros."
-        android:textAlignment="center"
-        android:textSize="@dimen/text_size_16"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        app:alignItems="center"
+        app:justifyContent="space_between">
+
+        <!--PAINEL DADOS DO MÊS SELECIONADO-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/all_default_layout_offset_4">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gasto do mês: " />
+
+                <TextView
+                    android:id="@+id/tv_registros_total_registros_mes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    tools:text="R$ 0,00 " />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Registros: " />
+
+                <TextView
+                    android:id="@+id/tv_registros_quantidade_registros_mes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    android:textStyle="bold"
+                    tools:text="15" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--PAINEL DE AÇÕES-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/all_default_layout_offset_4"
+            android:gravity="center"
+            android:orientation="horizontal">
 
 
-    <ProgressBar
-        android:id="@+id/progress_registros_carregando"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_registros_pesquisar"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="38dp"
+                android:layout_height="wrap_content"
+                app:cornerRadius="32dp"
+                app:icon="@drawable/ic_search"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/fab_registros_add_registro"
+                android:layout_width="38dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/all_default_layout_offset_4"
+                app:cornerRadius="32dp"
+                app:icon="@drawable/ic_add"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp" />
+
+
+        </LinearLayout>
+    </com.google.android.flexbox.FlexboxLayout>
+
+
+    <!--MONTH PAGE NAVIGATOR-->
+    <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_margin="@dimen/all_default_layout_offset_16"
-        android:indeterminate="true"
-        android:indeterminateBehavior="cycle"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/all_default_layout_offset_4"
+        android:paddingHorizontal="@dimen/all_default_layout_offset_8"
+        app:alignItems="center"
+        app:justifyContent="space_between">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_page_mes_anterior"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            app:cornerRadius="19dp"
+            app:icon="@drawable/ic_angle_left"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp" />
+
+        <TextView
+            android:id="@+id/textview_mes_ano"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold"
+            tools:visibility="gone"
+            tools:text="MARÇO/2022"/>
+
+        <LinearLayout
+            android:id="@+id/component_dropdown_mes_ano"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/all_default_layout_offset_4"
+                android:hint="Mês">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/dropdown_pesquisa_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:inputType="none"
+                    android:padding="0dp"
+                    tools:text="JANEIRO" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/all_default_layout_offset_4"
+                android:hint="Ano">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/dropdown_pesquisa_ano"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:inputType="none"
+                    android:padding="0dp"
+                    tools:text="2022" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_page_proximo_mes"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            app:cornerRadius="19dp"
+            app:icon="@drawable/ic_angle_right"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp" />
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <!--LABEL DE NENHUM REGISTRO-->
+    <TextView
+        android:id="@+id/textview_nenhum_registro_encontrado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/off_primary"
+        android:gravity="center"
+        android:paddingVertical="@dimen/all_default_layout_offset_8"
+        android:text="Nenhum registro encontrado."
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_16"
+        android:textStyle="bold" />
+
+
+    <!--LISTA DE REGISTROS-->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_registros"
+        android:id="@+id/recyclerview_registros"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/all_default_layout_offset_4"
+        android:background="@color/off_primary"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/all_default_layout_offset_4"
         tools:itemCount="3"
-        tools:listitem="@layout/layout_section_item_registro" />
+        tools:listitem="@layout/layout_adapter_registro" />
+
 
 </LinearLayout>

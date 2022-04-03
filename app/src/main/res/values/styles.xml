@@ -6,18 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionModeOverlay">true</item>
-
-        <!-- Custom Action Mode UI -->
-        <item name="actionModeCloseDrawable">@drawable/ic_close</item>
-        <item name="actionModeStyle">@style/ActionModeTheme</item>
     </style>
 
     <style name="Widget.MaterialComponents.Button.NoInset" parent="Widget.MaterialComponents.Button">
@@ -25,18 +19,12 @@
         <item name="android:insetBottom">4dp</item>
     </style>
 
-    <style name="ActionModeTheme" parent="Widget.AppCompat.ActionMode">
-        <item name="background">@android:color/white</item>
-        <item name="titleTextStyle">@style/ActionModeTitleTextStyle</item>
-        <item name="subtitleTextStyle">@style/ActionModeSubtitleTextStyle</item>
+    <style name="CalendarPickerLayoutTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="materialCalendarHeaderLayout">@style/MaterialCalendarHeader</item>
     </style>
 
-    <style name="ActionModeTitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionMode.Title">
-        <item name="android:textColor">@color/colorPrimary</item>
-    </style>
-
-    <style name="ActionModeSubtitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionMode.Subtitle">
-        <item name="android:textColor">@android:color/holo_red_dark</item>
+    <style name="MaterialCalendarHeader" parent="@style/Widget.MaterialComponents.MaterialCalendar.HeaderLayout">
+        <item name="android:visibility">gone</item>
     </style>
 
 </resources>

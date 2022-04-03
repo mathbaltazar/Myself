@@ -1,34 +1,53 @@
-package br.com.myself.ui.entradas
+package br.com.myself.ui.financas.entradas
 
-import android.app.Dialog
-import android.content.Context
-import android.view.WindowManager
-import com.com.myself.R
-import br.com.myself.context.EntradaContext
-import br.com.myself.model.Entrada
-import br.com.myself.observer.Trigger
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import androidx.fragment.app.DialogFragment
+import br.com.myself.R
+import br.com.myself.components.CalendarPickerEditText
+import br.com.myself.model.dao.EntradaDAO
+import br.com.myself.model.entity.Entrada
 import br.com.myself.observer.Events
+import br.com.myself.observer.Trigger
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
+import br.com.myself.util.Utils.Companion.getCalendar
+import br.com.myself.util.Utils.Companion.setUpDimensions
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_criar_entrada.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
+import org.jetbrains.anko.support.v4.toast
 import java.math.BigDecimal
 
-class CriarEntradaDialog(context: Context) : Dialog(context) {
+class CriarEntradaDialog(private val entrada: Entrada? = null) : DialogFragment() {
     
-    private var isEdit: Boolean = false
-    private var idEntradaEmEdicao: Int? = null
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        return inflater.inflate(R.layout.dialog_criar_entrada, container, false)
+    }
     
-    init {
-        setContentView(R.layout.dialog_criar_entrada)
-        setupView()
-        setUpDimensions()
+    override fun onStart() {
+        super.onStart()
+        
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.white)
+        dialog?.setUpDimensions(width = (Utils.getScreenSize(requireContext()).x * 0.9).toInt())
+        setUpView()
     }
 
-    private fun setupView() {
+    private fun setUpView() {
         
-        dateinput_dialog_nova_entrada_data.setDate(Utils.getUTCCalendar())
+        if (entrada != null) { // Significa edição
+            textinput_dialog_nova_entrada_descricao.setText(entrada.descricao)
+            textinput_dialog_nova_entrada_valor.setText(Utils.formatCurrency(entrada.valor))
+            calendar_picker_dialog_nova_entrada_data.setTime(entrada.data.timeInMillis)
+        }
 
         textinput_dialog_nova_entrada_valor.apply {
             addTextChangedListener(CurrencyMask(this))
@@ -36,63 +55,42 @@ class CriarEntradaDialog(context: Context) : Dialog(context) {
                 if (hasFocus) (v as TextInputEditText).setSelection(v.length()) }
         }
         
-        button_dialog_nova_entrada_adicionar.setOnClickListener {
+        calendar_picker_dialog_nova_entrada_data.setOnClickListener {
+            (it as CalendarPickerEditText).showCalendar(childFragmentManager, null)
+        }
+        
+        button_dialog_nova_entrada_salvar.setOnClickListener {
 
             val valor = textinput_dialog_nova_entrada_valor.text.toString()
-            val descricao = textinput_dialog_nova_entrada_descricao.text.toString()
-            val data = dateinput_dialog_nova_entrada_data.text.toString()
+            val fonte = textinput_dialog_nova_entrada_descricao.text.toString()
 
-            if (descricao.isBlank()) {
-                textinput_dialog_nova_entrada_descricao.error =
-                    "Descrição não pode ficar em branco"
+            if (fonte.isBlank()) {
+                textinput_dialog_nova_entrada_descricao.requestFocus()
+                Trigger.launch(Events.Toast("Campo Fonte vazio"))
             } else if (!isValorValido(valor)) {
-                textinput_dialog_nova_entrada_valor.error = "O valor deve ser maior que zero"
-            } else if (!Utils.isDataValida(data)) {
-                dateinput_dialog_nova_entrada_data.error = "Data inválida"
+                textinput_dialog_nova_entrada_valor.requestFocus()
+                Trigger.launch(Events.Toast("Campo Valor inválido"))
             } else {
 
-                val novaEntrada = Entrada()
-                novaEntrada.valor = Utils.unformatCurrency(valor).toDouble()
-                novaEntrada.descricao = descricao
-                novaEntrada.data = dateinput_dialog_nova_entrada_data.getTime()
-
-                if (isEdit) {
-                    novaEntrada.id = idEntradaEmEdicao
-                    EntradaContext.getDAO(context).alterar(novaEntrada)
-                } else {
-                    EntradaContext.getDAO(context).inserir(novaEntrada)
-                }
-
-                Trigger.launch(Events.Snack("Adicionado!"), Events.UpdateEntradas())
-                cancel()
+                val novaentrada = Entrada(
+                    id = entrada?.id,
+                    valor = Utils.unformatCurrency(valor).toDouble(),
+                    descricao = fonte.trim(),
+                    data = calendar_picker_dialog_nova_entrada_data.getTime().getCalendar()
+                )
+                
+                EntradaDAO(it.context).inserir(novaentrada)
+                
+                toast("Dados salvos!")
+                Trigger.launch(Events.UpdateEntradas)
+                dismiss()
             }
 
         }
-    }
-
-    private fun setUpDimensions() {
-        val lp = WindowManager.LayoutParams()
-        lp.copyFrom(window?.attributes)
-
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-
-        window?.attributes = lp
     }
 
     private fun isValorValido(valor: String): Boolean {
         return valor.isNotBlank() && Utils.unformatCurrency(valor).toBigDecimal() > BigDecimal.ZERO
     }
     
-    fun edit(entrada: Entrada) {
-        this.isEdit = true
-        this.idEntradaEmEdicao = entrada.id
-    
-        textinput_dialog_nova_entrada_descricao.setText(entrada.descricao)
-        textinput_dialog_nova_entrada_valor.setText(Utils.formatCurrency(entrada.valor))
-        dateinput_dialog_nova_entrada_data.setDate(entrada.data!!)
-    
-        button_dialog_nova_entrada_adicionar.text = "Salvar"
-        tv_dialog_nova_entrada_title.text = "Editar Entrada"
-    }
 }

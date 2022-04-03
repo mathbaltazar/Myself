@@ -1,9 +1,9 @@
 package br.com.myself.service.dto
 
-import br.com.myself.model.Backup
-import br.com.myself.model.Despesa
-import br.com.myself.model.Entrada
-import br.com.myself.model.Registro
+import br.com.myself.model.entity.Backup
+import br.com.myself.model.entity.Despesa
+import br.com.myself.model.entity.Entrada
+import br.com.myself.model.entity.Registro
 
 class SincronizarDadosBackupDTO {
 

@@ -6,7 +6,11 @@
         android:enabled="true"
         android:icon="@drawable/ic_registros"
         android:title="Registros" />
-
+    <item
+        android:id="@+id/bottom_navigation_entradas"
+        android:enabled="true"
+        android:icon="@drawable/ic_drawer_entradas"
+        android:title="Entradas" />
     <item
         android:id="@+id/bottom_navigation_despesas"
         android:enabled="true"

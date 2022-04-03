@@ -4,41 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
     android:orientation="vertical"
-    tools:context="br.com.myself.ui.despesa.DetalhesDespesaActivity"
-    tools:ignore="contentDescription">
+    tools:context="br.com.myself.ui.financas.despesas.DetalhesDespesaActivity"
+    tools:ignore="contentDescription,HardcodedText">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset_8"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/all_default_layout_offset_8"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="@dimen/all_default_layout_offset_8"
             android:src="@drawable/ic_despesa"
             app:tint="@color/colorPrimary" />
 
 
         <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_detalhes_despesa_nome"
+            android:id="@+id/til_detalhes_despesa_nome"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@android:color/white"
+            app:expandedHintEnabled="false"
             tools:enabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_detalhes_despesa_nome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/nome"
+                android:hint="Nome"
                 tools:text="Pensão Alimentícia" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -47,21 +48,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset_8"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/all_default_layout_offset_8"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/all_default_layout_offset_8"
             android:src="@drawable/ic_money"
             app:tint="@color/colorPrimary" />
 
 
         <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_detalhes_despesa_valor"
+            android:id="@+id/til_detalhes_despesa_valor"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                 android:id="@+id/et_detalhes_despesa_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/valor"
+                android:hint="Valor"
                 android:inputType="number"
                 tools:text="R$ 300,00" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -84,14 +84,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/all_default_layout_offset_8"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/all_default_layout_offset_8"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/all_default_layout_offset_8"
             android:src="@drawable/ic_calendar"
             app:tint="@color/colorPrimary" />
@@ -101,9 +100,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/vencimento"
-            app:boxBackgroundColor="@android:color/white"
-            tools:enabled="true">
+            android:hint="Vencimento"
+            app:boxBackgroundColor="@android:color/white">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/et_detalhes_despesa_vencimento"
@@ -132,10 +130,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_detalhes_despesa_adicionar_registro"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Registrar"
+            app:cornerRadius="@dimen/all_default_layout_offset_16"
             app:icon="@drawable/ic_add" />
     </LinearLayout>
 
@@ -150,8 +149,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_detalhes_despesa_registros"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
         android:layout_marginBottom="@dimen/all_default_layout_offset_16"
-        tools:listitem="@layout/layout_section_item_registro" />
+        tools:listitem="@layout/layout_adapter_registro" />
 </LinearLayout>

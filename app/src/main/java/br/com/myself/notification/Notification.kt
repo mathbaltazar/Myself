@@ -8,8 +8,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.com.myself.R
-import br.com.myself.ui.MainActivity
+import br.com.myself.R
+import br.com.myself.ui.financas.FinancasActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.util.*
@@ -42,15 +42,13 @@ class Notification: FirebaseMessagingService() {
         }
 
         fun notificar(context: Context) {
-            val intent = Intent(context, MainActivity::class.java).apply {
+            val intent = Intent(context, FinancasActivity::class.java).apply {
                 setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 action = "abrir_adicionar_gasto"
             }
             val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-            val notificationBuilder = NotificationCompat.Builder(context,
-                CHANNEL_ID
-            )
+            val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentTitle("Gastou alguma coisa?")
                 .setContentText("Coloque aqui no seu registro, não esqueça!")
@@ -59,9 +57,7 @@ class Notification: FirebaseMessagingService() {
                 .setAutoCancel(false)
                 .setWhen(Date().time)
     
-            createNotificationChannel(
-                context
-            )
+            createNotificationChannel(context)
             
             with(NotificationManagerCompat.from(context)) {
                 notify(notificationId, notificationBuilder.build())
@@ -72,7 +68,7 @@ class Notification: FirebaseMessagingService() {
     }
     
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        val intent = Intent(applicationContext, MainActivity::class.java).apply {
+        val intent = Intent(applicationContext, FinancasActivity::class.java).apply {
             setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             action = "abrir_adicionar_gasto"
         }

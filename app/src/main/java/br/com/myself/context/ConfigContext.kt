@@ -1,7 +1,7 @@
 package br.com.myself.context
 
 import android.content.Context
-import br.com.myself.database.dao.BackupDAO
+import br.com.myself.model.dao.BackupDAO
 
 class ConfigContext {
     companion object {

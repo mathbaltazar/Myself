@@ -1,10 +1,10 @@
-package br.com.myself.database.dao
+package br.com.myself.model.dao
 
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import br.com.myself.database.Database
-import br.com.myself.model.Backup
+import br.com.myself.model.database.Database
+import br.com.myself.model.entity.Backup
 
 class BackupDAO(context: Context) : Database<Backup>(context) {
 

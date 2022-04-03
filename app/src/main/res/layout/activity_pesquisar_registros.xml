@@ -4,56 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical"
-    tools:ignore="ContentDescription,HardcodedText">
+    tools:context=".ui.financas.registros.PesquisarRegistrosActivity"
+    tools:ignore="HardcodedText">
 
-    <RelativeLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/backgroung_gradient_app_color"
-        android:orientation="horizontal">
+        android:background="@drawable/backgroung_gradient_app_color">
 
-        <ImageView
-            android:id="@+id/button_dialog_pesquisar_registros_fechar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/all_default_layout_offset_8"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="@dimen/all_default_layout_offset_8"
-            app:srcCompat="@drawable/ic_close"
-            app:tint="@android:color/white" />
-
-        <TextView
-            android:id="@+id/textview_financas_titulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="@dimen/all_default_layout_offset_16"
-            android:text="Pesquisa de Registros"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_18"
-            android:textStyle="bold" />
-    </RelativeLayout>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_pesquisar_registro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navigationIcon="@drawable/ic_close"
+            app:navigationIconTint="@android:color/white"
+            app:subtitle="Resultados: 0"
+            app:subtitleTextColor="@color/colorSecondary"
+            app:title="Pesquisa de Registros"
+            app:titleTextColor="@android:color/white" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_dialog_pesquisar_registros_busca"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:helperText="Resultados: 0"
-        app:boxBackgroundColor="@android:color/white"
+        android:layout_margin="@dimen/all_default_layout_offset_8"
         app:endIconDrawable="@drawable/ic_search"
-        app:endIconMode="custom">
+        app:endIconMode="custom"
+        app:hintEnabled="false">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_dialog_pesquisar_registros_busca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/all_default_layout_offset_8"
             android:hint="Digite a sua busca..."
+            android:imeOptions="actionSearch"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,7 +47,7 @@
         android:id="@+id/tv_dialog_pesquisar_registros_sem_resultados"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/all_default_layout_offset_4"
+        android:layout_marginTop="@dimen/all_default_layout_offset_8"
         android:text="Sem resultados."
         android:textAlignment="center" />
 
@@ -69,6 +55,7 @@
         android:id="@+id/rv_dialog_pesquisar_registros_resultados_busca"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/all_default_layout_offset_8" />
+        android:layout_margin="@dimen/all_default_layout_offset_8"
+        android:layout_marginTop="@dimen/all_default_layout_offset_8" />
 
 </LinearLayout>

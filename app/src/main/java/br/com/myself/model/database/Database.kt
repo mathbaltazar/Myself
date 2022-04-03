@@ -1,13 +1,10 @@
-package br.com.myself.database
+package br.com.myself.model.database
 
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import br.com.myself.database.dao.BackupDAO
-import br.com.myself.database.dao.DespesaDAO
-import br.com.myself.database.dao.EntradaDAO
-import br.com.myself.database.dao.RegistroDAO
+import br.com.myself.model.dao.*
 
 abstract class Database<T>(context: Context) :
     SQLiteOpenHelper(context,
@@ -16,16 +13,17 @@ abstract class Database<T>(context: Context) :
     ) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        RegistroDAO.onCreate(db)
+        //RegistroDAO.onCreate(db)
         EntradaDAO.onCreate(db)
         DespesaDAO.onCreate(db)
         BackupDAO.onCreate(db)
+        CriseDAO.onCreate(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { }
 
     abstract fun bind(cursor: Cursor, elemento: T)
-
+    
     companion object {
         private const val DATABASE_NAME = "RegularDB"
         private const val DATABASE_VERSION = 1

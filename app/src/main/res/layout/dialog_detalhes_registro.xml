@@ -1,125 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/all_default_layout_offset_8">
+    app:cardCornerRadius="@dimen/all_default_layout_offset_4"
+    tools:ignore="HardcodedText,ContentDescription">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/all_default_layout_offset_8"
         android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/backgroung_gradient_app_color">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="DETALHES"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_detalhes_registro_alterar"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="42dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/all_default_layout_offset_4"
+                app:cornerRadius="21dp"
+                app:icon="@drawable/ic_edit"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@android:color/white" />
+
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="@dimen/all_default_layout_offset_8">
 
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/tv_detalhes_registro_referencia_despesa"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-                android:layout_weight="1"
-                android:text="DETALHES"
-                android:textColor="@color/colorPrimary"
+                android:layout_marginEnd="@dimen/all_default_layout_offset_8"
+                android:text="*Este registro pertence à um despesa"
+                android:textAlignment="textEnd"
+                android:textSize="@dimen/text_size_12"
+                android:textStyle="italic"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/all_default_layout_offset_8"
+                android:text="DESCRIÇÃO: "
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/tv_detalhes_registro_descricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/all_default_layout_offset_8"
+                android:text="Academia"
                 android:textSize="@dimen/text_size_16"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/button_detalhes_movimento_opcoes"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="@dimen/all_default_layout_offset_8"
-                android:src="@drawable/ic_more_vertical" />
+                android:text="VALOR: "
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/tv_detalhes_registro_valor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/all_default_layout_offset_8"
+                android:text="R$ 250,00"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DATA: "
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/tv_detalhes_registro_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/all_default_layout_offset_8"
+                android:text="25/10/2020"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold|italic" />
+
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1.5dp"
-            android:layout_marginVertical="@dimen/all_default_layout_offset_8"
-            android:background="@color/off_white" />
-
-        <TextView
-            android:id="@+id/tv_detalhes_movimento_referencia_despesa"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-            android:layout_marginBottom="@dimen/all_default_layout_offset_8"
-            android:text="*Este registro pertence à um despesa"
-            android:textAlignment="textEnd"
-            android:textSize="@dimen/text_size_12"
-            android:textStyle="italic"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-            android:text="DESCRIÇÃO: "
-            android:textSize="@dimen/text_size_16" />
-
-        <TextView
-            android:id="@+id/tv_detalhes_movimento_descricao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/all_default_layout_offset_8"
-            android:text="Pensão Alimenticia"
-            android:textSize="@dimen/text_size_16"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-            android:text="VALOR: "
-            android:textSize="@dimen/text_size_16" />
-
-        <TextView
-            android:id="@+id/tv_detalhes_movimento_valor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/all_default_layout_offset_8"
-            android:text="R$ 250,00"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/text_size_16"
-            android:textStyle="bold|italic" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-            android:text="DATA: "
-            android:textSize="@dimen/text_size_16" />
-
-        <TextView
-            android:id="@+id/tv_detalhes_movimento_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/all_default_layout_offset_8"
-            android:text="25/10/2020"
-            android:textSize="@dimen/text_size_16"
-            android:textStyle="bold|italic" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_detalhes_movimento_alterar"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8"
-            android:layout_marginTop="@dimen/all_default_layout_offset_8"
-            android:text="Alterar"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/text_size_16"
-            app:strokeColor="@color/colorPrimary" />
-
-
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

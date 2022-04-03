@@ -1,151 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="@dimen/all_default_layout_offset_8">
+    tools:ignore="HardcodedText">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registrar Despesa"
-        android:textAllCaps="true" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_marginVertical="@dimen/all_default_layout_offset_4"
-        android:background="@color/off_white" />
-
-    <TextView
-        android:id="@+id/tv_dialog_registrar_despesa_nome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Pensão Alimentícia"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/text_size_24" />
-
-    <TextView
-        android:id="@+id/tv_dialog_registrar_despesa_valor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="R$ 44,00"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/text_size_24"
+        android:background="@drawable/backgroung_gradient_app_color"
+        android:padding="@dimen/all_default_layout_offset_8"
+        android:text="REGISTRAR DESPESA"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_16"
         android:textStyle="bold" />
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_marginVertical="@dimen/all_default_layout_offset_4"
-        android:background="@color/off_white" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/all_default_layout_offset_8"
-        android:checked="true"
-        android:text="Data"
-        android:textAllCaps="true"
-        android:textColor="#767676" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:nestedScrollingEnabled="true"
+        android:orientation="vertical"
+        android:padding="@dimen/all_default_layout_offset_8">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_dialog_registrar_despesa_hoje"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_dialog_registrar_despesa_nome"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/all_default_layout_offset_4"
-            android:layout_weight="1"
-            android:checkable="true"
-            android:checked="true"
-            android:text="Hoje"
-            android:textAlignment="center" />
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_24"
+            tools:text="Pensão Alimentícia" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_dialog_registrar_despesa_outra_data"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_dialog_registrar_despesa_valor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_24"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="R$ 44,00"
+            tools:visibility="visible" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginVertical="@dimen/all_default_layout_offset_4"
+            android:background="@color/off_white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset_8"
+            android:checked="true"
+            android:text="Valor"
+            android:textAllCaps="true"
+            android:textColor="#767676" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_dialog_registrar_despesa_novo_valor"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/all_default_layout_offset_8">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_dialog_registrar_despesa_valor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_18"
+                tools:text="R$ 0,00" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/fbl_dialog_registrar_despesa_sugestoes_valor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:flexWrap="wrap">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/all_default_layout_offset_4"
+                android:layout_marginBottom="@dimen/all_default_layout_offset_8"
+                android:checked="true"
+                android:text="Sugestões..."
+                android:textColor="#767676" />
+
+            <!--<include
+                android:visibility="gone"
+                tools:visibility="visible"
+                layout="@layout/button_dialog_registrar_despesa_sugestao" />-->
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginVertical="@dimen/all_default_layout_offset_4"
+            android:background="@color/off_white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/all_default_layout_offset_8"
+            android:checked="true"
+            android:text="Data"
+            android:textAllCaps="true"
+            android:textColor="#767676" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <br.com.myself.components.CalendarPickerEditText
+                android:id="@+id/calendar_picker_dialog_registrar_despesa_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textSize="@dimen/text_size_18" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginVertical="@dimen/all_default_layout_offset_4"
+            android:background="@color/off_white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_dialog_registrar_despesa_registrar"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/all_default_layout_offset_4"
-            android:layout_weight="1"
-            android:checkable="true"
-            android:text="Outra data"
-            android:textAlignment="center" />
+            android:text="Registrar"
+            app:strokeColor="@color/colorAccent" />
+
     </LinearLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_dialog_registrar_despesa_data"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:visibility="visible"
-        android:visibility="gone">
-
-        <br.com.myself.components.DateInputText
-            android:id="@+id/dateinput_dialog_registrar_despesa_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Data"
-            android:inputType="number"
-            tools:text="12/12/2012"
-            android:textSize="@dimen/text_size_18" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switch_dialog_registrar_despesa_reajuste"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Reajuste ?"
-        android:textAllCaps="true"
-        android:textColor="#767676" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_dialog_registrar_despesa_novo_valor"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/all_default_layout_offset_8"
-        tools:visibility="visible"
-        android:visibility="gone">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_dialog_registrar_despesa_valor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Valor"
-            android:inputType="number"
-            android:text="R$ 0,00"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/text_size_18" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_marginVertical="@dimen/all_default_layout_offset_4"
-        android:background="@color/off_white" />
-
-    <Button
-        android:id="@+id/button_dialog_registrar_despesa_voltar"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/all_default_layout_offset_4"
-        android:text="voltar" />
-
-    <Button
-        android:id="@+id/button_dialog_registrar_despesa_registrar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/all_default_layout_offset_4"
-        android:text="Registrar" />
-
-
 </LinearLayout>

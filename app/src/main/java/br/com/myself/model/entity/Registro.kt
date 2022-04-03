@@ -1,24 +1,23 @@
-package br.com.myself.model
+package br.com.myself.model.entity
 
-import br.com.myself.util.IDateFilterable
+import androidx.room.*
+import java.util.*
 
-class Registro : IDateFilterable {
-    
-    var id: Long? = null
-    var descricao: String? = null
-    var outros: String? = null
-    var data: Long? = 0
-    var referencia_mes_ano: String? = null
-    var valor: Double = 0.0
-    var fk_despesa: Long? = null
-    
-    override fun getDate(): Long? {
-        return data
-    }
-    
-    override fun toString(): String {
-        return "[id=$id, descricao=$descricao, outros=$outros, data=$data, referencia_mes_ano=$referencia_mes_ano, valor=$valor, fk_despesa=$fk_despesa]"
-    }
-    
-    
-}
+@Entity(
+    /*foreignKeys = arrayOf(
+        ForeignKey(
+            entity = Despesa::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("despesa_id"),
+            onDelete = ForeignKey.SET_NULL
+        )
+    )*/
+)
+data class Registro(
+    @PrimaryKey(autoGenerate = true) var id: Long? = null,
+    @ColumnInfo val descricao: String,
+    @ColumnInfo val valor: Double,
+    @ColumnInfo val data: Calendar,
+    @ColumnInfo val outros: String? = null,
+    @ColumnInfo val despesa_id: Long? = null
+)

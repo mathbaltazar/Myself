@@ -37,7 +37,7 @@
                 android:id="@+id/tv_selecionar_despesa_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_size_16"
                 android:textStyle="bold"
                 tools:text="R$ 250,00" />

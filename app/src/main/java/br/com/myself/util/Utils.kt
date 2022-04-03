@@ -1,5 +1,6 @@
 package br.com.myself.util
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Point
 import android.view.WindowManager
@@ -11,25 +12,49 @@ import java.util.*
 class Utils {
     companion object {
         private val mLocale = Locale("pt", "BR")
-        private val sdf = SimpleDateFormat("dd/MM/yyyy",
-            mLocale
+        private val sdf = SimpleDateFormat("dd/MM/yyyy", mLocale)
+        val MESES_STRING = arrayOf(
+            "JANEIRO",
+            "FEVEREIRO",
+            "MARÇO",
+            "ABRIL",
+            "MAIO",
+            "JUNHO",
+            "JULHO",
+            "AGOSTO",
+            "SETEMBRO",
+            "OUTUBRO",
+            "NOVEMBRO",
+            "DEZEMBRO"
         )
-
+        val ANOS = (2000..getCalendar().get(Calendar.YEAR)).sortedDescending()
+    
+    
         fun Calendar.formattedDate(): String {
             return sdf.format(this.time)
         }
 
-        fun Long.formattedDate(): String {
-            return sdf.format(Date(this))
+        fun Long?.formattedDate(): String {
+            return sdf.format(Date(this ?: 0))
+        }
+        
+        fun Long?.getCalendar(): Calendar {
+            return getCalendar(this ?: 0)
         }
     
-        fun getUTCCalendar(): Calendar {
-            return Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        fun getCalendar(): Calendar {
+            return GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"), mLocale)
+        }
+    
+        fun getCalendar(time: Long): Calendar {
+            val calendar = getCalendar()
+            calendar.setTimeInMillis(time)
+            return calendar
         }
 
         fun formatCurrency(valor: Double?): String {
             return NumberFormat.getCurrencyInstance(mLocale)
-                .format(valor)
+                .format(valor ?: 0)
                 .replace("R$", "R$ ")
                 .trim()
         }
@@ -70,51 +95,41 @@ class Utils {
             return true
         }
     
-        fun getMesString(mes: Int, ano: Int): String {
-            val mesExtense = when (mes) {
-                1 -> "JANEIRO"
-                2 -> "FEVEREIRO"
-                3 -> "MARÇO"
-                4 -> "ABRIL"
-                5 -> "MAIO"
-                6 -> "JUNHO"
-                7 -> "JULHO"
-                8 -> "AGOSTO"
-                9 -> "SETEMBRO"
-                10 -> "OUTUBRO"
-                11 -> "NOVEMBRO"
-                12 -> "DEZEMBRO"
-                else -> ""
-            }
-            
-            return "$mesExtense/$ano"
-        }
-        
         fun getScreenSize(context: Context): Point {
             val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val size = Point()
             wm.defaultDisplay.getSize(size)
+            
+            /* TODO AVALIAR MELHOR POSSIBILIDADE
+            
+            val x = wm.currentWindowMetrics.bounds.width()
+            val y = wm.currentWindowMetrics.bounds.height()
+    
+            Log.i("SCREEN SIZE INFORMATION","Utils.getScreenSize() - currentWindowMetrics | X: $x - Y: $y")*/
+            
             return size
         }
     
-        fun getAnosDisponiveis(itens: List<IDateFilterable>): Collection<Int> {
-            val anos = itens.map { it.getDate()?.formattedDate()?.substring(6) }
-            return anos.distinct().map { it!!.toInt() }
+        /**
+         * @param width Set WindowManager.LayoutParams.MATCH_PARENT as default.
+         * @param height Set WindowManager.LayoutParams.WRAP_CONTENT as default.
+         * @param screenWidthPercent If not set or value passed is <= 0, the attribute *width* will be considered.
+         */
+        fun Dialog.setUpDimensions(
+            width: Int = WindowManager.LayoutParams.MATCH_PARENT,
+            height: Int = WindowManager.LayoutParams.WRAP_CONTENT,
+            screenWidthPercent: Int = 0
+        ) {
+            val lp = WindowManager.LayoutParams()
+            lp.copyFrom(window?.attributes)
+    
+            lp.width = if (screenWidthPercent <= 0) width
+            else (getScreenSize(context).x * screenWidthPercent / 100)
+            
+            lp.height = height
+    
+            window?.attributes = lp
         }
     
-        fun getMesDisponivelPorAno(itens: List<IDateFilterable>, ano: Int): Collection<Int> {
-            val meses = itens.filter { it.getDate()?.formattedDate()?.substring(6) == ano.toString() }.map {
-                it.getDate()?.formattedDate()?.substring(3, 5)
-            }
-            return meses.distinct().map { it!!.toInt() }
-        }
-    
-        fun filtrarItensPorData(itens: List<IDateFilterable>, mes: Int, ano: Int): List<IDateFilterable> {
-            return itens.filter {
-                it.getDate()?.formattedDate()?.substring(6) == ano.toString() && it.getDate()?.formattedDate()
-                    ?.substring(3, 5)?.toInt() == mes
-            }
-        
-        }
     }
 }

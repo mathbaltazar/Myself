@@ -1,11 +1,12 @@
-package br.com.myself.database.dao
+package br.com.myself.model.dao
 
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import br.com.myself.database.Database
-import br.com.myself.model.Entrada
+import br.com.myself.model.database.Database
+import br.com.myself.model.entity.Entrada
 import br.com.myself.util.Utils
+import br.com.myself.util.Utils.Companion.getCalendar
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -13,10 +14,19 @@ class EntradaDAO(context: Context) : Database<Entrada>(context) {
     
     
     override fun bind(cursor: Cursor, elemento: Entrada) {
-        cursor.getColumnIndex(ID).also { elemento.id = cursor.getLong(it) }
-        cursor.getColumnIndex(FONTE).also { elemento.fonte = cursor.getString(it) }
-        cursor.getColumnIndex(DATA).also { elemento.data = cursor.getLong(it) }
-        cursor.getColumnIndex(VALOR).also { elemento.valor = cursor.getDouble(it) }
+        elemento.id = cursor.getLong(cursor.getColumnIndexOrThrow(ID))
+        elemento.descricao = cursor.getString(cursor.getColumnIndexOrThrow(DESCRICAO))
+        //elemento.data = cursor.getLong(cursor.getColumnIndexOrThrow(DATA))
+        elemento.valor = cursor.getDouble(cursor.getColumnIndexOrThrow(VALOR))
+    }
+    
+    fun bind(cursor: Cursor): Entrada {
+        return Entrada(
+            id = cursor.getLong(cursor.getColumnIndexOrThrow(ID)),
+            descricao = cursor.getString(cursor.getColumnIndexOrThrow(DESCRICAO)),
+            data = cursor.getLong(cursor.getColumnIndexOrThrow(DATA)).getCalendar(),
+            valor = cursor.getDouble(cursor.getColumnIndexOrThrow(VALOR))
+        )
     }
     
     fun getTodasEntradas(): ArrayList<Entrada> {
@@ -26,9 +36,7 @@ class EntradaDAO(context: Context) : Database<Entrada>(context) {
         val cursor = readableDatabase.rawQuery(sql, null)
         
         while (cursor.moveToNext()) {
-            val entrada = Entrada()
-            bind(cursor, entrada)
-            entradas.add(entrada)
+            entradas.add(bind(cursor))
         }
 
         cursor.close()
@@ -36,20 +44,12 @@ class EntradaDAO(context: Context) : Database<Entrada>(context) {
     }
     
     fun inserir(entrada: Entrada) {
-        val sql = "INSERT INTO $TAB_ENTRADA ($FONTE, $VALOR, $DATA)" +
-                " VALUES ('${entrada.fonte}', ${entrada.valor}, ${entrada.data})"
+        val insert = "INSERT INTO $TAB_ENTRADA" +
+                " ($DESCRICAO, $VALOR, $DATA) " +
+                " VALUES " +
+                " ('${entrada.descricao}', ${entrada.valor}, ${entrada.data}')"
         
-        writableDatabase.execSQL(sql)
-    }
-    
-    fun alterar(entrada: Entrada) {
-        val sql = " UPDATE $TAB_ENTRADA SET " +
-                "  $FONTE = '${entrada.fonte}' , " +
-                "  $VALOR = ${entrada.valor} , " +
-                "  $DATA = ${entrada.data}  " +
-                "  WHERE $ID = ${entrada.id}"
-        
-        writableDatabase.execSQL(sql)
+        writableDatabase.execSQL(insert)
     }
     
     fun deletar(entrada: Entrada) {
@@ -65,14 +65,13 @@ class EntradaDAO(context: Context) : Database<Entrada>(context) {
         
         if (!entradas.isNullOrEmpty()) {
             val stmt = db.compileStatement(
-                "INSERT INTO $TAB_ENTRADA ($FONTE, $VALOR, $DATA) VALUES (?, ?, ?)")
+                "INSERT INTO $TAB_ENTRADA ($DESCRICAO, $VALOR, $DATA) VALUES (?, ?, ?)")
             
             entradas.forEach { entrada ->
-                stmt.bindString(1, entrada.fonte)
+                stmt.bindString(1, entrada.descricao)
                 stmt.bindDouble(2, entrada.valor)
-                
-                if (entrada.data != null) stmt.bindLong(3, entrada.data!!)
-                else stmt.bindNull(3)
+    
+                //stmt.bindLong(3, entrada.data)
                 
                 stmt.executeInsert()
                 stmt.clearBindings()
@@ -124,16 +123,18 @@ class EntradaDAO(context: Context) : Database<Entrada>(context) {
     companion object {
         internal const val TAB_ENTRADA = "Entrada"
         
-        private const val FONTE = "fonte"
-        internal const val DATA = "data"
+        private const val DESCRICAO = "descricao"
+        private const val DATA = "data"
         private const val VALOR = "valor"
+        private const val REFERENCIA_ANO_MES = "referencia_ano_mes"
         
         fun onCreate(db: SQLiteDatabase) {
             val create =
                 "CREATE TABLE $TAB_ENTRADA (" +
                         "$ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "$FONTE TEXT," +
+                        "$DESCRICAO TEXT," +
                         "$DATA NUMERIC," +
+                        "$REFERENCIA_ANO_MES TEXT," +
                         "$VALOR DECIMAL(10, 2)" +
                         ")"
             
