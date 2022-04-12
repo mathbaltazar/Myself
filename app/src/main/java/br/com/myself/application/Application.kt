@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.room.Room
 import br.com.myself.R
-import br.com.myself.model.database.MyDatabase
+import br.com.myself.domain.database.MyDatabase
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
@@ -16,7 +16,9 @@ class Application : Application() {
     override fun onCreate() {
         super.onCreate()
     
-        myDatabase = Room.databaseBuilder(this, MyDatabase::class.java, MyDatabase.NAME).build()
+        myDatabase = Room.databaseBuilder(this, MyDatabase::class.java, MyDatabase.NAME)
+            .fallbackToDestructiveMigration()
+            .build()
         
         
         ViewPump.init(

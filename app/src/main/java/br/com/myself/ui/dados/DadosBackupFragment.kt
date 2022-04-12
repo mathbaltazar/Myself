@@ -7,16 +7,13 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import br.com.myself.R
-import br.com.myself.context.ConfigContext
-import br.com.myself.context.DespesaContext
-import br.com.myself.model.dao.BackupDAO
-import br.com.myself.model.dao.EntradaDAO
-import br.com.myself.model.entity.Backup
+import br.com.myself.domain.dao.BackupDAO
+import br.com.myself.domain.entity.Backup
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
-import br.com.myself.service.BackupService
-import br.com.myself.service.ConnectionTestService
-import br.com.myself.service.dto.SincronizarDadosBackupDTO
+import br.com.myself.services.BackupService
+import br.com.myself.services.ConnectionTestService
+import br.com.myself.services.dto.SincronizarDadosBackupDTO
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -160,8 +157,8 @@ class DadosBackupFragment : Fragment() {
 
         val request = SincronizarDadosBackupDTO()
         //request.registros = RegistroContext.getDAO(mView.context).getTodosRegistros()
-        request.despesas = DespesaContext.getDAO(mView.context).getTodasDespesas()
-        request.entradas = EntradaDAO(mView.context).getTodasEntradas()
+        //request.despesas = DespesaContext.getDAO(mView.context).getTodasDespesas()
+        //request.entradas = EntradaDAO(mView.context).getTodasEntradas()
         request.backup = mBackup
         request.backup!!.dataUltimaSincronizacao = Calendar.getInstance().timeInMillis
 
@@ -211,9 +208,9 @@ class DadosBackupFragment : Fragment() {
 
                 val dto = t.body()!!
                 //RegistroContext.getDAO(mView.context).restaurarRegistros(dto.registros)
-                DespesaContext.getDAO(mView.context).restaurarDespesas(dto.despesas)
-                EntradaDAO(mView.context).restaurarEntradas(dto.entradas)
-                ConfigContext.getDAO(mView.context).salvarConfiguracao(dto.backup)
+                //DespesaContext.getDAO(mView.context).restaurarDespesas(dto.despesas)
+                //EntradaDAO(mView.context).restaurarEntradas(dto.entradas)
+                //ConfigContext.getDAO(mView.context).salvarConfiguracao(dto.backup)
                 
                 Trigger.launch(Events.Toast("Os dados do servidor foram restaurados!"))
 

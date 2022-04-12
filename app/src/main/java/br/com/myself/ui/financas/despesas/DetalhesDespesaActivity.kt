@@ -1,7 +1,6 @@
 package br.com.myself.ui.financas.despesas
 
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.Menu
@@ -13,9 +12,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
-import br.com.myself.context.DespesaContext
-import br.com.myself.model.entity.Despesa
-import br.com.myself.model.repository.RegistroRepository
+import br.com.myself.domain.entity.Despesa
+import br.com.myself.domain.repository.DespesaRepository
+import br.com.myself.domain.repository.RegistroRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
 import br.com.myself.ui.adapter.RegistroAdapter
@@ -26,21 +25,26 @@ import br.com.myself.util.Utils
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_detalhes_despesa.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import org.jetbrains.anko.toast
 import java.math.BigDecimal
 
-
 class DetalhesDespesaActivity : AppCompatActivity() {
     
     companion object {
+        const val DESPESA_ID: String = "DESPESA_ID"
         private const val MENU_ITEMID_EXCLUIR: Int = 0
     }
     
-    private val despesa: Despesa = DespesaContext.getDataView(this).despesaDetalhada!!
+    private lateinit var despesa: Despesa
+    private val disposables: CompositeDisposable = CompositeDisposable()
     
-    private val registroRepository = RegistroRepository(this)
+    private val registroRepository by lazy { RegistroRepository(applicationContext) }
+    private val despesaRepository by lazy { DespesaRepository(applicationContext) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +52,13 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         supportActionBar?.title = "Detalhes"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setUpView()
-        bindView()
+    
+        Async.doInBackground({
+            despesaRepository.getDespesa(intent.getLongExtra(DESPESA_ID, 0))
+        }, {
+            despesa = it
+            bindView()
+        })
     }
     
     private fun setUpView() {
@@ -66,17 +76,20 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     
         button_detalhes_despesa_adicionar_registro.setOnClickListener {
             val dialog = RegistrarDespesaDialog(despesa, registroRepository)
-            dialog.onDismiss(object : DialogInterface {
-                override fun dismiss() { carregarRegistros() }
-                override fun cancel() {}
-            })
             dialog.show(supportFragmentManager, null)
         }
+        
+        disposables.add(Trigger.watcher().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe {
+                if (it is Events.UpdateDespesas) {
+                    carregarRegistros()
+                }
+            })
     }
     
     private fun bindView() {
         et_detalhes_despesa_nome.setText(despesa.nome)
-        et_detalhes_despesa_nome.setSelection(despesa.nome!!.length)
+        et_detalhes_despesa_nome.setSelection(despesa.nome.length)
        
         et_detalhes_despesa_valor.setText(Utils.formatCurrency(despesa.valor))
     
@@ -109,13 +122,11 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     
     private fun carregarRegistros() {
         Async.doInBackground({ registroRepository.pesquisarRegistros(despesa.id) }, { registros ->
-    
-    
+            
             tv_detalhes_despesa_sem_registros.visibility =
                 if (registros.isEmpty()) View.VISIBLE else View.GONE
             
             (rv_detalhes_despesa_registros.adapter as RegistroAdapter).submitList(registros)
-            
             
         })
     }
@@ -138,10 +149,11 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         AlertDialog.Builder(this).setTitle("Excluir despesa")
             .setMessage(msg)
             .setPositiveButton("Excluir") { _, _ ->
-                DespesaContext.getDAO(this).deletar(despesa)
-                DespesaContext.removerDespesa(despesa)
-                Trigger.launch(Events.Toast("Removido!"), Events.UpdateDespesas)
-                finish()
+                Async.doInBackground({ despesaRepository.excluir(despesa) }, {
+                    toast("Removido!")
+                    Trigger.launch(Events.UpdateDespesas, Events.UpdateRegistros)
+                    finish()
+                })
             }.setNegativeButton("Cancelar", null)
             .show()
     }
@@ -166,8 +178,14 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         this.despesa.valor = valor
         // Vencimento já é atribuído na seleção, validação desnecessária
         
-        DespesaContext.getDAO(this).alterar(this.despesa)
-        Trigger.launch(Events.UpdateDespesas)
+        // Dispose observers
+        disposables.dispose()
+        
+        Async.doInBackground({
+            despesaRepository.salvar(this.despesa)
+        }, {
+            Trigger.launch(Events.UpdateDespesas)
+        })
         
         return true
     }

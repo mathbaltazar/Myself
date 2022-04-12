@@ -10,15 +10,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
-import br.com.myself.model.dao.EntradaDAO
-import br.com.myself.model.entity.Entrada
+import br.com.myself.domain.entity.Entrada
+import br.com.myself.domain.repository.EntradaRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
+import br.com.myself.util.Async
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_adapter_entrada.view.*
 
-class EntradaAdapter : ListAdapter<Entrada, RecyclerView.ViewHolder>(COMPARATOR) {
+class EntradaAdapter(private val repository: EntradaRepository) : ListAdapter<Entrada, RecyclerView.ViewHolder>(COMPARATOR) {
     
     private object COMPARATOR : DiffUtil.ItemCallback<Entrada>() {
         override fun areItemsTheSame(oldItem: Entrada, newItem: Entrada): Boolean = oldItem.id == newItem.id
@@ -36,7 +37,7 @@ class EntradaAdapter : ListAdapter<Entrada, RecyclerView.ViewHolder>(COMPARATOR)
         (holder as EntradaViewHolder).bindView(getItem(position))
     }
     
-    private class EntradaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private inner class EntradaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindView(entrada: Entrada) {
             itemView.tv_item_entradas_valor.text = Utils.formatCurrency(entrada.valor)
             itemView.tv_item_entradas_descricao.text = entrada.descricao
@@ -65,8 +66,10 @@ class EntradaAdapter : ListAdapter<Entrada, RecyclerView.ViewHolder>(COMPARATOR)
                 AlertDialog.Builder(itemView.context).setTitle("Excluir").setMessage(mensagem)
                     .setPositiveButton("Excluir") { _, _ ->
                         
-                        EntradaDAO(itemView.context).deletar(entrada)
-                        Trigger.launch(Events.Toast("Excluído!"), Events.UpdateEntradas)
+                        Async.doInBackground {
+                            repository.delete(entrada)
+                            Trigger.launch(Events.Toast("Excluído!"), Events.UpdateEntradas)
+                        }
                         
                     }.setNegativeButton("Cancelar", null).show()
                 true
@@ -74,7 +77,8 @@ class EntradaAdapter : ListAdapter<Entrada, RecyclerView.ViewHolder>(COMPARATOR)
             
             return popupMenu
         }
-        
+    
     }
     
 }
+

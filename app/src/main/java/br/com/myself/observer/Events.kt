@@ -1,9 +1,9 @@
 package br.com.myself.observer
 
 import android.view.View
-import br.com.myself.model.entity.Despesa
-import br.com.myself.model.entity.Entrada
-import br.com.myself.model.entity.Registro
+import br.com.myself.domain.entity.Despesa
+import br.com.myself.domain.entity.Entrada
+import br.com.myself.domain.entity.Registro
 
 open class Events {
     

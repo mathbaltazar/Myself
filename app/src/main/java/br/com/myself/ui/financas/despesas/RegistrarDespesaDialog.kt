@@ -8,15 +8,14 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import br.com.myself.R
 import br.com.myself.components.CalendarPickerEditText
-import br.com.myself.model.entity.Despesa
-import br.com.myself.model.entity.Registro
-import br.com.myself.model.repository.RegistroRepository
+import br.com.myself.domain.entity.Despesa
+import br.com.myself.domain.entity.Registro
+import br.com.myself.domain.repository.RegistroRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
 import br.com.myself.util.Async
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
-import br.com.myself.util.Utils.Companion.getCalendar
 import br.com.myself.util.Utils.Companion.setUpDimensions
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.button.MaterialButton
@@ -44,7 +43,7 @@ class RegistrarDespesaDialog(
         super.onStart()
     
         dialog?.window?.setBackgroundDrawableResource(android.R.color.white)
-        dialog?.setUpDimensions(width = (Utils.getScreenSize(requireContext()).x * .85).toInt())
+        dialog?.setUpDimensions(widthPercent = (Utils.getScreenSize(requireContext()).x * .85).toInt())
         
         
         tv_dialog_registrar_despesa_nome.text = despesa.nome
@@ -76,9 +75,9 @@ class RegistrarDespesaDialog(
             
             // Criação do registro a partir da despesa
             val novoregistro = Registro(
-            descricao = despesa.nome!!,
+            descricao = despesa.nome,
             valor = valor,
-            data = calendar_picker_dialog_registrar_despesa_data.getTime().getCalendar(),
+            data = calendar_picker_dialog_registrar_despesa_data.getTime(),
             despesa_id = despesa.id)
             
             Async.doInBackground({
@@ -95,31 +94,34 @@ class RegistrarDespesaDialog(
     }
     
     private fun calcularSugestoes() {
-        val registros = registroRepository.pesquisarRegistros(despesa.id)
-        
-        val valoresPossiveis = registros.map(Registro::valor).distinct()
-        
-        valoresPossiveis.sorted().forEachIndexed { index, valor ->
+        Async.doInBackground({
+            registroRepository.pesquisarRegistros(despesa.id)
+        }, { registros ->
     
-            val button = layoutInflater.inflate(
-                R.layout.button_dialog_registrar_despesa_sugestao,
-                fbl_dialog_registrar_despesa_sugestoes_valor,
-                false
-            ) as MaterialButton
-            button.text = Utils.formatCurrency(valor)
-            
-            if (index == 0) { // Primeiro button, descer pra linha de baixo do flexbox
-                val lp = FlexboxLayout.LayoutParams(button.layoutParams)
-                lp.isWrapBefore = true
-                button.layoutParams = lp
-            }
-            
-            fbl_dialog_registrar_despesa_sugestoes_valor.addView(button)
+            registros.map(Registro::valor)
+                .distinct()
+                .sorted()
+                .forEachIndexed { index, valor ->
         
-            button.setOnClickListener {
-                et_dialog_registrar_despesa_valor.setText(button.text)
+                val button =
+                    layoutInflater.inflate(R.layout.button_dialog_registrar_despesa_sugestao,
+                        flexbox_dialog_registrar_despesa_sugestoes_valor,
+                        false) as MaterialButton
+                button.text = Utils.formatCurrency(valor)
+        
+                if (index == 0) { // Primeiro button, descer pra linha de baixo do flexbox
+                    val lp = FlexboxLayout.LayoutParams(button.layoutParams)
+                    lp.isWrapBefore = true
+                    button.layoutParams = lp
+                }
+        
+                flexbox_dialog_registrar_despesa_sugestoes_valor.addView(button)
+        
+                button.setOnClickListener {
+                    et_dialog_registrar_despesa_valor.setText(button.text)
+                }
             }
-        }
+        })
     }
     
 }

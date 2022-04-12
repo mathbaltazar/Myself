@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Point
 import android.view.WindowManager
 import java.text.NumberFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,25 +32,11 @@ class Utils {
         fun Calendar.formattedDate(): String {
             return sdf.format(this.time)
         }
-
-        fun Long?.formattedDate(): String {
-            return sdf.format(Date(this ?: 0))
-        }
-        
-        fun Long?.getCalendar(): Calendar {
-            return getCalendar(this ?: 0)
-        }
     
         fun getCalendar(): Calendar {
             return GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"), mLocale)
         }
     
-        fun getCalendar(time: Long): Calendar {
-            val calendar = getCalendar()
-            calendar.setTimeInMillis(time)
-            return calendar
-        }
-
         fun formatCurrency(valor: Double?): String {
             return NumberFormat.getCurrencyInstance(mLocale)
                 .format(valor ?: 0)
@@ -64,35 +49,6 @@ class Utils {
                 .replace(".", "")
                 .replace(",", ".")
                 .trim()
-        }
-
-        fun isDataValida(dateToValidate: String?): Boolean {
-
-            if (dateToValidate.isNullOrBlank() || dateToValidate.length < 10) {
-                return false
-            }
-            
-            val ano = dateToValidate.substring(dateToValidate.length - 4)
-            if (ano.toInt() < 1970) {
-                return false
-            }
-    
-            //val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-            sdf.isLenient = false
-
-            try {
-                val date = sdf.parse(dateToValidate)
-
-                if (date!!.after(Date())) {
-                    return false
-                }
-
-            } catch (e: ParseException) {
-                e.printStackTrace()
-                return false
-            }
-
-            return true
         }
     
         fun getScreenSize(context: Context): Point {
@@ -111,20 +67,19 @@ class Utils {
         }
     
         /**
-         * @param width Set WindowManager.LayoutParams.MATCH_PARENT as default.
-         * @param height Set WindowManager.LayoutParams.WRAP_CONTENT as default.
-         * @param screenWidthPercent If not set or value passed is <= 0, the attribute *width* will be considered.
+         * @param widthPercent Width percentage accordingly with device screen.
+         * If not set, WindowManager.LayoutParams.MATCH_PARENT as default.
+         * @param height Exact size of the height. Set WindowManager.LayoutParams.WRAP_CONTENT as default.
          */
         fun Dialog.setUpDimensions(
-            width: Int = WindowManager.LayoutParams.MATCH_PARENT,
-            height: Int = WindowManager.LayoutParams.WRAP_CONTENT,
-            screenWidthPercent: Int = 0
+            widthPercent: Int = WindowManager.LayoutParams.MATCH_PARENT,
+            height: Int = WindowManager.LayoutParams.WRAP_CONTENT
         ) {
             val lp = WindowManager.LayoutParams()
             lp.copyFrom(window?.attributes)
     
-            lp.width = if (screenWidthPercent <= 0) width
-            else (getScreenSize(context).x * screenWidthPercent / 100)
+            lp.width = if (widthPercent < 0) widthPercent
+            else (getScreenSize(context).x * widthPercent / 100)
             
             lp.height = height
     

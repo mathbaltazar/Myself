@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/all_default_layout_offset_4"
     android:clickable="true"
-    app:cardElevation="6dp"
+    app:cardElevation="4dp"
     android:focusable="true"
     app:contentPadding="@dimen/all_default_layout_offset_8"
     tools:ignore="HardcodedText">

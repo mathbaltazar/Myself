@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import br.com.myself.R
 import br.com.myself.components.CalendarPickerEditText
-import br.com.myself.model.entity.Registro
-import br.com.myself.model.repository.RegistroRepository
+import br.com.myself.domain.entity.Registro
+import br.com.myself.domain.repository.RegistroRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
 import br.com.myself.util.Async
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
-import br.com.myself.util.Utils.Companion.getCalendar
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.bottom_sheet_registro.view.*
@@ -63,7 +62,7 @@ class CriarRegistroBottomSheet(
                     descricao = descricao.trim(),
                     valor = Utils.unformatCurrency(valor).toDouble(),
                     outros = outros.trim(),
-                    data = data.getCalendar()
+                    data = data
                 )
     
                 Async.doInBackground({
@@ -87,7 +86,7 @@ class CriarRegistroBottomSheet(
             view.textinput_bottom_sheet_registro_descricao.setSelection(registro.descricao.length)
             
             view.textinput_bottom_sheet_registro_valor.setText(Utils.formatCurrency(registro.valor))
-            view.calendar_picker_bottom_sheet_registro_data.setTime(registro.data.timeInMillis)
+            view.calendar_picker_bottom_sheet_registro_data.setTime(registro.data)
         }
     }
     

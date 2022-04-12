@@ -10,46 +10,44 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import java.util.*
 
 class CalendarPickerEditText(context: Context, attrs: AttributeSet) :
     TextInputEditText(context, attrs) {
     
     private lateinit var datePicker: MaterialDatePicker<Long>
-    private val builder: MaterialDatePicker.Builder<Long>
+    private val calendar: Calendar = Calendar.getInstance()
     
     init {
+        calendar.timeInMillis = MaterialDatePicker.todayInUtcMilliseconds()
+        
         val calendarConstraint = CalendarConstraints.Builder()
                 .setValidator(DateValidatorPointBackward.now())
                 .setEnd(MaterialDatePicker.thisMonthInUtcMilliseconds())
                 .build()
         
-        builder = MaterialDatePicker.Builder.datePicker()
+        val builder = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(calendarConstraint)
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .setTheme(R.style.CalendarPickerLayoutTheme)
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .setSelection(calendar.timeInMillis)
+            .build()
         
-        buildPicker()
-    
-        setText(datePicker.selection?.formattedDate())
-    }
-    
-    private fun buildPicker() {
-        datePicker = builder.build()
-    
-        datePicker.addOnPositiveButtonClickListener {
-            setText(it.formattedDate())
+        builder.addOnPositiveButtonClickListener {
+            calendar.timeInMillis = it
+            setText(calendar.formattedDate())
         }
+        
+        setText(calendar.formattedDate())
     }
     
-    fun getTime(): Long {
-        return datePicker.selection!!
+    fun getTime(): Calendar {
+        return calendar
     }
     
-    fun setTime(time: Long) {
-        builder.setSelection(time)
-        buildPicker()
-        setText(time.formattedDate())
+    fun setTime(calendar: Calendar) {
+        this.calendar.timeInMillis = calendar.timeInMillis
+        setText(calendar.formattedDate())
     }
     
     fun showCalendar(fragmentManager: FragmentManager, tag: String?) {

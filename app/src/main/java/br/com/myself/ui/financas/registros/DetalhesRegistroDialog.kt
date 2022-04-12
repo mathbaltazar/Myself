@@ -5,7 +5,7 @@ import android.content.Context
 import android.view.View
 import android.view.Window
 import br.com.myself.R
-import br.com.myself.model.entity.Registro
+import br.com.myself.domain.entity.Registro
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
 import br.com.myself.util.Utils

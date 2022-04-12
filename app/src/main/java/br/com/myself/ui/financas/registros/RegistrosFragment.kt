@@ -2,7 +2,6 @@ package br.com.myself.ui.financas.registros
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
-import br.com.myself.model.entity.Registro
-import br.com.myself.model.repository.RegistroRepository
+import br.com.myself.domain.entity.Registro
+import br.com.myself.domain.repository.RegistroRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
 import br.com.myself.ui.adapter.RegistroAdapter
@@ -43,7 +42,7 @@ class RegistrosFragment(private val repository: RegistroRepository) : Fragment()
         registrarObservers()
         
         // INSTANCIAR ADAPTER E CLICKLISTENERS
-        configureRegistroAdapter()
+        setupRegistroRecyclerView()
         
         // RECUPERAR OS DADOS DO REPOSITORIO
         atualizarDadosDoMes(monthPageController)
@@ -87,7 +86,7 @@ class RegistrosFragment(private val repository: RegistroRepository) : Fragment()
         }
     }
     
-    private fun configureRegistroAdapter() {
+    private fun setupRegistroRecyclerView() {
         recyclerview_registros.layoutManager = LinearLayoutManager(requireContext())
         val adapter = RegistroAdapter()
         val listener = AdapterClickListener<Registro>(
@@ -128,8 +127,8 @@ class RegistrosFragment(private val repository: RegistroRepository) : Fragment()
         { registros -> // CALLBACK APÓS A CONSULTA
             val total = registros.map(Registro::valor).sum()
     
-            tv_registros_total_registros_mes.setText(Utils.formatCurrency(total))
-            tv_registros_quantidade_registros_mes.setText("${registros.size}")
+            tv_registros_total_registros_mes.text = Utils.formatCurrency(total)
+            tv_registros_quantidade_registros_mes.text = "${registros.size}"
     
             (recyclerview_registros.adapter as RegistroAdapter).submitList(registros) {
                 textview_nenhum_registro_encontrado.visibility =

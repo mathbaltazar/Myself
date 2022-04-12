@@ -5,10 +5,11 @@ import android.content.Context
 import android.view.Window
 import android.widget.ArrayAdapter
 import br.com.myself.R
-import br.com.myself.context.DespesaContext
-import br.com.myself.model.entity.Despesa
+import br.com.myself.domain.entity.Despesa
+import br.com.myself.domain.repository.DespesaRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
+import br.com.myself.util.Async
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
@@ -16,7 +17,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_criar_despesa.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 
-class CriarDespesaDialog(context: Context) : Dialog(context) {
+class CriarDespesaDialog(context: Context, private val despesaRepository: DespesaRepository) : Dialog(context) {
     
     private var vencimentoSelecionado: Int = 0
     
@@ -25,7 +26,7 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
         window?.setBackgroundDrawableResource(android.R.color.white)
         
         setUpView()
-        setUpDimensions(width = (Utils.getScreenSize(context).x * .85).toInt())
+        setUpDimensions(widthPercent = (Utils.getScreenSize(context).x * .85).toInt())
     }
     
     private fun setUpView() {
@@ -61,18 +62,19 @@ class CriarDespesaDialog(context: Context) : Dialog(context) {
                 et_dialog_criar_despesa_valor.requestFocus()
                 Trigger.launch(Events.Toast("Valor inválido"))
             } else {
-                val despesa = Despesa()
+                val despesa = Despesa(
+                    nome = nome,
+                    valor = Utils.unformatCurrency(valor).toDouble(),
+                    diaVencimento = this.vencimentoSelecionado
+                )
                 
-                despesa.nome = nome
-                despesa.valor = Utils.unformatCurrency(valor).toDouble()
-                despesa.diaVencimento = this.vencimentoSelecionado
+                Async.doInBackground({
+                    despesaRepository.salvar(despesa)
+                }, {
+                    Trigger.launch(Events.Toast("Salvo!"), Events.UpdateDespesas)
+                    cancel()
+                })
                 
-                despesa.id = DespesaContext.getDAO(context).inserir(despesa)
-                DespesaContext.atualizarDespesa(despesa)
-                
-                Trigger.launch(Events.Toast("Dados salvos!"), Events.UpdateDespesas)
-                
-                cancel()
             }
             
             

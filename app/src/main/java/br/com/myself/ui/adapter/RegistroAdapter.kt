@@ -7,17 +7,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
-import br.com.myself.model.entity.Registro
+import br.com.myself.domain.entity.Registro
 import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.formattedDate
 import kotlinx.android.synthetic.main.layout_adapter_registro.view.*
 
 class RegistroAdapter : ListAdapter<Registro, RecyclerView.ViewHolder>(COMPARATOR) {
-    
-    private object COMPARATOR : DiffUtil.ItemCallback<Registro>() {
-        override fun areItemsTheSame(oldItem: Registro, newItem: Registro): Boolean = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Registro, newItem: Registro): Boolean = oldItem == newItem
+    companion object {
+        val COMPARATOR = object : DiffUtil.ItemCallback<Registro>() {
+            override fun areItemsTheSame(oldItem: Registro, newItem: Registro): Boolean =
+                oldItem.id == newItem.id
+        
+            override fun areContentsTheSame(oldItem: Registro, newItem: Registro): Boolean =
+                oldItem == newItem
+        }
     }
     
     private var mListener: AdapterClickListener<Registro>? = null

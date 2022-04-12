@@ -7,7 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
-import br.com.myself.model.repository.RegistroRepository
+import br.com.myself.domain.repository.RegistroRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
 import br.com.myself.ui.adapter.RegistroAdapter

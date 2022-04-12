@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
-import br.com.myself.model.entity.Despesa
+import br.com.myself.domain.entity.Despesa
 import br.com.myself.util.Utils
 import kotlinx.android.synthetic.main.list_item_selecionar_despesa.view.*
 

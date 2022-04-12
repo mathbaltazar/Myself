@@ -62,39 +62,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="- Hidantal (1 cp a noite)" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginVertical="@dimen/all_default_layout_offset_8"
-                    android:background="@color/off_white" />
-
-                <com.google.android.flexbox.FlexboxLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/all_default_layout_offset_8">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Número de crises: " />
-
-                    <TextView
-                        android:id="@+id/tv_crises_numero_crises"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="8"
-                        android:textColor="@android:color/darker_gray" />
-
-                </com.google.android.flexbox.FlexboxLayout>
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_crises_mais_detalhes"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mais detalhes"
+                android:layout_height="36dp"
+                android:text="Mais"
+                android:padding="0dp"
                 app:icon="@drawable/ic_arrow_down"
                 app:iconGravity="textEnd" />
 
@@ -121,26 +97,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_alignSelf="center"
-            android:text="Até:  " />
+            android:text="Número de crises: " />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        <TextView
+            android:id="@+id/tv_crises_numero_crises"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="-12dp"
-            android:paddingEnd="-12dp"
-            app:boxBackgroundColor="@android:color/white"
-            app:hintEnabled="false">
+            tools:text="8"
+            android:textColor="@android:color/darker_gray" />
 
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/dropdown_crises_filtro_anos"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:inputType="none"
-                android:padding="0dp"
-                android:text="Todos" />
-        </com.google.android.material.textfield.TextInputLayout>
     </com.google.android.flexbox.FlexboxLayout>
 
     <TextView
@@ -165,14 +130,14 @@
         android:layout_height="1.8dp"
         android:background="@color/off_white" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_crises_registrar_crise"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="@dimen/all_default_layout_offset_8"
-            android:text="Registrar Crise"
-            app:icon="@drawable/ic_fab_add" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_crises_registrar_crise"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/all_default_layout_offset_8"
+        android:text="Registrar Crise"
+        app:icon="@drawable/ic_fab_add" />
 
 </LinearLayout>

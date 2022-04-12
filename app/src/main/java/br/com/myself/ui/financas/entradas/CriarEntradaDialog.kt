@@ -8,13 +8,13 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import br.com.myself.R
 import br.com.myself.components.CalendarPickerEditText
-import br.com.myself.model.dao.EntradaDAO
-import br.com.myself.model.entity.Entrada
+import br.com.myself.domain.entity.Entrada
+import br.com.myself.domain.repository.EntradaRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
+import br.com.myself.util.Async
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
-import br.com.myself.util.Utils.Companion.getCalendar
 import br.com.myself.util.Utils.Companion.setUpDimensions
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_criar_entrada.*
@@ -22,7 +22,10 @@ import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import org.jetbrains.anko.support.v4.toast
 import java.math.BigDecimal
 
-class CriarEntradaDialog(private val entrada: Entrada? = null) : DialogFragment() {
+class CriarEntradaDialog(
+    private val entrada: Entrada? = null,
+    private val repository: EntradaRepository
+) : DialogFragment() {
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +40,7 @@ class CriarEntradaDialog(private val entrada: Entrada? = null) : DialogFragment(
         super.onStart()
         
         dialog?.window?.setBackgroundDrawableResource(android.R.color.white)
-        dialog?.setUpDimensions(width = (Utils.getScreenSize(requireContext()).x * 0.9).toInt())
+        dialog?.setUpDimensions(widthPercent = (Utils.getScreenSize(requireContext()).x * 0.9).toInt())
         setUpView()
     }
 
@@ -46,7 +49,7 @@ class CriarEntradaDialog(private val entrada: Entrada? = null) : DialogFragment(
         if (entrada != null) { // Significa edição
             textinput_dialog_nova_entrada_descricao.setText(entrada.descricao)
             textinput_dialog_nova_entrada_valor.setText(Utils.formatCurrency(entrada.valor))
-            calendar_picker_dialog_nova_entrada_data.setTime(entrada.data.timeInMillis)
+            calendar_picker_dialog_nova_entrada_data.setTime(entrada.data)
         }
 
         textinput_dialog_nova_entrada_valor.apply {
@@ -76,14 +79,16 @@ class CriarEntradaDialog(private val entrada: Entrada? = null) : DialogFragment(
                     id = entrada?.id,
                     valor = Utils.unformatCurrency(valor).toDouble(),
                     descricao = fonte.trim(),
-                    data = calendar_picker_dialog_nova_entrada_data.getTime().getCalendar()
+                    data = calendar_picker_dialog_nova_entrada_data.getTime()
                 )
                 
-                EntradaDAO(it.context).inserir(novaentrada)
-                
-                toast("Dados salvos!")
-                Trigger.launch(Events.UpdateEntradas)
-                dismiss()
+                Async.doInBackground({
+                    repository.salvar(novaentrada)
+                }, {
+                    toast("Dados salvos!")
+                    Trigger.launch(Events.UpdateEntradas)
+                    dismiss()
+                })
             }
 
         }

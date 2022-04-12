@@ -7,19 +7,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
-import br.com.myself.model.dao.EntradaDAO
-import br.com.myself.model.entity.Entrada
+import br.com.myself.domain.entity.Entrada
+import br.com.myself.domain.repository.EntradaRepository
 import br.com.myself.observer.Trigger
 import br.com.myself.observer.Events
 import br.com.myself.ui.adapter.EntradaAdapter
+import br.com.myself.util.Async
+import br.com.myself.util.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_entradas.*
 import kotlinx.android.synthetic.main.fragment_entradas.view.*
-import java.util.ArrayList
+import java.util.*
+import java.util.Calendar.MONTH
+import java.util.Calendar.YEAR
 
-class EntradasFragment : Fragment() {
+class EntradasFragment(private val repository: EntradaRepository) : Fragment() {
     
     private lateinit var mView: View
     private val disposables = CompositeDisposable()
@@ -36,7 +40,7 @@ class EntradasFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     
-        val adapter = EntradaAdapter()
+        val adapter = EntradaAdapter(repository)
         mView.rv_entradas.adapter = adapter
         mView.rv_entradas.layoutManager = LinearLayoutManager(mView.context)
         
@@ -62,15 +66,19 @@ class EntradasFragment : Fragment() {
     }
     
     private fun carregarEntradas() {
-        val entradas = EntradaDAO(requireContext()).getTodasEntradas()
-        
-        mView.tv_entradas_empty.visibility =
-            if (entradas.isEmpty()) View.VISIBLE else View.GONE
-        (rv_entradas.adapter as EntradaAdapter).submitList(entradas)
+        val calendar = Utils.getCalendar()
+        Async.doInBackground ({
+            repository.pesquisarEntradas(calendar[MONTH], calendar[YEAR])
+        }) { entradas ->
+            
+            mView.tv_entradas_empty.visibility =
+                    if (entradas.isEmpty()) View.VISIBLE else View.GONE
+            (rv_entradas.adapter as EntradaAdapter).submitList(entradas)
+        }
     }
     
     private fun iniciarDialogCriarEntrada(entrada: Entrada? = null) {
-        val dialog = CriarEntradaDialog(entrada)
+        val dialog = CriarEntradaDialog(entrada, repository)
         dialog.show(childFragmentManager, null)
     }
     
@@ -79,8 +87,4 @@ class EntradasFragment : Fragment() {
         super.onDestroyView()
     }
     
-    class EntradaDataViewObject {
-        var referencia_ano_mes: String = ""
-        var entradas: ArrayList<Entrada> = arrayListOf()
-    }
 }

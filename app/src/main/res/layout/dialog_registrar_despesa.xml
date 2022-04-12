@@ -78,7 +78,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/fbl_dialog_registrar_despesa_sugestoes_valor"
+            android:id="@+id/flexbox_dialog_registrar_despesa_sugestoes_valor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:flexWrap="wrap">

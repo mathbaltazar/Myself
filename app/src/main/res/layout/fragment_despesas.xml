@@ -46,16 +46,16 @@
             android:padding="@dimen/all_default_layout_offset_4"
             android:text="Não há despesas registradas."
             android:textAlignment="center"
-            tools:visibility="visible"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_despesas"
+            android:id="@+id/recyclerview_despesas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/all_default_layout_offset_4"
-            tools:listitem="@layout/adapter_despesas_item"
-            tools:itemCount="3"/>
+            tools:itemCount="3"
+            tools:listitem="@layout/adapter_despesas_item" />
 
     </com.google.android.flexbox.FlexboxLayout>
 
@@ -64,12 +64,12 @@
         android:id="@+id/fab_despesas_adicionar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/all_default_layout_offset_16"
         android:src="@drawable/ic_fab_add"
         app:backgroundTint="@color/colorAccent"
-        app:tint="@android:color/white"
-        android:layout_margin="@dimen/all_default_layout_offset_16"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:tint="@android:color/white" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_despesas_info"

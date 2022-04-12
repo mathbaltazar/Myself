@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.com.myself.R
-import br.com.myself.model.entity.Registro
-import br.com.myself.model.repository.RegistroRepository
+import br.com.myself.domain.entity.Registro
+import br.com.myself.domain.repository.RegistroRepository
 import br.com.myself.notification.Notification
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
