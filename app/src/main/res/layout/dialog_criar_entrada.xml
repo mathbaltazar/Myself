@@ -10,10 +10,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:padding="@dimen/all_default_layout_offset_8"
         android:background="@drawable/backgroung_gradient_app_color"
+        android:padding="@dimen/all_default_layout_offset_8"
         android:text="Entrada"
+        android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_16"
         android:textStyle="bold" />
@@ -70,7 +70,8 @@
             <br.com.myself.components.CalendarPickerEditText
                 android:id="@+id/calendar_picker_dialog_nova_entrada_data"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

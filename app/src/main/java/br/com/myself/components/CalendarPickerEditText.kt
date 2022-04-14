@@ -15,7 +15,7 @@ import java.util.*
 class CalendarPickerEditText(context: Context, attrs: AttributeSet) :
     TextInputEditText(context, attrs) {
     
-    private lateinit var datePicker: MaterialDatePicker<Long>
+    private val mDatePicker: MaterialDatePicker<Long>
     private val calendar: Calendar = Calendar.getInstance()
     
     init {
@@ -26,19 +26,23 @@ class CalendarPickerEditText(context: Context, attrs: AttributeSet) :
                 .setEnd(MaterialDatePicker.thisMonthInUtcMilliseconds())
                 .build()
         
-        val builder = MaterialDatePicker.Builder.datePicker()
+        mDatePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(calendarConstraint)
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .setTheme(R.style.CalendarPickerLayoutTheme)
             .setSelection(calendar.timeInMillis)
             .build()
         
-        builder.addOnPositiveButtonClickListener {
+        mDatePicker.addOnPositiveButtonClickListener {
             calendar.timeInMillis = it
             setText(calendar.formattedDate())
         }
         
         setText(calendar.formattedDate())
+        
+        setFocusable(false)
+        setCursorVisible(false)
+        
     }
     
     fun getTime(): Calendar {
@@ -51,22 +55,11 @@ class CalendarPickerEditText(context: Context, attrs: AttributeSet) :
     }
     
     fun showCalendar(fragmentManager: FragmentManager, tag: String?) {
-        datePicker.show(fragmentManager, tag)
+        mDatePicker.show(fragmentManager, tag)
     }
     
     fun showCalendar(fragmentTransaction: FragmentTransaction, tag: String?) {
-        datePicker.show(fragmentTransaction, tag)
-    }
-    
-    
-    override fun setFocusable(focusable: Boolean) {
-        // Focusable sempre FALSE
-        super.setFocusable(false)
-    }
-    
-    override fun setClickable(clickable: Boolean) {
-        // Clickable sempre TRUE
-        super.setClickable(true)
+        mDatePicker.show(fragmentTransaction, tag)
     }
     
 }

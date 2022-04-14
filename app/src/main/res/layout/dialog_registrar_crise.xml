@@ -41,7 +41,8 @@
                 <br.com.myself.components.CalendarPickerEditText
                     android:id="@+id/calendar_picker_dialog_registrar_crise_data"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
