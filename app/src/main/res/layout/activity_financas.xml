@@ -8,21 +8,6 @@
     android:isScrollContainer="true"
     tools:context="br.com.myself.ui.financas.FinancasActivity">
 
-    <TextView
-        android:id="@+id/textview_financas_titulo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/backgroung_gradient_app_color"
-        android:padding="@dimen/all_default_layout_offset_16"
-        tools:text="Registros"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-
-
-
     <FrameLayout
         android:id="@+id/container_finanacas"
         android:layout_width="match_parent"

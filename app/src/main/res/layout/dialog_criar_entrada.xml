@@ -76,12 +76,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_dialog_nova_entrada_salvar"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/all_default_layout_offset_4"
             android:text="Salvar"
-            android:textColor="@color/colorAccent"
+            app:backgroundTint="@color/colorAccent"
             android:textSize="18sp" />
     </com.google.android.flexbox.FlexboxLayout>
 </LinearLayout>

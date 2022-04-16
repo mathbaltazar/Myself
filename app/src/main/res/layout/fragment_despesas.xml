@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    tools:context=".ui.financas.despesas.DespesasFragment"
     tools:ignore="HardcodedText,ContentDescription">
 
     <com.google.android.flexbox.FlexboxLayout
@@ -12,6 +13,43 @@
         android:layout_height="match_parent"
         app:alignItems="center"
         app:flexDirection="column">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            app:cardElevation="4dp"
+            android:layout_height="56dp">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Despesas"
+                    android:textSize="@dimen/text_size_20"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_despesas_info"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/all_default_layout_offset_8"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="18dp"
+                    app:icon="@drawable/ic_info"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,16 +65,7 @@
                 android:textAllCaps="true"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/button_despesas_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="@dimen/all_default_layout_offset_4"
-                android:src="@drawable/ic_info"
-                tools:ignore="ContentDescription" />
+
         </LinearLayout>
 
         <TextView
@@ -58,7 +87,6 @@
             tools:listitem="@layout/adapter_despesas_item" />
 
     </com.google.android.flexbox.FlexboxLayout>
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_despesas_adicionar"

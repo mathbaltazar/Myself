@@ -8,21 +8,64 @@
     tools:context="br.com.myself.ui.financas.entradas.EntradasFragment"
     tools:ignore="HardcodedText, ContentDescription">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_entradas"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/all_default_layout_offset_8" />
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_entradas_empty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/text_size_16"
-        android:text="Não há entradas registradas!"
-        android:textAlignment="center"
-        android:textSize="@dimen/text_size_16"
-        android:textStyle="italic" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:cardElevation="4dp">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Entradas"
+                    android:textSize="@dimen/text_size_20"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_despesas_info"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/all_default_layout_offset_8"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="18dp"
+                    app:icon="@drawable/ic_info"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_entradas_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_size_16"
+            android:text="Não há entradas"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="italic" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_entradas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/all_default_layout_offset_8" />
+
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_entradas_add"

@@ -33,20 +33,14 @@ class FinancasActivity : AppCompatActivity() {
                 R.id.bottom_navigation_registros -> {
                     supportFragmentManager.beginTransaction().setReorderingAllowed(true)
                         .replace(R.id.container_finanacas, RegistrosFragment(registroRepository)).commit()
-                    
-                    textview_financas_titulo.text = "Registros"
                 }
                 R.id.bottom_navigation_entradas -> {
                     supportFragmentManager.beginTransaction().setReorderingAllowed(true)
                         .replace(R.id.container_finanacas, EntradasFragment(entradaRepository)).commit()
-                    
-                    textview_financas_titulo.text = "Entradas"
                 }
                 R.id.bottom_navigation_despesas -> {
                     supportFragmentManager.beginTransaction().setReorderingAllowed(true)
                         .replace(R.id.container_finanacas, DespesasFragment(despesaRepository, registroRepository)).commit()
-                    
-                    textview_financas_titulo.text = "Despesas"
                 }
             }
             

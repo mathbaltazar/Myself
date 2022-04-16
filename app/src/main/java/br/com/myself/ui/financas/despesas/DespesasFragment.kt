@@ -1,9 +1,7 @@
 package br.com.myself.ui.financas.despesas
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,17 +20,14 @@ import kotlinx.android.synthetic.main.fragment_despesas.*
 class DespesasFragment(
     private val despesaRepository: DespesaRepository,
     private val registroRepository: RegistroRepository
-) : Fragment() {
+) : Fragment(R.layout.fragment_despesas) {
     
     private val disposables: CompositeDisposable = CompositeDisposable()
     
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View  = inflater.inflate(R.layout.fragment_despesas, container, false)
-        
-    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    
+        
         
         button_despesas_info.setOnClickListener {
             card_despesas_info.visibility = View.VISIBLE
