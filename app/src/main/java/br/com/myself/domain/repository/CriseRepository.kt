@@ -1,13 +1,13 @@
 package br.com.myself.domain.repository
 
-import android.content.Context
-import br.com.myself.application.Application
+import android.app.Application
 import br.com.myself.domain.dao.CriseDAO
+import br.com.myself.domain.database.MyDatabase
 import br.com.myself.domain.entity.Crise
 
-class CriseRepository(context: Context) {
+class CriseRepository(application: Application) {
     private val dao: CriseDAO =
-        (context.applicationContext as Application).getDatabase().getCriseDAO()
+        MyDatabase.getInstance(application).getCriseDAO()
     
     fun salvar(crise: Crise): Long {
         return dao.persist(crise)

@@ -1,5 +1,6 @@
 package br.com.myself.ui.financas
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -15,9 +16,9 @@ import kotlinx.android.synthetic.main.activity_financas.*
 
 class FinancasActivity : AppCompatActivity() {
     
-    private val registroRepository: RegistroRepository by lazy { RegistroRepository(applicationContext) }
-    private val despesaRepository: DespesaRepository by lazy { DespesaRepository(applicationContext) }
-    private val entradaRepository: EntradaRepository by lazy { EntradaRepository(applicationContext) }
+    private val registroRepository: RegistroRepository by lazy { RegistroRepository(applicationContext as Application) }
+    private val despesaRepository: DespesaRepository by lazy { DespesaRepository(applicationContext as Application) }
+    private val entradaRepository: EntradaRepository by lazy { EntradaRepository(applicationContext as Application) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

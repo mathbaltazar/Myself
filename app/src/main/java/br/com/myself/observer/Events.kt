@@ -10,7 +10,6 @@ open class Events {
     class Toast(val message: String)
     class Snack(val view: View, val message: String)
     
-    object UpdateRegistros
     object UpdateEntradas
     object UpdateDespesas
     class EditarRegistro(val registro: Registro)

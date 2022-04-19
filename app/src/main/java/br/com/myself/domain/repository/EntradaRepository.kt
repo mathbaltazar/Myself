@@ -1,12 +1,12 @@
 package br.com.myself.domain.repository
 
-import android.content.Context
-import br.com.myself.application.Application
+import android.app.Application
+import br.com.myself.domain.database.MyDatabase
 import br.com.myself.domain.entity.Entrada
 
-class EntradaRepository(val context: Context) {
+class EntradaRepository(application: Application) {
     
-    private val dao = (context.applicationContext as Application).getDatabase().getEntradaDAO()
+    private val dao = MyDatabase.getInstance(application).getEntradaDAO()
     
     fun pesquisarEntradas(mes: Int, ano: Int): List<Entrada> {
         // Seguindo o pattern "yyyy-MM-dd"

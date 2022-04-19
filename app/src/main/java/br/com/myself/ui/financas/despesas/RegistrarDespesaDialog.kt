@@ -84,7 +84,7 @@ class RegistrarDespesaDialog(
                 registroRepository.salvarRegistro(novoregistro)
             },{
                 toast("Registrado!")
-                Trigger.launch(Events.UpdateRegistros, Events.UpdateDespesas)
+                Trigger.launch(Events.UpdateDespesas)
     
                 dismiss()
             })

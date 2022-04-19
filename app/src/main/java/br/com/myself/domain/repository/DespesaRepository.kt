@@ -1,12 +1,12 @@
 package br.com.myself.domain.repository
 
-import android.content.Context
-import br.com.myself.application.Application
+import android.app.Application
+import br.com.myself.domain.database.MyDatabase
 import br.com.myself.domain.entity.Despesa
 
-class DespesaRepository(context: Context) {
+class DespesaRepository(application: Application) {
     
-    private val dao = (context.applicationContext as Application).getDatabase().getDespesaDAO()
+    private val dao = MyDatabase.getInstance(application).getDespesaDAO()
     
     fun getAllDespesas(): List<Despesa> {
         return dao.findAll()

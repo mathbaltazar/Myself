@@ -6,22 +6,17 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.com.myself.R
-import br.com.myself.domain.entity.Registro
-import br.com.myself.domain.repository.RegistroRepository
 import br.com.myself.notification.Notification
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
 import br.com.myself.ui.crises.CrisesActivity
 import br.com.myself.ui.financas.FinancasActivity
-import br.com.myself.util.Async
-import br.com.myself.util.Utils
 import com.google.firebase.messaging.FirebaseMessaging
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_home.*
 import org.jetbrains.anko.toast
-import kotlin.math.ceil
 
 class HomeActivity : AppCompatActivity() {
     
@@ -42,13 +37,6 @@ class HomeActivity : AppCompatActivity() {
         }
         
         registerGlobalToast()
-        
-        // TESTE 2: Instanciando Repository
-        Async.doInBackground {
-            val repository = RegistroRepository(applicationContext)
-            repository.salvarRegistro(Registro(descricao = "Teste ${4}", data = Utils.getCalendar(), valor = ceil(Math.random() + 1)))
-        }
-        
     }
     
     private fun registerGlobalToast() {

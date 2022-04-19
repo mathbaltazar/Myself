@@ -1,16 +1,16 @@
 package br.com.myself.domain.repository
 
-import android.content.Context
-import br.com.myself.application.Application
+import android.app.Application
+import androidx.lifecycle.LiveData
 import br.com.myself.domain.dao.RegistroDAO
+import br.com.myself.domain.database.MyDatabase
 import br.com.myself.domain.entity.Registro
 
-class RegistroRepository(context: Context) {
+class RegistroRepository(application: Application) {
     
-    private val registroDAO: RegistroDAO =
-        (context.applicationContext as Application).getDatabase().getRegistroDAO()
+    private val registroDAO: RegistroDAO = MyDatabase.getInstance(application).getRegistroDAO()
     
-    fun pesquisarRegistros(mes: Int, ano: Int): List<Registro> {
+    fun pesquisarRegistros(mes: Int, ano: Int): LiveData<List<Registro>> {
         // Seguindo o pattern "yyyy-MM-dd"
         var monthLike = "%-"
         if (mes < 10) monthLike += "0"
@@ -34,8 +34,7 @@ class RegistroRepository(context: Context) {
     }
     
     fun pesquisarRegistros(pesquisa: String): List<Registro> {
-        return registroDAO.findAllRegistrosByDescricao("%$pesquisa%") // Cláusula LIKE
+        return registroDAO.findAllRegistrosByDescricao("%$pesquisa%")
     }
-    
     
 }

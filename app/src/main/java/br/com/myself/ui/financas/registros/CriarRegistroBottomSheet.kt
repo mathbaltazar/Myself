@@ -69,7 +69,7 @@ class CriarRegistroBottomSheet(
                     repository.salvarRegistro(novoregistro)
                 }, {
                     toast("Dados salvos!")
-                    Trigger.launch(Events.UpdateRegistros, Events.AtualizarDetalhesRegistro(novoregistro))
+                    Trigger.launch(Events.AtualizarDetalhesRegistro(novoregistro))
         
                     dismiss()
                 })

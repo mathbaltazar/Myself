@@ -1,5 +1,6 @@
 package br.com.myself.ui.financas.despesas
 
+import android.app.Application
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
@@ -43,8 +44,8 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     private lateinit var despesa: Despesa
     private val disposables: CompositeDisposable = CompositeDisposable()
     
-    private val registroRepository by lazy { RegistroRepository(applicationContext) }
-    private val despesaRepository by lazy { DespesaRepository(applicationContext) }
+    private val registroRepository by lazy { RegistroRepository(applicationContext as Application) }
+    private val despesaRepository by lazy { DespesaRepository(applicationContext as Application) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,7 +109,6 @@ class DetalhesDespesaActivity : AppCompatActivity() {
                     .setPositiveButton("Excluir") { _, _ ->
                         Async.doInBackground({ registroRepository.excluirRegistro(registro) }, {
                             toast("Excluído!")
-                            Trigger.launch(Events.UpdateRegistros)
                     
                             carregarRegistros()
                         })
@@ -151,7 +151,7 @@ class DetalhesDespesaActivity : AppCompatActivity() {
             .setPositiveButton("Excluir") { _, _ ->
                 Async.doInBackground({ despesaRepository.excluir(despesa) }, {
                     toast("Removido!")
-                    Trigger.launch(Events.UpdateDespesas, Events.UpdateRegistros)
+                    Trigger.launch(Events.UpdateDespesas)
                     finish()
                 })
             }.setNegativeButton("Cancelar", null)

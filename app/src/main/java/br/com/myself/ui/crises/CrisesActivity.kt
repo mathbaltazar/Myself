@@ -1,6 +1,7 @@
 package br.com.myself.ui.crises
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
@@ -27,7 +28,7 @@ import java.util.*
 
 class CrisesActivity : AppCompatActivity() {
     
-    private val repository: CriseRepository by lazy { CriseRepository(applicationContext) }
+    private val repository: CriseRepository by lazy { CriseRepository(applicationContext as Application) }
     private val disposable: CompositeDisposable = CompositeDisposable()
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,8 +142,4 @@ class CrisesActivity : AppCompatActivity() {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
     
-    class CriseDataViewObject {
-        var crises: ArrayList<Crise> = arrayListOf()
-        var filtroAnos: Int = 0
-    }
 }

@@ -1,5 +1,6 @@
 package br.com.myself.ui.financas.registros
 
+import android.app.Application
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -8,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.domain.repository.RegistroRepository
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
 import br.com.myself.ui.adapter.RegistroAdapter
 import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.Async
@@ -18,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_pesquisar_registros.*
 
 class PesquisarRegistrosActivity : AppCompatActivity() {
     
-    private val registroRepository by lazy { RegistroRepository(applicationContext) }
+    private val registroRepository by lazy { RegistroRepository(applicationContext as Application) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +34,9 @@ class PesquisarRegistrosActivity : AppCompatActivity() {
         
                 AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
                     .setPositiveButton("Excluir") { _, _ ->
-                        Async.doInBackground({
+                        Async.doInBackground {
                             registroRepository.excluirRegistro(registro)
-                        }, {
-                            Trigger.launch(Events.UpdateRegistros)
-                        })
+                        }
                     }.setNegativeButton("Cancelar", null).show()
             }))
     

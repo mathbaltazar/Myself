@@ -100,7 +100,7 @@
                 app:iconPadding="0dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/fab_registros_add_registro"
+                android:id="@+id/button_registros_add"
                 android:layout_width="38dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/all_default_layout_offset_4"
