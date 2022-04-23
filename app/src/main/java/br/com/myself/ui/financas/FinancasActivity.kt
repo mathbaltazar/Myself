@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.myself.R
 import br.com.myself.domain.repository.DespesaRepository
-import br.com.myself.domain.repository.EntradaRepository
 import br.com.myself.domain.repository.RegistroRepository
 import br.com.myself.ui.financas.despesas.DespesasFragment
 import br.com.myself.ui.financas.entradas.EntradasFragment
@@ -18,7 +17,6 @@ class FinancasActivity : AppCompatActivity() {
     
     private val registroRepository: RegistroRepository by lazy { RegistroRepository(applicationContext as Application) }
     private val despesaRepository: DespesaRepository by lazy { DespesaRepository(applicationContext as Application) }
-    private val entradaRepository: EntradaRepository by lazy { EntradaRepository(applicationContext as Application) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +35,7 @@ class FinancasActivity : AppCompatActivity() {
                 }
                 R.id.bottom_navigation_entradas -> {
                     supportFragmentManager.beginTransaction().setReorderingAllowed(true)
-                        .replace(R.id.container_finanacas, EntradasFragment(entradaRepository)).commit()
+                        .replace(R.id.container_finanacas, EntradasFragment()).commit()
                 }
                 R.id.bottom_navigation_despesas -> {
                     supportFragmentManager.beginTransaction().setReorderingAllowed(true)

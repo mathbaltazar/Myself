@@ -9,10 +9,6 @@ import androidx.fragment.app.DialogFragment
 import br.com.myself.R
 import br.com.myself.components.CalendarPickerEditText
 import br.com.myself.domain.entity.Entrada
-import br.com.myself.domain.repository.EntradaRepository
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
-import br.com.myself.util.Async
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
@@ -24,7 +20,7 @@ import java.math.BigDecimal
 
 class CriarEntradaDialog(
     private val entrada: Entrada? = null,
-    private val repository: EntradaRepository
+    private val onSave: (DialogFragment, Entrada) -> Unit
 ) : DialogFragment() {
     
     override fun onCreateView(
@@ -63,34 +59,23 @@ class CriarEntradaDialog(
         }
         
         button_dialog_nova_entrada_salvar.setOnClickListener {
-
             val valor = textinput_dialog_nova_entrada_valor.text.toString()
             val fonte = textinput_dialog_nova_entrada_descricao.text.toString()
 
             if (fonte.isBlank()) {
                 textinput_dialog_nova_entrada_descricao.requestFocus()
-                Trigger.launch(Events.Toast("Campo Fonte vazio"))
+                toast("Campo Fonte vazio")
             } else if (!isValorValido(valor)) {
                 textinput_dialog_nova_entrada_valor.requestFocus()
-                Trigger.launch(Events.Toast("Campo Valor inválido"))
+                toast("Campo Valor inválido")
             } else {
-
-                val novaentrada = Entrada(
+                onSave(this, Entrada(
                     id = entrada?.id,
                     valor = Utils.unformatCurrency(valor).toDouble(),
                     descricao = fonte.trim(),
                     data = calendar_picker_dialog_nova_entrada_data.getTime()
-                )
-                
-                Async.doInBackground({
-                    repository.salvar(novaentrada)
-                }, {
-                    toast("Dados salvos!")
-                    Trigger.launch(Events.UpdateEntradas)
-                    dismiss()
-                })
+                ))
             }
-
         }
     }
 

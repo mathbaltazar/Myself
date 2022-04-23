@@ -32,6 +32,10 @@ class Utils {
         fun Calendar.formattedDate(): String {
             return sdf.format(this.time)
         }
+        
+        fun Calendar.monthString() : String {
+            return MESES_STRING[get(Calendar.MONTH)]
+        }
     
         fun getCalendar(): Calendar {
             return GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"), mLocale)

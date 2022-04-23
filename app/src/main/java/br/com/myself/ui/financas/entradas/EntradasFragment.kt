@@ -1,90 +1,100 @@
 package br.com.myself.ui.financas.entradas
 
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.domain.entity.Entrada
-import br.com.myself.domain.repository.EntradaRepository
-import br.com.myself.observer.Trigger
-import br.com.myself.observer.Events
 import br.com.myself.ui.adapter.EntradaAdapter
-import br.com.myself.util.Async
 import br.com.myself.util.Utils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_entradas.*
+import br.com.myself.viewmodel.EntradasFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_entradas.view.*
-import java.util.*
-import java.util.Calendar.MONTH
-import java.util.Calendar.YEAR
+import org.jetbrains.anko.support.v4.toast
 
-class EntradasFragment(private val repository: EntradaRepository) : Fragment() {
+class EntradasFragment : Fragment(R.layout.fragment_entradas) {
     
-    private lateinit var mView: View
-    private val disposables = CompositeDisposable()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        mView = inflater.inflate(R.layout.fragment_entradas, container, false)
-        
-        return mView
-    }
+    private lateinit var viewModel: EntradasFragmentViewModel
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(EntradasFragmentViewModel::class.java)
     
-        val adapter = EntradaAdapter(repository)
-        mView.rv_entradas.adapter = adapter
-        mView.rv_entradas.layoutManager = LinearLayoutManager(mView.context)
+        setUpAdapter()
         
-        carregarEntradas()
+        viewModel.entradas.observe(viewLifecycleOwner, {
+            (view.rv_entradas.adapter as EntradaAdapter).submitData(lifecycle, it)
     
+            atualizarUI()
+        })
+        
+        viewModel.quantidadeEntradas.observe(viewLifecycleOwner, { countEntradas ->
+            view.tv_entradas_empty.visibility =
+                if (countEntradas == 0) View.VISIBLE else View.GONE
+        })
+        
+        view.button_decrement_year.setOnClickListener {
+            viewModel.decrementarAno()
+        }
+        
+        view.button_increment_year.setOnClickListener {
+            viewModel.incrementarAno()
+        }
+        
         view.button_entradas_add.setOnClickListener {
             iniciarDialogCriarEntrada()
         }
-        
-        registerObservables()
-        
     }
     
-    private fun registerObservables() {
-        disposables.add(
-            Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe { t ->
-                    when (t) {
-                        is Events.UpdateEntradas -> carregarEntradas()
-                        is Events.EditarEntrada -> iniciarDialogCriarEntrada(t.entrada)
-                    }
-                })
-    }
+    private fun setUpAdapter() {
+        view?.rv_entradas?.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = EntradaAdapter()
+        
+        adapter.setClickListener(onItemLongClick = { viewAnchor, entrada ->
+            val popupMenu = PopupMenu(requireContext(), viewAnchor)
     
-    private fun carregarEntradas() {
-        val calendar = Utils.getCalendar()
-        Async.doInBackground ({
-            repository.pesquisarEntradas(calendar[MONTH], calendar[YEAR])
-        }) { entradas ->
+            popupMenu.menu.add(Menu.NONE, 0, Menu.NONE, "Editar").setOnMenuItemClickListener {
+                iniciarDialogCriarEntrada(entrada)
+                true
+            }
+    
+            popupMenu.menu.add(Menu.NONE, 1, Menu.NONE, "Excluir").setOnMenuItemClickListener {
+                var mensagem = "Deseja realmente excluir a entrada?"
+                mensagem += "\n\nFonte: ${entrada.descricao}"
+                mensagem += "\nValor: ${Utils.formatCurrency(entrada.valor)}"
+        
+                AlertDialog.Builder(requireContext()).setTitle("Excluir").setMessage(mensagem)
+                    .setPositiveButton("Excluir") { _, _ ->
+                        viewModel.excluir(entrada) {
+                            toast("Removido!")
+                        }
+                    }.setNegativeButton("Cancelar", null).show()
+                true
+            }
+            popupMenu.show()
             
-            mView.tv_entradas_empty.visibility =
-                    if (entradas.isEmpty()) View.VISIBLE else View.GONE
-            (rv_entradas.adapter as EntradaAdapter).submitList(entradas)
-        }
+        }, onSeparatorClick = {
+            // TODO
+        })
+    
+        view?.rv_entradas?.adapter = adapter
+    }
+    
+    private fun atualizarUI() {
+        view?.textview_ano?.text = "${viewModel.anoAtual}"
     }
     
     private fun iniciarDialogCriarEntrada(entrada: Entrada? = null) {
-        val dialog = CriarEntradaDialog(entrada, repository)
+        val dialog = CriarEntradaDialog(entrada) { dialog, novaentrada ->
+            viewModel.salvar(novaentrada) {
+                toast("Dados salvos!")
+                dialog.dismiss()
+            }
+        }
         dialog.show(childFragmentManager, null)
     }
-    
-    override fun onDestroyView() {
-        disposables.clear()
-        super.onDestroyView()
-    }
-    
 }

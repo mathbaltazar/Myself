@@ -1,7 +1,6 @@
 package br.com.myself.application
 
 import android.app.Application
-import android.util.Log
 import br.com.myself.R
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
@@ -21,8 +20,6 @@ class Application : Application() {
                             .build())
                 ).build()
         )
-        
-        Log.d("ApplicationContext","onCreated disparado!")
     }
     
 }
