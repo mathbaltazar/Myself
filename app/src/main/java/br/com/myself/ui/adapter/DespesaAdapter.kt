@@ -1,26 +1,19 @@
 package br.com.myself.ui.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
 import br.com.myself.domain.entity.Despesa
-import br.com.myself.domain.repository.DespesaRepository
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
-import br.com.myself.ui.financas.despesas.DetalhesDespesaActivity
-import br.com.myself.util.Async
 import br.com.myself.util.Utils
 import kotlinx.android.synthetic.main.adapter_despesas_item.view.*
 
-class DespesaAdapter(private val repository: DespesaRepository)
-    : ListAdapter<Despesa, RecyclerView.ViewHolder>(COMPARATOR) {
+class DespesaAdapter : ListAdapter<Despesa, RecyclerView.ViewHolder>(COMPARATOR) {
+    
+    private var mListener: ((Int, Despesa) -> Unit)? = null
     
     private object COMPARATOR : DiffUtil.ItemCallback<Despesa>() {
         override fun areItemsTheSame(oldItem: Despesa, newItem: Despesa): Boolean = oldItem.id == newItem.id
@@ -35,6 +28,10 @@ class DespesaAdapter(private val repository: DespesaRepository)
     
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as ItemViewHolder).bindView(getItem(position))
+    }
+    
+    fun setOnItemActionListener(listener: (Int, Despesa) -> Unit) {
+        mListener = listener
     }
     
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -67,39 +64,25 @@ class DespesaAdapter(private val repository: DespesaRepository)
             
             // BOTÃO DE AÇÃO EXCLUIR
             itemView.button_adapter_despesas_item_excluir.setOnClickListener {
-                excluirDepesa(despesa)
+                mListener?.invoke(ACTION_EXCLUIR, despesa)
             }
             
             // BOTÃO DE AÇÃO DETALHES
             itemView.button_adapter_despesas_item_detalhes.setOnClickListener {
-                val intent = Intent(itemView.context, DetalhesDespesaActivity::class.java)
-                intent.putExtra(DetalhesDespesaActivity.DESPESA_ID, despesa.id)
-                itemView.context.startActivity(intent)
+                mListener?.invoke(ACTION_DETALHES, despesa)
             }
             
             // BOTÃO DE AÇÃO REGISTRAR
             itemView.button_adapter_despesas_item_registrar.setOnClickListener {
-                Trigger.launch(Events.RegistrarDespesa(despesa))
+                mListener?.invoke(ACTION_REGISTRAR, despesa)
             }
         }
     
-        private fun excluirDepesa(despesa: Despesa) {
-            var mensagem = "Nome: ${despesa.nome}"
-            mensagem += "\nValor: ${Utils.formatCurrency(despesa.valor)}"
-            if (despesa.diaVencimento != 0) mensagem += "\nVencimento: ${despesa.diaVencimento}"
-            
-            AlertDialog.Builder(itemView.context).setTitle("Excluir despesa?")
-                .setMessage(mensagem)
-                .setPositiveButton("Excluir") { _, _ ->
-                    Async.doInBackground({
-                        repository.excluir(despesa)
-                    }) {
-                        Toast.makeText(itemView.context, "Removido!", Toast.LENGTH_SHORT).show()
-                        Trigger.launch(Events.UpdateDespesas)
-                    }
-                }.setNegativeButton("Cancelar", null)
-                .show()
-        }
+    }
     
+    companion object {
+        const val ACTION_EXCLUIR = 1
+        const val ACTION_DETALHES = 2
+        const val ACTION_REGISTRAR = 3
     }
 }

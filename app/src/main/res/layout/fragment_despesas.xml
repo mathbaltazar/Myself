@@ -16,8 +16,8 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            app:cardElevation="4dp"
-            android:layout_height="56dp">
+            android:layout_height="56dp"
+            app:cardElevation="4dp">
 
 
             <RelativeLayout
@@ -36,11 +36,11 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_despesas_info"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="34dp"
+                    android:layout_height="33dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/all_default_layout_offset_8"
+                    android:layout_marginEnd="10dp"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     app:cornerRadius="18dp"
@@ -122,16 +122,16 @@
                 android:text="@string/layout_movimentos_despesas_info"
                 android:textSize="@dimen/text_size_16" />
 
-            <ImageView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_card_despesas_info_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="@dimen/all_default_layout_offset_4"
-                android:src="@drawable/ic_close"
-                tools:ignore="ContentDescription" />
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:icon="@drawable/ic_close" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

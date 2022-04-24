@@ -9,25 +9,20 @@ import androidx.fragment.app.DialogFragment
 import br.com.myself.R
 import br.com.myself.components.CalendarPickerEditText
 import br.com.myself.domain.entity.Despesa
-import br.com.myself.domain.entity.Registro
-import br.com.myself.domain.repository.RegistroRepository
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
-import br.com.myself.util.Async
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
-import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_registrar_despesa.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
-import org.jetbrains.anko.support.v4.toast
 import java.math.BigDecimal
+import java.util.*
 
 class RegistrarDespesaDialog(
     private val despesa: Despesa,
-    private val registroRepository: RegistroRepository
+    private val sugestoes: List<Double>,
+    private val onRegister: (DialogFragment, Double, Calendar) -> Unit
 ) : DialogFragment() {
     
     override fun onCreateView(
@@ -66,7 +61,6 @@ class RegistrarDespesaDialog(
         }
         
         button_dialog_registrar_despesa_registrar.setOnClickListener {
-            
             val valor = Utils.unformatCurrency(et_dialog_registrar_despesa_valor.text.toString()).toDouble()
             if (valor.toBigDecimal() <= BigDecimal.ZERO) {
                 til_dialog_registrar_despesa_novo_valor.error = "Valor inválido"
@@ -74,54 +68,25 @@ class RegistrarDespesaDialog(
             }
             
             // Criação do registro a partir da despesa
-            val novoregistro = Registro(
-            descricao = despesa.nome,
-            valor = valor,
-            data = calendar_picker_dialog_registrar_despesa_data.getTime(),
-            despesa_id = despesa.id)
-            
-            Async.doInBackground({
-                registroRepository.salvarRegistro(novoregistro)
-            },{
-                toast("Registrado!")
-                Trigger.launch(Events.UpdateDespesas)
-    
-                dismiss()
-            })
+            onRegister(this, valor, calendar_picker_dialog_registrar_despesa_data.getTime())
         }
         
-        calcularSugestoes()
+        setUpSugestoes()
     }
     
-    private fun calcularSugestoes() {
-        Async.doInBackground({
-            registroRepository.pesquisarRegistros(despesa.id)
-        }, { registros ->
-    
-            registros.map(Registro::valor)
-                .distinct()
-                .sorted()
-                .forEachIndexed { index, valor ->
-        
-                val button =
-                    layoutInflater.inflate(R.layout.button_dialog_registrar_despesa_sugestao,
-                        flexbox_dialog_registrar_despesa_sugestoes_valor,
-                        false) as MaterialButton
-                button.text = Utils.formatCurrency(valor)
-        
-                if (index == 0) { // Primeiro button, descer pra linha de baixo do flexbox
-                    val lp = FlexboxLayout.LayoutParams(button.layoutParams)
-                    lp.isWrapBefore = true
-                    button.layoutParams = lp
-                }
-        
-                flexbox_dialog_registrar_despesa_sugestoes_valor.addView(button)
-        
-                button.setOnClickListener {
-                    et_dialog_registrar_despesa_valor.setText(button.text)
-                }
+    private fun setUpSugestoes() {
+        sugestoes.sorted().forEach { valor ->
+            val button = layoutInflater.inflate(R.layout.button_dialog_registrar_despesa_sugestao,
+                flexbox_dialog_registrar_despesa_sugestoes_valor,
+                false) as MaterialButton
+            
+            button.text = Utils.formatCurrency(valor)
+            button.setOnClickListener {
+                et_dialog_registrar_despesa_valor.setText(button.text)
             }
-        })
+            
+            flexbox_dialog_registrar_despesa_sugestoes_valor.addView(button)
+        }
     }
     
 }

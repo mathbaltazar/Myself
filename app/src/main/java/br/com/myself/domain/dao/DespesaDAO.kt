@@ -1,5 +1,6 @@
 package br.com.myself.domain.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import br.com.myself.domain.entity.Despesa
 
@@ -7,7 +8,7 @@ import br.com.myself.domain.entity.Despesa
 interface DespesaDAO {
     
     @Query("SELECT * FROM Despesa ORDER BY id DESC")
-    fun findAll(): List<Despesa>
+    fun findAll(): LiveData<List<Despesa>>
     
     @Query("SELECT * FROM Despesa WHERE id =:id")
     fun find(id: Long): Despesa

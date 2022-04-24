@@ -1,6 +1,5 @@
 package br.com.myself.ui.financas.despesas
 
-import android.app.Application
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
@@ -11,24 +10,21 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
-import br.com.myself.domain.entity.Despesa
-import br.com.myself.domain.repository.DespesaRepository
-import br.com.myself.domain.repository.RegistroRepository
+import br.com.myself.domain.entity.Registro
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
 import br.com.myself.ui.adapter.RegistroAdapter
 import br.com.myself.util.AdapterClickListener
-import br.com.myself.util.Async
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
+import br.com.myself.viewmodel.DetalhesDespesaActivityViewModel
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_detalhes_despesa.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import org.jetbrains.anko.toast
@@ -39,99 +35,107 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     companion object {
         const val DESPESA_ID: String = "DESPESA_ID"
         private const val MENU_ITEMID_EXCLUIR: Int = 0
+        private const val MENU_ITEMID_SALVAR: Int = 1
     }
     
-    private lateinit var despesa: Despesa
-    private val disposables: CompositeDisposable = CompositeDisposable()
-    
-    private val registroRepository by lazy { RegistroRepository(applicationContext as Application) }
-    private val despesaRepository by lazy { DespesaRepository(applicationContext as Application) }
+    private lateinit var viewModel: DetalhesDespesaActivityViewModel
+    private var menuItemSalvar: MenuItem? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalhes_despesa)
         supportActionBar?.title = "Detalhes"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setUpView()
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
+        
+        viewModel = ViewModelProvider(this).get(DetalhesDespesaActivityViewModel::class.java)
+        
+        val despesaId = intent.getLongExtra(DESPESA_ID, 0)
     
-        Async.doInBackground({
-            despesaRepository.getDespesa(intent.getLongExtra(DESPESA_ID, 0))
-        }, {
-            despesa = it
-            bindView()
-        })
+        viewModel.loadDespesa(despesaId) {
+            setUpView()
+            setUpObservers()
+        }
     }
     
     private fun setUpView() {
+        with(et_detalhes_despesa_nome) {
+            setText(viewModel.despesa.nome)
+            setSelection(viewModel.despesa.nome.length)
+            addTextChangedListener { viewModel.setDespesaEdited() }
+        }
+        
         with(et_detalhes_despesa_valor) {
             addTextChangedListener(CurrencyMask(this))
+            setText(Utils.formatCurrency(viewModel.despesa.valor))
+            addTextChangedListener { viewModel.setDespesaEdited() }
             onFocusChange { _, hasFocus ->
                 if (hasFocus) setSelection(length())
             }
         }
         
-        et_detalhes_despesa_vencimento.setAdapter(obterAdapter())
-        et_detalhes_despesa_vencimento.setOnItemClickListener { _, _, position, _ ->
-            despesa.diaVencimento = position
+        with(et_detalhes_despesa_vencimento) {
+            val vencAdapter = obterVencimentoAdapter()
+            setAdapter(vencAdapter)
+            setText(vencAdapter.getItem(viewModel.despesa.diaVencimento), false)
+            setOnItemClickListener { _, _, position, _ ->
+                viewModel.despesa.diaVencimento = position
+                viewModel.setDespesaEdited()
+            }
         }
     
         button_detalhes_despesa_adicionar_registro.setOnClickListener {
-            val dialog = RegistrarDespesaDialog(despesa, registroRepository)
-            dialog.show(supportFragmentManager, null)
+            viewModel.getSugestoes { sugestoes ->
+                val dialog =
+                    RegistrarDespesaDialog(viewModel.despesa, sugestoes) { dialog, valor, data ->
+                        viewModel.registrar(valor, data) {
+                            dialog.dismiss()
+                        }
+                    }
+                dialog.show(supportFragmentManager, null)
+            }
         }
-        
-        disposables.add(Trigger.watcher().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe {
-                if (it is Events.UpdateDespesas) {
-                    carregarRegistros()
-                }
-            })
+    
+        setUpRegistrosAdapter()
     }
     
-    private fun bindView() {
-        et_detalhes_despesa_nome.setText(despesa.nome)
-        et_detalhes_despesa_nome.setSelection(despesa.nome.length)
-       
-        et_detalhes_despesa_valor.setText(Utils.formatCurrency(despesa.valor))
-    
-        with(et_detalhes_despesa_vencimento) {
-            setText(adapter.getItem(despesa.diaVencimento).toString(), false)
+    private fun setUpObservers() {
+        viewModel.registrosDaDespesa.observe(this) { registros ->
+            tv_detalhes_despesa_sem_registros.visibility =
+                if (registros.isEmpty()) View.VISIBLE else View.GONE
+        
+            (rv_detalhes_despesa_registros.adapter as RegistroAdapter).submitList(registros)
         }
         
-        
+        viewModel.despesaEdited.observe(this) {
+            menuItemSalvar?.isEnabled = it
+        }
+    }
+    
+    private fun setUpRegistrosAdapter() {
         val adapter = RegistroAdapter()
         adapter.setClickListener(AdapterClickListener(
             onLongClick = { registro ->
-                var msg = "Descrição: ${registro.descricao}"
-                msg += "\nValor: ${Utils.formatCurrency(registro.valor)}"
-        
-                AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
-                    .setPositiveButton("Excluir") { _, _ ->
-                        Async.doInBackground({ registroRepository.excluirRegistro(registro) }, {
-                            toast("Excluído!")
-                    
-                            carregarRegistros()
-                        })
-                    }.setNegativeButton("Cancelar", null).show()
+                confirmarExcluirRegistro(registro)
             }))
         rv_detalhes_despesa_registros.adapter = adapter
         rv_detalhes_despesa_registros.layoutManager = LinearLayoutManager(this)
-        
-        carregarRegistros()
     }
     
-    private fun carregarRegistros() {
-        Async.doInBackground({ registroRepository.pesquisarRegistros(despesa.id) }, { registros ->
-            
-            tv_detalhes_despesa_sem_registros.visibility =
-                if (registros.isEmpty()) View.VISIBLE else View.GONE
-            
-            (rv_detalhes_despesa_registros.adapter as RegistroAdapter).submitList(registros)
-            
-        })
+    private fun confirmarExcluirRegistro(registro: Registro) {
+        var msg = "Descrição: ${registro.descricao}"
+        msg += "\nValor: ${Utils.formatCurrency(registro.valor)}"
+    
+        AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
+            .setPositiveButton("Excluir") { _, _ ->
+                viewModel.excluirRegistro(registro) {
+                    toast("Excluído!")
+                }
+            }.setNegativeButton("Cancelar", null)
+            .show()
     }
     
-    private fun obterAdapter(): ArrayAdapter<String> {
+    private fun obterVencimentoAdapter(): ArrayAdapter<String> {
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item)
     
         adapter.add("Sem vencimento")
@@ -141,53 +145,45 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         return adapter
     }
     
-    private fun excluirDepesa() {
-        var msg = "Nome: ${despesa.nome}"
-        msg += "\nValor: ${Utils.formatCurrency(despesa.valor)}"
-        if (despesa.diaVencimento != 0) msg += "\nVencimento: ${despesa.diaVencimento}"
+    private fun confirmarExcluirDepesa() {
+        var msg = "Nome: ${viewModel.despesa.nome}"
+        msg += "\nValor: ${Utils.formatCurrency(viewModel.despesa.valor)}"
+        if (viewModel.despesa.diaVencimento != 0) msg += "\nVencimento: ${viewModel.despesa.diaVencimento}"
     
         AlertDialog.Builder(this).setTitle("Excluir despesa")
             .setMessage(msg)
             .setPositiveButton("Excluir") { _, _ ->
-                Async.doInBackground({ despesaRepository.excluir(despesa) }, {
-                    toast("Removido!")
-                    Trigger.launch(Events.UpdateDespesas)
-                    finish()
-                })
+               viewModel.excluirDespesa {
+                   toast("Removido!")
+                   finish()
+               }
             }.setNegativeButton("Cancelar", null)
             .show()
     }
     
-    private fun persistirDespesa(): Boolean {
+    private fun salvarDespesa(finishOnSave: Boolean = false) {
         val nome = et_detalhes_despesa_nome.text.toString()
         val valor = Utils.unformatCurrency(et_detalhes_despesa_valor.text.toString()).toDouble()
         
         if (nome.isBlank()) {
             et_detalhes_despesa_nome.requestFocus()
             Trigger.launch(Events.Toast("Nome inválido"))
-            return false
+            return
         }
         
         if (valor.toBigDecimal() <= BigDecimal.ZERO) {
             et_detalhes_despesa_valor.requestFocus()
             Trigger.launch(Events.Toast("Valor inválido"))
-            return false
+            return
         }
         
-        this.despesa.nome = nome
-        this.despesa.valor = valor
+        viewModel.despesa.nome = nome
+        viewModel.despesa.valor = valor
         // Vencimento já é atribuído na seleção, validação desnecessária
         
-        // Dispose observers
-        disposables.dispose()
-        
-        Async.doInBackground({
-            despesaRepository.salvar(this.despesa)
-        }, {
-            Trigger.launch(Events.UpdateDespesas)
-        })
-        
-        return true
+        viewModel.salvarDespesa {
+            if (finishOnSave) finish()
+        }
     }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -195,23 +191,43 @@ class DetalhesDespesaActivity : AppCompatActivity() {
             MENU_ITEMID_EXCLUIR, Menu.NONE, "Excluir")
             .setIcon(R.drawable.ic_delete)
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+    
+        menu.add(Menu.NONE,
+            MENU_ITEMID_SALVAR, Menu.NONE, "Salvar")
+            .setEnabled(false)
+            .setIcon(R.drawable.ic_check)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        
+        menuItemSalvar = menu.findItem(MENU_ITEMID_SALVAR)
+        
         return super.onCreateOptionsMenu(menu)
     }
     
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-        } else if (item.itemId == MENU_ITEMID_EXCLUIR) {
-            excluirDepesa()
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+            MENU_ITEMID_SALVAR -> salvarDespesa()
+            MENU_ITEMID_EXCLUIR -> confirmarExcluirDepesa()
         }
-        
         return super.onOptionsItemSelected(item)
     }
     
     override fun onBackPressed() {
-        if (persistirDespesa()) {
-            super.onBackPressed()
-        }
+        if (viewModel.wasEdited) confirmarSalvarDespesaOnClose()
+        else super.onBackPressed()
+    }
+    
+    private fun confirmarSalvarDespesaOnClose() {
+        AlertDialog.Builder(this)
+            .setMessage("Salvar dados?")
+            .setPositiveButton("Salvar") { _, _ ->
+                salvarDespesa(finishOnSave = true)
+            }
+            .setNegativeButton("Não Salvar") { _, _ ->
+                finish()
+            }
+            .setCancelable(false)
+            .show()
     }
     
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {

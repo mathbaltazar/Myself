@@ -6,10 +6,8 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import br.com.myself.R
 import br.com.myself.domain.entity.Despesa
-import br.com.myself.domain.repository.DespesaRepository
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
-import br.com.myself.util.Async
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
@@ -17,7 +15,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.dialog_criar_despesa.*
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 
-class CriarDespesaDialog(context: Context, private val despesaRepository: DespesaRepository) : Dialog(context) {
+class CriarDespesaDialog(context: Context, private val onSave: (Dialog, Despesa) -> Unit) : Dialog(context) {
     
     private var vencimentoSelecionado: Int = 0
     
@@ -54,7 +52,6 @@ class CriarDespesaDialog(context: Context, private val despesaRepository: Despes
             val nome = et_dialog_criar_despesa_nome.text.toString()
             val valor = et_dialog_criar_despesa_valor.text.toString()
             
-            
             if (nome.isBlank()) {
                 et_dialog_criar_despesa_nome.requestFocus()
                 Trigger.launch(Events.Toast("Nome inválido"))
@@ -62,21 +59,12 @@ class CriarDespesaDialog(context: Context, private val despesaRepository: Despes
                 et_dialog_criar_despesa_valor.requestFocus()
                 Trigger.launch(Events.Toast("Valor inválido"))
             } else {
-                val despesa = Despesa(
+                onSave(this, Despesa(
                     nome = nome,
                     valor = Utils.unformatCurrency(valor).toDouble(),
                     diaVencimento = this.vencimentoSelecionado
-                )
-                
-                Async.doInBackground({
-                    despesaRepository.salvar(despesa)
-                }, {
-                    Trigger.launch(Events.Toast("Salvo!"), Events.UpdateDespesas)
-                    cancel()
-                })
-                
+                ))
             }
-            
             
         }
     }

@@ -29,12 +29,16 @@ class RegistroRepository(application: Application) {
         registroDAO.delete(registro)
     }
     
-    fun pesquisarRegistros(despesaId: Long): List<Registro> {
-        return registroDAO.findAllRegistrosByDespesa(despesaId)
+    fun getValoresPelaDespesaId(despesaId: Long): List<Double> {
+        return registroDAO.findAllValorByDespesaId(despesaId)
     }
     
     fun pesquisarRegistros(pesquisa: String): List<Registro> {
         return registroDAO.findAllRegistrosByDescricao("%$pesquisa%")
+    }
+    
+    fun getRegistrosDaDespesa(despesaId: Long): LiveData<List<Registro>> {
+        return registroDAO.findAllRegistrosByDespesaId(despesaId)
     }
     
 }

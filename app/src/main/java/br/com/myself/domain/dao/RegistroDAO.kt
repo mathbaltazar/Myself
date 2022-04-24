@@ -16,8 +16,11 @@ interface RegistroDAO  {
     @Delete
     fun delete(registro: Registro)
     
+    @Query("SELECT DISTINCT(valor) FROM Registro WHERE despesa_id =:despesaId")
+    fun findAllValorByDespesaId(despesaId: Long): List<Double>
+    
     @Query("SELECT * FROM Registro WHERE despesa_id =:despesaId ORDER BY data DESC, id DESC")
-    fun findAllRegistrosByDespesa(despesaId: Long): List<Registro>
+    fun findAllRegistrosByDespesaId(despesaId: Long): LiveData<List<Registro>>
     
     @Query("SELECT * FROM Registro WHERE descricao LIKE :buscar")
     fun findAllRegistrosByDescricao(buscar: String): List<Registro>
