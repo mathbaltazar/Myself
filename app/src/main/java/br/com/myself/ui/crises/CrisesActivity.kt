@@ -1,7 +1,6 @@
 package br.com.myself.ui.crises
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
@@ -9,37 +8,37 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.domain.entity.Crise
-import br.com.myself.domain.repository.CriseRepository
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
 import br.com.myself.ui.adapter.CrisesAdapter
-import br.com.myself.util.Async
 import br.com.myself.util.Utils.Companion.formattedDate
+import br.com.myself.viewmodel.CrisesActivityViewModel
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_crises.*
 import org.jetbrains.anko.toast
-import java.util.*
 
 class CrisesActivity : AppCompatActivity() {
     
-    private val repository: CriseRepository by lazy { CriseRepository(applicationContext as Application) }
-    private val disposable: CompositeDisposable = CompositeDisposable()
+    private lateinit var viewModel: CrisesActivityViewModel
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crises)
         
-        setUpView()
-        configureAdapter()
-        loadCrises()
+        viewModel = ViewModelProvider(this).get(CrisesActivityViewModel::class.java)
         
-        registerObservables()
+        setUpView()
+    
+        viewModel.crises.observe(this, { crises ->
+            (recycler_view_crises.adapter as CrisesAdapter).submitList(crises)
+    
+            tv_crises_sem_crises_registradas.visibility =
+                if (crises.isEmpty()) View.VISIBLE else View.GONE
+    
+            tv_crises_numero_crises.text = crises.size.toString()
+        })
     }
     
     @SuppressLint("SetTextI18n")
@@ -58,10 +57,10 @@ class CrisesActivity : AppCompatActivity() {
         }
     
         button_crises_registrar_crise.setOnClickListener {
-            val dialog = RegistrarCriseDialog(repository = repository)
-            dialog.show(supportFragmentManager, null)
+            abrirDialogRegistrarCrise()
         }
-        
+    
+        configureAdapter()
     }
     
     private fun configureAdapter() {
@@ -75,22 +74,30 @@ class CrisesActivity : AppCompatActivity() {
     }
     
     private fun showPopupMenu(crise: Crise, view: View) {
-        val popup = PopupMenu(this@CrisesActivity, view, Gravity.END)/*.also { inflateLongClickMenu(it, crise) }*/
+        val popup = PopupMenu(this, view, Gravity.END)
         popup.menu.add("Editar").setOnMenuItemClickListener {
-            val dialog = RegistrarCriseDialog(crise, repository)
-            dialog.show(supportFragmentManager, null)
-            
+            abrirDialogRegistrarCrise(crise)
             true
         }
     
         popup.menu.add("Excluir").setOnMenuItemClickListener {
-            excluirCrise(crise)
+            confirmarExcluirCrise(crise)
             true
         }
         popup.show()
     }
     
-    private fun excluirCrise(crise: Crise) {
+    private fun abrirDialogRegistrarCrise(crise: Crise? = null) {
+        val dialog = RegistrarCriseDialog(crise) { dialog,  novacrise ->
+            viewModel.salvarCrise(novacrise) {
+                toast("Salvo!")
+                dialog.dismiss()
+            }
+        }
+        dialog.show(supportFragmentManager, null)
+    }
+    
+    private fun confirmarExcluirCrise(crise: Crise) {
         var mensagem = "Data: ${crise.data.formattedDate()}"
         mensagem += "\nHorários: Entre ${crise.horario1} e ${crise.horario2}"
         mensagem += "\nObservações: ${crise.observacoes}"
@@ -99,43 +106,12 @@ class CrisesActivity : AppCompatActivity() {
             .setMessage(mensagem)
             .setPositiveButton("Excluir") { _, _ ->
                 
-                Async.doInBackground({ repository.excluir(crise) }, {
+                viewModel.excluirCrise(crise) {
                     toast("Removido!")
-                    Trigger.launch(Events.UpdateCrises)
-                })
-                
+                }
+    
             }.setNegativeButton("Cancelar", null)
             .show()
-    }
-    
-    private fun loadCrises() {
-        Async.doInBackground({ repository.getTodasCrises() }, { crises ->
-            
-            (recycler_view_crises.adapter as CrisesAdapter).submitList(crises)
-        
-            tv_crises_sem_crises_registradas.visibility =
-                if (crises.isEmpty()) View.VISIBLE else View.GONE
-    
-            tv_crises_numero_crises.text = crises.size.toString()
-            
-        })
-    }
-    
-    private fun registerObservables() {
-        disposable.clear()
-        disposable.add(Trigger.watcher().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { t ->
-                when (t) {
-                    is Events.UpdateCrises -> loadCrises()
-                }
-            })
-    }
-    
-    
-    override fun onDestroy() {
-        disposable.clear()
-        super.onDestroy()
     }
     
     override fun attachBaseContext(newBase: Context) {

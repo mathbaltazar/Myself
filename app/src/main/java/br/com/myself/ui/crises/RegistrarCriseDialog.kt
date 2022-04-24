@@ -9,16 +9,12 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import br.com.myself.R
 import br.com.myself.domain.entity.Crise
-import br.com.myself.domain.repository.CriseRepository
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
-import br.com.myself.util.Async
 import br.com.myself.util.Utils.Companion.setUpDimensions
 import kotlinx.android.synthetic.main.dialog_registrar_crise.*
 
 class RegistrarCriseDialog(
     private val crise: Crise? = null,
-    private val repository: CriseRepository
+    private val onSave: (DialogFragment, Crise) -> Unit
 ) : DialogFragment() {
     
     override fun onCreateView(
@@ -46,7 +42,7 @@ class RegistrarCriseDialog(
             salvarCrise()
         }
         
-        gerarHorariosDropdown()
+        setUpHorariosDropdown()
         
         if (crise != null) { // EDIÇÃO
             calendar_picker_dialog_registrar_crise_data.setTime(crise.data)
@@ -62,21 +58,16 @@ class RegistrarCriseDialog(
         val horario1 = dropdown_dialog_registrar_crise_horario1.text.toString()
         val horario2 = dropdown_dialog_registrar_crise_horario2.text.toString()
     
-        val novaCrise = Crise(
+        onSave(this, Crise(
             id = crise?.id,
             data = data,
             observacoes = observacoes,
             horario1 = horario1,
             horario2 = horario2
-        )
-    
-        Async.doInBackground({ repository.salvar(novaCrise) }, {
-            Trigger.launch(Events.Toast("Salvo!"), Events.UpdateCrises)
-            dismiss()
-        })
+        ))
     }
     
-    private fun gerarHorariosDropdown() {
+    private fun setUpHorariosDropdown() {
         val adapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item)
         
         for (i in 0..23) {

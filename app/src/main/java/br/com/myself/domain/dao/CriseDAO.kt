@@ -1,5 +1,6 @@
 package br.com.myself.domain.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import br.com.myself.domain.entity.Crise
 
@@ -13,6 +14,6 @@ interface CriseDAO {
     fun delete(crise: Crise)
     
     @Query("SELECT * FROM Crise ORDER BY data DESC")
-    fun findAll(): List<Crise>
+    fun findAll(): LiveData<List<Crise>>
 
 }

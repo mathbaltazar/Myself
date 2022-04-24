@@ -1,6 +1,7 @@
 package br.com.myself.domain.repository
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import br.com.myself.domain.dao.CriseDAO
 import br.com.myself.domain.database.MyDatabase
 import br.com.myself.domain.entity.Crise
@@ -17,9 +18,8 @@ class CriseRepository(application: Application) {
         dao.delete(crise)
     }
     
-    fun getTodasCrises(): List<Crise> {
+    fun getTodasCrises(): LiveData<List<Crise>> {
         return dao.findAll()
     }
-    
     
 }

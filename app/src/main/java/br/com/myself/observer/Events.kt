@@ -11,5 +11,4 @@ open class Events {
     class EditarRegistro(val registro: Registro)
     class AtualizarDetalhesRegistro(val registro: Registro)
     
-    object UpdateCrises
 }
