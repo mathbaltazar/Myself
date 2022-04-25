@@ -10,19 +10,20 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/backgroung_gradient_app_color">
+        android:layout_height="62dp"
+        android:background="@android:color/white">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_pesquisar_registro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:navigationIcon="@drawable/ic_close"
-            app:navigationIconTint="@android:color/white"
+            app:navigationIconTint="@android:color/black"
             app:subtitle="Resultados: 0"
-            app:subtitleTextColor="@color/colorSecondary"
-            app:title="Pesquisa de Registros"
-            app:titleTextColor="@android:color/white" />
+            app:subtitleTextColor="@color/colorPrimary"
+            app:titleCentered="true"
+            app:subtitleCentered="true"
+            app:title="Pesquisa de Registros" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputLayout

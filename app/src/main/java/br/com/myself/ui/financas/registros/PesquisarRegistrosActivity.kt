@@ -1,6 +1,7 @@
 package br.com.myself.ui.financas.registros
 
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +14,7 @@ import br.com.myself.ui.adapter.RegistroAdapter
 import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.Async
 import br.com.myself.util.Utils
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_pesquisar_registros.*
 
 class PesquisarRegistrosActivity : AppCompatActivity() {
@@ -81,4 +83,7 @@ class PesquisarRegistrosActivity : AppCompatActivity() {
         return super.onContextItemSelected(item)
     }
     
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
+    }
 }

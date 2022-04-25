@@ -8,77 +8,20 @@
     tools:context="br.com.myself.ui.crises.CrisesActivity"
     tools:ignore="HardcodedText">
 
-    <TextView
-        android:id="@+id/textview_crises_titulo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/backgroung_gradient_app_color"
-        android:gravity="center"
-        android:padding="@dimen/all_default_layout_offset_16"
-        android:text="CRISES"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/text_size_18"
-        android:textStyle="bold" />
-
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         app:cardElevation="@dimen/all_default_layout_offset_4">
 
-        <com.google.android.flexbox.FlexboxLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/all_default_layout_offset_8"
-            app:flexDirection="column">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Controle de crises"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/text_size_24" />
-
-            <LinearLayout
-                android:id="@+id/ll_crises_mais_detalhes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Medicamentos: "
-                    android:textSize="@dimen/text_size_16" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="- Divalcon ER 500mg (1 cp a noite e 1 de manhã)" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="- Hidantal (1 cp a noite)" />
-            </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_crises_mais_detalhes"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="Mais"
-                android:padding="0dp"
-                app:icon="@drawable/ic_arrow_down"
-                app:iconGravity="textEnd" />
-
-            <!--
-            Dias que não tomou a dosagem corretamente... (Notificações??)
-            -->
-
-        </com.google.android.flexbox.FlexboxLayout>
+            android:layout_height="match_parent"
+            android:layout_marginVertical="@dimen/all_default_layout_offset_4"
+            android:gravity="center"
+            android:text="Controle de crises"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_20"
+            app:layout_alignSelf="center" />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.flexbox.FlexboxLayout
@@ -89,6 +32,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:text="Últimas crises"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_size_18"
@@ -103,32 +47,84 @@
             android:id="@+id/tv_crises_numero_crises"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="8"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@android:color/darker_gray"
+            tools:text="8" />
 
     </com.google.android.flexbox.FlexboxLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/all_default_layout_offset_8"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Detalhes"
+            android:textSize="@dimen/text_size_16" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_crises_mais_detalhes"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="@dimen/all_default_layout_offset_8"
+            android:padding="0dp"
+            android:text="Mais"
+            app:icon="@drawable/ic_arrow_down"
+            app:iconGravity="textEnd" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_crises_mais_detalhes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/all_default_layout_offset_16"
+        android:layout_marginBottom="@dimen/all_default_layout_offset_16"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medicamentos: "
+            android:textSize="@dimen/text_size_16" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Divalcon ER 500mg (1 cp a noite e 1 de manhã)" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Hidantal (1 cp a noite)" />
+    </LinearLayout>
+
+    <!--
+    Dias que não tomou a dosagem corretamente... (Notificações??)
+    -->
     <TextView
         android:id="@+id/tv_crises_sem_crises_registradas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Não há registros de crises."
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_16" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_crises"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@color/off_primary"
         android:nestedScrollingEnabled="true"
         android:padding="@dimen/all_default_layout_offset_4"
+        android:paddingBottom="@dimen/all_default_layout_offset_2"
         tools:listitem="@layout/adapter_crises_item" />
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.8dp"
-        android:background="@color/off_white" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_crises_registrar_crise"

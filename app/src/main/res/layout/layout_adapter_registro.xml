@@ -51,6 +51,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="italic"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     tools:text="Outros textos do registro" />
 
             </LinearLayout>

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import br.com.myself.domain.entity.Registro
 import br.com.myself.domain.repository.RegistroRepository
+import br.com.myself.util.Async
 import br.com.myself.util.Utils
 import java.util.*
 
@@ -45,8 +46,20 @@ class RegistrosFragmentViewModel(application: Application) : AndroidViewModel(ap
         return registros.value?.sumOf(Registro::valor)
     }
     
+    fun salvarRegistro(registro: Registro, onSaved: () -> Unit) {
+        Async.doInBackground({
+            registroRepository.salvarRegistro(registro)
+        }, { onSaved() })
+    }
     
-    class MonthPageFilter(private val calendar: Calendar = Utils.getCalendar()) {
+    fun excluirRegistro(registro: Registro, onDeleted: () -> Unit) {
+        Async.doInBackground({
+            registroRepository.excluirRegistro(registro)
+        }, { onDeleted() })
+    }
+    
+    
+    private class MonthPageFilter(private val calendar: Calendar = Utils.getCalendar()) {
         fun proximoMes(): MonthPageFilter {
             calendar.roll(Calendar.MONTH, true)
             return this

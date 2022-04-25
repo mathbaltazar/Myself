@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/all_default_layout_offset_4"
-    tools:ignore="HardcodedText,ContentDescription">
+    tools:ignore="HardcodedText">
 
 
     <LinearLayout
@@ -28,11 +28,24 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_detalhes_registro_alterar"
+                android:id="@+id/button_detalhes_registro_excluir"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="42dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/all_default_layout_offset_4"
+                app:cornerRadius="21dp"
+                app:icon="@drawable/ic_delete"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@android:color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_detalhes_registro_alterar"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="42dp"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/button_detalhes_registro_excluir"
                 android:layout_marginEnd="@dimen/all_default_layout_offset_4"
                 app:cornerRadius="21dp"
                 app:icon="@drawable/ic_edit"
@@ -41,7 +54,6 @@
                 app:iconTint="@android:color/white" />
 
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,9 +85,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/all_default_layout_offset_8"
-                android:text="Academia"
                 android:textSize="@dimen/text_size_16"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Academia" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -88,10 +100,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/all_default_layout_offset_8"
-                android:text="R$ 250,00"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_size_16"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                tools:text="R$ 250,00" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -107,6 +119,21 @@
                 android:text="25/10/2020"
                 android:textSize="@dimen/text_size_16"
                 android:textStyle="bold|italic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="OUTROS: "
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/tv_detalhes_registro_outros"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/all_default_layout_offset_8"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="italic"
+                tools:text="Pago com atraso" />
 
         </LinearLayout>
 

@@ -6,59 +6,54 @@ import android.view.View
 import android.view.Window
 import br.com.myself.R
 import br.com.myself.domain.entity.Registro
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.formattedDate
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.dialog_detalhes_registro.*
 
 class DetalhesRegistroDialog(context: Context, registro: Registro) : Dialog(context) {
     
+    companion object {
+        const val ACTION_EDITAR = 1
+        const val ACTION_EXCLUIR = 2
+    }
+    
     private val disposable = CompositeDisposable()
+    private var mListener : ((Int, Registro) -> Unit)? = null
     
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         setContentView(R.layout.dialog_detalhes_registro)
+    
+        button_detalhes_registro_alterar.setOnClickListener {
+            mListener?.invoke(ACTION_EDITAR, registro)
+        }
+        button_detalhes_registro_excluir.setOnClickListener {
+            mListener?.invoke(ACTION_EXCLUIR, registro)
+        }
         
-        setUpView(registro)
-        show()
+        bindData(registro)
     }
     
-    override fun onStart() {
-        registrarObservables()
-        super.onStart()
-    }
-    
-    private fun setUpView(registro: Registro) {
+    fun bindData(registro: Registro) {
         tv_detalhes_registro_descricao.text = registro.descricao
         tv_detalhes_registro_data.text = registro.data.formattedDate()
         tv_detalhes_registro_valor.text = Utils.formatCurrency(registro.valor)
+        tv_detalhes_registro_outros.text = registro.outros
     
         tv_detalhes_registro_referencia_despesa.visibility =
             if (registro.despesa_id != null) View.VISIBLE else  View.GONE
-        
-        button_detalhes_registro_alterar.setOnClickListener {
-            Trigger.launch(Events.EditarRegistro(registro))
-        }
     }
     
-    private fun registrarObservables() {
-        disposable.add(Trigger.watcher().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe { t ->
-                if (t is Events.AtualizarDetalhesRegistro) {
-                    setUpView(t.registro)
-                }
-            })
+    fun setOnActionListener(listener: (Int, Registro) -> Unit) {
+        mListener = listener
     }
-    
+  
     override fun onStop() {
         disposable.clear()
         super.onStop()
     }
     
-
+    
 }

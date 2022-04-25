@@ -1,11 +1,9 @@
 package br.com.myself.ui.financas
 
-import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.myself.R
-import br.com.myself.domain.repository.RegistroRepository
 import br.com.myself.ui.financas.despesas.DespesasFragment
 import br.com.myself.ui.financas.entradas.EntradasFragment
 import br.com.myself.ui.financas.registros.RegistrosFragment
@@ -13,8 +11,6 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_financas.*
 
 class FinancasActivity : AppCompatActivity() {
-    
-    private val registroRepository: RegistroRepository by lazy { RegistroRepository(applicationContext as Application) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +25,7 @@ class FinancasActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.bottom_navigation_registros -> {
                     supportFragmentManager.beginTransaction().setReorderingAllowed(true)
-                        .replace(R.id.container_finanacas, RegistrosFragment(registroRepository)).commit()
+                        .replace(R.id.container_finanacas, RegistrosFragment()).commit()
                 }
                 R.id.bottom_navigation_entradas -> {
                     supportFragmentManager.beginTransaction().setReorderingAllowed(true)

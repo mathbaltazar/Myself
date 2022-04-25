@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import br.com.myself.R
 import br.com.myself.components.CalendarPickerEditText
 import br.com.myself.domain.entity.Registro
-import br.com.myself.domain.repository.RegistroRepository
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
-import br.com.myself.util.Async
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -22,7 +19,7 @@ import java.math.BigDecimal
 
 class CriarRegistroBottomSheet(
     private val registro: Registro? = null,
-    private val repository: RegistroRepository
+    private val onSave: (DialogFragment, Registro) -> Unit
 ) : BottomSheetDialogFragment() {
     
     override fun onCreateView(
@@ -56,23 +53,13 @@ class CriarRegistroBottomSheet(
                 view.textinput_bottom_sheet_registro_valor.requestFocus()
                 toast("Campo Valor inválido")
             } else {
-                
-                val novoregistro = Registro(
+                onSave(this, Registro(
                     id = registro?.id,
                     descricao = descricao.trim(),
                     valor = Utils.unformatCurrency(valor).toDouble(),
                     outros = outros.trim(),
                     data = data
-                )
-    
-                Async.doInBackground({
-                    repository.salvarRegistro(novoregistro)
-                }, {
-                    toast("Dados salvos!")
-                    Trigger.launch(Events.AtualizarDetalhesRegistro(novoregistro))
-        
-                    dismiss()
-                })
+                ))
             }
         }
         
@@ -84,9 +71,9 @@ class CriarRegistroBottomSheet(
         if (registro != null) {
             view.textinput_bottom_sheet_registro_descricao.setText(registro.descricao)
             view.textinput_bottom_sheet_registro_descricao.setSelection(registro.descricao.length)
-            
             view.textinput_bottom_sheet_registro_valor.setText(Utils.formatCurrency(registro.valor))
             view.calendar_picker_bottom_sheet_registro_data.setTime(registro.data)
+            view.textinput_bottom_sheet_registro_outros.setText(registro.outros)
         }
     }
     

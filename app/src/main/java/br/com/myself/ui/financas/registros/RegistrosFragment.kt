@@ -1,9 +1,7 @@
 package br.com.myself.ui.financas.registros
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -11,36 +9,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.domain.entity.Registro
-import br.com.myself.domain.repository.RegistroRepository
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
 import br.com.myself.ui.adapter.RegistroAdapter
 import br.com.myself.util.AdapterClickListener
-import br.com.myself.util.Async
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.RegistrosFragmentViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_registros.*
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.toast
 
-class RegistrosFragment(private val repository: RegistroRepository) : Fragment() {
+class RegistrosFragment : Fragment(R.layout.fragment_registros) {
     
-    private val disposable = CompositeDisposable()
     private lateinit var viewModel : RegistrosFragmentViewModel
-    
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_registros, container, false)
-    }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(RegistrosFragmentViewModel::class.java)
-        registrarObservers()
         
         // INSTANCIAR ADAPTER E CLICKLISTENERS
         setupRegistroRecyclerView()
@@ -96,24 +79,33 @@ class RegistrosFragment(private val repository: RegistroRepository) : Fragment()
         val listener = AdapterClickListener<Registro>(
             onClick = {
                 val dialog = DetalhesRegistroDialog(requireContext(), it)
+                dialog.setOnActionListener { action, registro ->
+                    when (action) {
+                        DetalhesRegistroDialog.ACTION_EDITAR -> abrirBottomSheetCriarRegistro(registro, dialog)
+                        DetalhesRegistroDialog.ACTION_EXCLUIR -> confirmarExcluirRegistro(registro, dialog)
+                    }
+                }
                 dialog.show()
             },
             onLongClick = {
-                var mensagem = "Descrição: ${it.descricao}"
-                mensagem += "\nValor: ${Utils.formatCurrency(it.valor)}"
-    
-                AlertDialog.Builder(requireContext()).setTitle("Excluir registro?").setMessage(mensagem)
-                    .setPositiveButton("Excluir") { _, _ ->
-                        Async.doInBackground({
-                            repository.excluirRegistro(it)
-                        }, {
-                            toast("Removido!")
-                        })
-                    }.setNegativeButton("Cancelar", null).show()
+                confirmarExcluirRegistro(it)
             }
         )
         adapter.setClickListener(listener)
         recyclerview_registros.adapter = adapter
+    }
+    
+    private fun confirmarExcluirRegistro(registro: Registro, dialog: DetalhesRegistroDialog? = null) {
+        var mensagem = "Descrição: ${registro.descricao}"
+        mensagem += "\nValor: ${Utils.formatCurrency(registro.valor)}"
+    
+        AlertDialog.Builder(requireContext()).setTitle("Excluir registro?").setMessage(mensagem)
+            .setPositiveButton("Excluir") { _, _ ->
+                viewModel.excluirRegistro(registro) {
+                    toast("Removido!")
+                    dialog?.dismiss()
+                }
+            }.setNegativeButton("Cancelar", null).show()
     }
     
     private fun atualizarUI() {
@@ -135,30 +127,20 @@ class RegistrosFragment(private val repository: RegistroRepository) : Fragment()
         component_dropdown_mes_ano.visibility = View.GONE
     }
     
-    private fun registrarObservers() {
-        disposable.clear()
-        disposable.add(
-            Trigger.watcher().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe { t ->
-                when (t) {
-                    is Events.EditarRegistro -> abrirBottomSheetCriarRegistro(t.registro)
-                }
-            })
-    }
-    
-    private fun abrirBottomSheetCriarRegistro(registro: Registro?) {
-        val bottomSheet = CriarRegistroBottomSheet(registro, repository)
+    private fun abrirBottomSheetCriarRegistro(registro: Registro?, detalhesDialog: DetalhesRegistroDialog? = null) {
+        val bottomSheet = CriarRegistroBottomSheet(registro) { dialog, novoregistro ->
+            viewModel.salvarRegistro(novoregistro) {
+                toast("Dados salvos!")
+                dialog.dismiss()
+                detalhesDialog?.bindData(novoregistro)
+            }
+        }
         bottomSheet.show(childFragmentManager, null)
     }
     
     override fun onResume() {
         super.onResume()
         resetarLayoutIrPara()
-    }
-    
-    override fun onDestroyView() {
-        disposable.clear()
-        super.onDestroyView()
     }
     
 }
