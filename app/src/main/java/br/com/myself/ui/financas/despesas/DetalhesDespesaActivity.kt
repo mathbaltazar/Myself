@@ -1,8 +1,10 @@
 package br.com.myself.ui.financas.despesas
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -15,6 +17,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.databinding.ActivityDetalhesDespesaBinding
+import br.com.myself.model.entity.Despesa
 import br.com.myself.model.entity.Registro
 import br.com.myself.ui.adapter.RegistroAdapter
 import br.com.myself.util.AdapterClickListener
@@ -24,13 +27,20 @@ import br.com.myself.viewmodel.DetalhesDespesaActivityViewModel
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import java.math.BigDecimal
 
 class DetalhesDespesaActivity : AppCompatActivity() {
     
     companion object {
-        const val DESPESA_ID: String = "DESPESA_ID"
+        fun getIntent(context: Context, despesa: Despesa): Intent {
+            val intent = context.intentFor<DetalhesDespesaActivity>()
+            intent.putExtra(DESPESA_EXTRA, despesa as Parcelable)
+            return intent
+        }
+    
+        const val DESPESA_EXTRA: String = "DESPESA_EXTRA"
         private const val MENU_ITEMID_EXCLUIR: Int = 0
         private const val MENU_ITEMID_SALVAR: Int = 1
     }
@@ -46,13 +56,11 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         
+        val despesa = intent.getParcelableExtra<Despesa>(DESPESA_EXTRA)!!
+        viewModel.attachDespesa(despesa)
         
-        val despesaId = intent.getLongExtra(DESPESA_ID, 0)
-    
-        viewModel.loadDespesa(despesaId) {
-            setUpView()
-            setUpObservers()
-        }
+        setUpView()
+        setUpObservers()
     }
     
     private fun setUpView() {

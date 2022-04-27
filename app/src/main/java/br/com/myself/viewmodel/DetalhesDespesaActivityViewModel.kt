@@ -12,7 +12,7 @@ import br.com.myself.util.Async
 import java.util.*
 
 class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewModel(application) {
-    private val registroRepository: RegistroRepository by lazy { RegistroRepository(getApplication()) }
+    private val registroRepository: RegistroRepository by lazy { RegistroRepository(application) }
     private val despesaRepository: DespesaRepository by lazy { DespesaRepository(application) }
     
     lateinit var despesa: Despesa
@@ -20,14 +20,10 @@ class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewMo
     
     val despesaEdited: MutableLiveData<Boolean> = MutableLiveData(false)
     
-    fun loadDespesa(id: Long, onLoaded: () -> Unit) {
-        Async.doInBackground({ despesaRepository.getDespesa(id) }, {
-            despesa = it
-            registrosDaDespesa = registroRepository.getRegistrosDaDespesa(it.id)
-            onLoaded()
-        })
+    fun attachDespesa(despesa: Despesa) {
+        this.despesa = despesa
+        registrosDaDespesa = registroRepository.getRegistrosDaDespesa(despesa.id)
     }
-    
     fun wasEdited() = despesaEdited.value ?: false
     
     fun excluirDespesa(onDeleted: () -> Unit) {
@@ -71,6 +67,5 @@ class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewMo
     fun setDespesaEdited() {
         despesaEdited.value = true
     }
-    
     
 }
