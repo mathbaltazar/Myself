@@ -34,7 +34,7 @@
             app:startIconDrawable="@drawable/ic_edit">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textinput_dialog_nova_entrada_descricao"
+                android:id="@+id/textinput_fonte"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences" />
@@ -50,7 +50,7 @@
             app:startIconDrawable="@drawable/ic_money">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textinput_dialog_nova_entrada_valor"
+                android:id="@+id/textinput_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -68,14 +68,14 @@
             app:startIconDrawable="@drawable/ic_calendar">
 
             <br.com.myself.components.CalendarPickerEditText
-                android:id="@+id/calendar_picker_dialog_nova_entrada_data"
+                android:id="@+id/calendar_picker_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_dialog_nova_entrada_salvar"
+            android:id="@+id/button_salvar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/all_default_layout_offset_4"

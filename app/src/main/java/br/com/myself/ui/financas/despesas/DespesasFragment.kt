@@ -6,38 +6,37 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
+import br.com.myself.databinding.FragmentDespesasBinding
 import br.com.myself.domain.entity.Despesa
 import br.com.myself.ui.adapter.DespesaAdapter
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.DespesasFragmentViewModel
-import kotlinx.android.synthetic.main.fragment_despesas.*
 import org.jetbrains.anko.support.v4.toast
 
 class DespesasFragment : Fragment(R.layout.fragment_despesas) {
     
-    private lateinit var viewModel: DespesasFragmentViewModel
+    private val viewModel: DespesasFragmentViewModel by viewModels()
+    private var _binding: FragmentDespesasBinding? = null
+    private val binding get() = _binding!!
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        viewModel = ViewModelProvider(this).get(DespesasFragmentViewModel::class.java)
-        
-        
-        button_despesas_info.setOnClickListener {
-            card_despesas_info.visibility = View.VISIBLE
-            card_despesas_info.animation = null
+        binding.buttonDespesasInfo.setOnClickListener {
+            binding.cardDespesasInfo.visibility = View.VISIBLE
+            binding.cardDespesasInfo.animation = null
         }
         
-        button_card_despesas_info_close.setOnClickListener {
-            card_despesas_info.animation =
+        binding.buttonCardDespesasInfoClose.setOnClickListener {
+            binding.cardDespesasInfo.animation =
                 AnimationUtils.loadAnimation(it.context, android.R.anim.fade_out)
-            card_despesas_info.visibility = View.GONE
+            binding.cardDespesasInfo.visibility = View.GONE
         }
         
-        fab_despesas_adicionar.setOnClickListener {
+        binding.buttonAdicionar.setOnClickListener {
             CriarDespesaDialog(it.context) { dialog, despesa ->
                 viewModel.salvar(despesa) {
                     toast("Salvo!")
@@ -49,8 +48,8 @@ class DespesasFragment : Fragment(R.layout.fragment_despesas) {
         setUpAdapter()
     
         viewModel.despesas.observe(viewLifecycleOwner) { despesas ->
-            (recyclerview_despesas.adapter as DespesaAdapter).submitList(despesas)
-            tv_despesas_sem_depesas.visibility =
+            (binding.recyclerviewDespesas.adapter as DespesaAdapter).submitList(despesas)
+            binding.textviewSemDepesas.visibility =
                 if (despesas.isEmpty()) View.VISIBLE else View.GONE
         }
         
@@ -58,8 +57,8 @@ class DespesasFragment : Fragment(R.layout.fragment_despesas) {
     
     private fun setUpAdapter() {
         val adapter = DespesaAdapter()
-        recyclerview_despesas.adapter = adapter
-        recyclerview_despesas.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerviewDespesas.adapter = adapter
+        binding.recyclerviewDespesas.layoutManager = LinearLayoutManager(requireContext())
         adapter.setOnItemActionListener { action, despesa ->
             when (action) {
                 DespesaAdapter.ACTION_EXCLUIR -> confirmarExcluirDespesa(despesa)
@@ -101,4 +100,8 @@ class DespesasFragment : Fragment(R.layout.fragment_despesas) {
             .show()
     }
     
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
 }

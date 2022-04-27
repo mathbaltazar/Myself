@@ -26,7 +26,7 @@
         android:padding="@dimen/all_default_layout_offset_8">
 
         <TextView
-            android:id="@+id/tv_dialog_registrar_despesa_nome"
+            android:id="@+id/textview_nome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
@@ -34,7 +34,7 @@
             tools:text="Pensão Alimentícia" />
 
         <TextView
-            android:id="@+id/tv_dialog_registrar_despesa_valor"
+            android:id="@+id/textview_valor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
@@ -61,14 +61,14 @@
             android:textColor="#767676" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_dialog_registrar_despesa_novo_valor"
+            android:id="@+id/textinput_layout_valor"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/all_default_layout_offset_8">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_dialog_registrar_despesa_valor"
+                android:id="@+id/textinput_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -87,7 +87,7 @@
             android:textColor="#767676" />
 
         <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/flexbox_dialog_registrar_despesa_sugestoes_valor"
+            android:id="@+id/flexbox_sugestoes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:flexWrap="wrap" />
@@ -113,7 +113,7 @@
             android:layout_height="wrap_content">
 
             <br.com.myself.components.CalendarPickerEditText
-                android:id="@+id/calendar_picker_dialog_registrar_despesa_data"
+                android:id="@+id/calendar_picker_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
@@ -128,7 +128,7 @@
             android:background="@color/off_white" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_dialog_registrar_despesa_registrar"
+            android:id="@+id/button_registrar"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

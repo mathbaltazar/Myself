@@ -2,25 +2,28 @@ package br.com.myself.ui.financas
 
 import android.content.Context
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import br.com.myself.R
+import br.com.myself.databinding.ActivityFinancasBinding
 import br.com.myself.ui.financas.despesas.DespesasFragment
 import br.com.myself.ui.financas.entradas.EntradasFragment
 import br.com.myself.ui.financas.registros.RegistrosFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_financas.*
 
 class FinancasActivity : AppCompatActivity() {
     
+    private val binding: ActivityFinancasBinding by viewModels()
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_financas)
+        setContentView(binding.root)
         
         initView()
     }
     
     private fun initView() {
-        bottom_navigation_view_financas.setOnItemSelectedListener { menuItem ->
+        binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
             
             when (menuItem.itemId) {
                 R.id.bottom_navigation_registros -> {
@@ -39,8 +42,8 @@ class FinancasActivity : AppCompatActivity() {
             
             true
         }
-        
-        bottom_navigation_view_financas.selectedItemId = R.id.bottom_navigation_registros
+    
+        binding.bottomNavigationView.selectedItemId = R.id.bottom_navigation_registros
     }
     
     override fun attachBaseContext(newBase: Context) {

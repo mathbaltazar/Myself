@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content">
 
                 <br.com.myself.components.CalendarPickerEditText
-                    android:id="@+id/calendar_picker_dialog_registrar_crise_data"
+                    android:id="@+id/calendar_picker_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none" />
@@ -58,7 +58,7 @@
                 app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_dialog_registrar_crise_observacoes"
+                    android:id="@+id/edit_text_observacoes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start|top"
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/dropdown_dialog_registrar_crise_horario1"
+                        android:id="@+id/dropdown_horario_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="none"
@@ -111,7 +111,7 @@
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/dropdown_dialog_registrar_crise_horario2"
+                        android:id="@+id/dropdown_horario_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="none"

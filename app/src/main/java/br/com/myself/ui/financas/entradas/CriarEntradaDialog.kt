@@ -6,15 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
-import br.com.myself.R
-import br.com.myself.components.CalendarPickerEditText
+import br.com.myself.databinding.DialogCriarEntradaBinding
 import br.com.myself.domain.entity.Entrada
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.dialog_criar_entrada.*
-import org.jetbrains.anko.sdk27.coroutines.onFocusChange
 import org.jetbrains.anko.support.v4.toast
 import java.math.BigDecimal
 
@@ -23,13 +20,17 @@ class CriarEntradaDialog(
     private val onSave: (DialogFragment, Entrada) -> Unit
 ) : DialogFragment() {
     
+    private var _binding: DialogCriarEntradaBinding? = null
+    private val binding get() = _binding!!
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return inflater.inflate(R.layout.dialog_criar_entrada, container, false)
+        _binding = DialogCriarEntradaBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
     
     override fun onStart() {
@@ -43,44 +44,49 @@ class CriarEntradaDialog(
     private fun setUpView() {
         
         if (entrada != null) { // Significa edição
-            textinput_dialog_nova_entrada_descricao.setText(entrada.descricao)
-            textinput_dialog_nova_entrada_valor.setText(Utils.formatCurrency(entrada.valor))
-            calendar_picker_dialog_nova_entrada_data.setTime(entrada.data)
+            binding.textinputFonte.setText(entrada.descricao)
+            binding.textinputValor.setText(Utils.formatCurrency(entrada.valor))
+            binding.calendarPickerData.setTime(entrada.data)
         }
 
-        textinput_dialog_nova_entrada_valor.apply {
+        binding.textinputValor.apply {
             addTextChangedListener(CurrencyMask(this))
-            onFocusChange { v, hasFocus ->
+            setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) (v as TextInputEditText).setSelection(v.length()) }
         }
         
-        calendar_picker_dialog_nova_entrada_data.setOnClickListener {
-            (it as CalendarPickerEditText).showCalendar(childFragmentManager, null)
+        binding.calendarPickerData.apply {
+            setOnClickListener { showCalendar(childFragmentManager, null) }
         }
-        
-        button_dialog_nova_entrada_salvar.setOnClickListener {
-            val valor = textinput_dialog_nova_entrada_valor.text.toString()
-            val fonte = textinput_dialog_nova_entrada_descricao.text.toString()
-
+    
+        binding.buttonSalvar.setOnClickListener {
+            val valor = binding.textinputValor.text.toString()
+            val fonte = binding.textinputFonte.text.toString()
+    
             if (fonte.isBlank()) {
-                textinput_dialog_nova_entrada_descricao.requestFocus()
+                binding.textinputFonte.requestFocus()
                 toast("Campo Fonte vazio")
             } else if (!isValorValido(valor)) {
-                textinput_dialog_nova_entrada_valor.requestFocus()
+                binding.textinputValor.requestFocus()
                 toast("Campo Valor inválido")
             } else {
                 onSave(this, Entrada(
                     id = entrada?.id,
                     valor = Utils.unformatCurrency(valor).toDouble(),
                     descricao = fonte.trim(),
-                    data = calendar_picker_dialog_nova_entrada_data.getTime()
+                    data = binding.calendarPickerData.getTime()
                 ))
             }
         }
+        
     }
 
     private fun isValorValido(valor: String): Boolean {
         return valor.isNotBlank() && Utils.unformatCurrency(valor).toBigDecimal() > BigDecimal.ZERO
     }
     
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
 }

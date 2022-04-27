@@ -33,7 +33,7 @@
                     android:text="DATA" />
 
                 <TextView
-                    android:id="@+id/tv_adapter_crises_item_data"
+                    android:id="@+id/textview_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
@@ -67,7 +67,7 @@
                     android:gravity="center">
 
                     <TextView
-                        android:id="@+id/tv_adapter_crises_item_horario1"
+                        android:id="@+id/textview_horario_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
@@ -81,7 +81,7 @@
                         android:text="e" />
 
                     <TextView
-                        android:id="@+id/tv_adapter_crises_item_horario2"
+                        android:id="@+id/textview_horario_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
@@ -99,7 +99,7 @@
             android:text="OBSERVAÇÕES" />
 
         <TextView
-            android:id="@+id/tv_adapter_crises_item_observacoes"
+            android:id="@+id/textview_observacoes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Um sono durante a tarde. Acordei com dores de cabeça, músculos da coxa contraídos e escoriações na língua." />

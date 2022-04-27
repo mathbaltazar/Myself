@@ -35,7 +35,7 @@
         app:startIconDrawable="@drawable/ic_edit">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textinput_bottom_sheet_registro_descricao"
+            android:id="@+id/textinput_descricao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapSentences"
@@ -52,7 +52,7 @@
         app:startIconDrawable="@drawable/ic_money">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textinput_bottom_sheet_registro_valor"
+            android:id="@+id/textinput_valor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -69,7 +69,7 @@
         app:startIconDrawable="@drawable/ic_info">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textinput_bottom_sheet_registro_outros"
+            android:id="@+id/textinput_outros"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapSentences" />
@@ -85,7 +85,7 @@
         app:startIconDrawable="@drawable/ic_calendar">
 
         <br.com.myself.components.CalendarPickerEditText
-            android:id="@+id/calendar_picker_bottom_sheet_registro_data"
+            android:id="@+id/calendar_picker_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none" />
@@ -99,7 +99,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_bottom_sheet_registro_adicionar"
+        android:id="@+id/button_registrar"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

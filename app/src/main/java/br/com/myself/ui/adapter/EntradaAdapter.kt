@@ -7,11 +7,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
+import br.com.myself.databinding.AdapterEntradaItemBinding
+import br.com.myself.databinding.AdapterEntradaSeparatorBinding
 import br.com.myself.domain.entity.Entrada
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.formattedDate
-import kotlinx.android.synthetic.main.layout_adapter_entrada_item.view.*
-import kotlinx.android.synthetic.main.layout_adapter_entrada_separator.view.*
 
 const val ITEM_VIEW_TYPE = 0
 const val SEPARATOR_VIEW_TYPE = 1
@@ -25,10 +25,10 @@ class EntradaAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             SEPARATOR_VIEW_TYPE -> SeparatorViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_adapter_entrada_separator, parent, false))
+                .inflate(R.layout.adapter_entrada_separator, parent, false))
             
             ITEM_VIEW_TYPE -> return ItemViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_adapter_entrada_item, parent, false))
+                .inflate(R.layout.adapter_entrada_item, parent, false))
             
             else -> super.createViewHolder(parent, viewType)
         }
@@ -58,10 +58,12 @@ class EntradaAdapter :
     }
     
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val binding = AdapterEntradaItemBinding.bind(itemView)
+        
         fun bindView(itemModel: UIModel.Item) {
-            itemView.tv_item_entradas_valor.text = Utils.formatCurrency(itemModel.entrada.valor)
-            itemView.tv_item_entradas_descricao.text = itemModel.entrada.descricao
-            itemView.tv_item_entradas_data.text = itemModel.entrada.data.formattedDate()
+            binding.textviewValor.text = Utils.formatCurrency(itemModel.entrada.valor)
+            binding.textviewDescricao.text = itemModel.entrada.descricao
+            binding.textviewData.text = itemModel.entrada.data.formattedDate()
             
             itemView.setOnLongClickListener { anchor ->
                 onItemLongClick?.invoke(anchor, itemModel.entrada)
@@ -71,8 +73,10 @@ class EntradaAdapter :
     }
     
     private inner class SeparatorViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        val binding = AdapterEntradaSeparatorBinding.bind(itemView)
+        
         fun bindSeparator(separatorModel: UIModel.Separator) {
-            itemView.textview_mes.text = separatorModel.mes
+            binding.textviewMes.text = separatorModel.mes
     
             itemView.setOnClickListener {
                 onSeparatorClick?.invoke()

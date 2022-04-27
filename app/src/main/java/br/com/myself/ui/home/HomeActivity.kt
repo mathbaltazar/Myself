@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import br.com.myself.R
+import br.com.myself.databinding.ActivityHomeBinding
 import br.com.myself.notification.Notification
 import br.com.myself.observer.Events
 import br.com.myself.observer.Trigger
@@ -15,7 +15,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_home.*
 import org.jetbrains.anko.toast
 
 class HomeActivity : AppCompatActivity() {
@@ -24,15 +23,16 @@ class HomeActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        val binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         
         // FINANÇAS
-        button_home_financas.setOnClickListener {
+        binding.buttonFinancas.setOnClickListener {
             startActivity(Intent(applicationContext, FinancasActivity::class.java))
         }
     
         // CRISES
-        button_home_crises.setOnClickListener {
+        binding.buttonCrises.setOnClickListener {
             startActivity(Intent(applicationContext, CrisesActivity::class.java))
         }
         

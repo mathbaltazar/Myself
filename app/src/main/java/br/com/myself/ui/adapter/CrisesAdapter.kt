@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
+import br.com.myself.databinding.AdapterCrisesItemBinding
 import br.com.myself.domain.entity.Crise
 import br.com.myself.util.Utils.Companion.formattedDate
-import kotlinx.android.synthetic.main.adapter_crises_item.view.*
 
 class CrisesAdapter : ListAdapter<Crise, RecyclerView.ViewHolder>(COMPARATOR) {
     
@@ -33,15 +33,16 @@ class CrisesAdapter : ListAdapter<Crise, RecyclerView.ViewHolder>(COMPARATOR) {
         (holder as ItemViewHolder).bindView(getItem(position))
     }
     
-    private inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val binding = AdapterCrisesItemBinding.bind(itemView)
+        
         fun bindView(crise: Crise) {
-            
             itemView.setOnClickListener { _onClick?.invoke(crise, itemView) }
     
-            itemView.tv_adapter_crises_item_data.text = crise.data.formattedDate()
-            itemView.tv_adapter_crises_item_horario1.text = crise.horario1
-            itemView.tv_adapter_crises_item_horario2.text = crise.horario2
-            itemView.tv_adapter_crises_item_observacoes.text =
+            binding.textviewData.text = crise.data.formattedDate()
+            binding.textviewHorario1.text = crise.horario1
+            binding.textviewHorario2.text = crise.horario2
+            binding.textviewObservacoes.text =
                 if (crise.observacoes.isBlank()) "Nada registrado." else crise.observacoes
         }
     }

@@ -7,21 +7,29 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
-import br.com.myself.R
+import br.com.myself.databinding.DialogRegistrarCriseBinding
 import br.com.myself.domain.entity.Crise
 import br.com.myself.util.Utils.Companion.setUpDimensions
-import kotlinx.android.synthetic.main.dialog_registrar_crise.*
 
 class RegistrarCriseDialog(
     private val crise: Crise? = null,
     private val onSave: (DialogFragment, Crise) -> Unit
 ) : DialogFragment() {
     
+    private var _binding: DialogRegistrarCriseBinding? = null
+    private val binding get() = _binding!!
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return inflater.inflate(R.layout.dialog_registrar_crise, container, false)
+        _binding = DialogRegistrarCriseBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+    
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
     
     override fun onStart() {
@@ -34,29 +42,30 @@ class RegistrarCriseDialog(
     }
     
     private fun setUpView() {
-        calendar_picker_dialog_registrar_crise_data.setOnClickListener {
-            calendar_picker_dialog_registrar_crise_data.showCalendar(childFragmentManager, null)
+    
+        binding.calendarPickerData.apply {
+            setOnClickListener { showCalendar(childFragmentManager, null) }
         }
-        
-        button_dialog_registrar_crise_salvar.setOnClickListener {
+    
+        binding.buttonDialogRegistrarCriseSalvar.setOnClickListener {
             salvarCrise()
         }
         
         setUpHorariosDropdown()
         
         if (crise != null) { // EDIÇÃO
-            calendar_picker_dialog_registrar_crise_data.setTime(crise.data)
-            et_dialog_registrar_crise_observacoes.setText(crise.observacoes)
-            dropdown_dialog_registrar_crise_horario1.setText(crise.horario1, false)
-            dropdown_dialog_registrar_crise_horario2.setText(crise.horario2, false)
+            binding.calendarPickerData.setTime(crise.data)
+            binding.editTextObservacoes.setText(crise.observacoes)
+            binding.dropdownHorario1.setText(crise.horario1, false)
+            binding.dropdownHorario2.setText(crise.horario2, false)
         }
     }
     
     private fun salvarCrise() {
-        val data = calendar_picker_dialog_registrar_crise_data.getTime()
-        val observacoes = et_dialog_registrar_crise_observacoes.text.toString().trim()
-        val horario1 = dropdown_dialog_registrar_crise_horario1.text.toString()
-        val horario2 = dropdown_dialog_registrar_crise_horario2.text.toString()
+        val data = binding.calendarPickerData.getTime()
+        val observacoes = binding.editTextObservacoes.text.toString().trim()
+        val horario1 = binding.dropdownHorario1.text.toString()
+        val horario2 = binding.dropdownHorario2.text.toString()
     
         onSave(this, Crise(
             id = crise?.id,
@@ -76,8 +85,8 @@ class RegistrarCriseDialog(
             }
         }
         
-        dropdown_dialog_registrar_crise_horario1.setAdapter(adapter)
-        dropdown_dialog_registrar_crise_horario2.setAdapter(adapter)
+        binding.dropdownHorario1.setAdapter(adapter)
+        binding.dropdownHorario2.setAdapter(adapter)
     }
     
 }

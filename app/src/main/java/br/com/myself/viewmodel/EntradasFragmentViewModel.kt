@@ -60,11 +60,11 @@ class EntradasFragmentViewModel(application: Application) : AndroidViewModel(app
         repository.salvar(entrada, onComplete)
     }
     
-    fun decrementarAno() {
+    fun voltarAno() {
         yearLiveData.value = anoAtual - 1
     }
     
-    fun incrementarAno() {
+    fun avancarAno() {
         yearLiveData.value = anoAtual + 1
     }
 }

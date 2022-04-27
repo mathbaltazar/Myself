@@ -14,7 +14,7 @@
         android:background="@android:color/white">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_pesquisar_registro"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:navigationIcon="@drawable/ic_close"
@@ -27,7 +27,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_dialog_pesquisar_registros_busca"
+        android:id="@+id/textInputLayoutBusca"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/tv_dialog_pesquisar_registros_sem_resultados"
+        android:id="@+id/text_view_sem_resultados"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/all_default_layout_offset_8"
@@ -53,7 +53,7 @@
         android:textAlignment="center" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_dialog_pesquisar_registros_resultados_busca"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/all_default_layout_offset_8"

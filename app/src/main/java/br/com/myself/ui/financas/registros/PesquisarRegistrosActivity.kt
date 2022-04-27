@@ -1,78 +1,106 @@
 package br.com.myself.ui.financas.registros
 
-import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import br.com.myself.R
-import br.com.myself.domain.repository.RegistroRepository
+import br.com.myself.databinding.ActivityPesquisarRegistrosBinding
+import br.com.myself.domain.entity.Registro
 import br.com.myself.ui.adapter.RegistroAdapter
 import br.com.myself.util.AdapterClickListener
-import br.com.myself.util.Async
 import br.com.myself.util.Utils
+import br.com.myself.viewmodel.PesquisarRegistrosActivityViewModel
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_pesquisar_registros.*
+import org.jetbrains.anko.toast
 
 class PesquisarRegistrosActivity : AppCompatActivity() {
     
-    private val registroRepository by lazy { RegistroRepository(applicationContext as Application) }
+    private val viewModel: PesquisarRegistrosActivityViewModel by viewModels()
+    private val binding by lazy { ActivityPesquisarRegistrosBinding.inflate(layoutInflater) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pesquisar_registros)
-        setSupportActionBar(toolbar_pesquisar_registro)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         
+        configureAdapter()
+    
+        binding.textInputLayoutBusca.apply {
+            setEndIconOnClickListener {
+                iniciarBusca(editText?.text.toString().trim())
+            }
+            editText?.setOnEditorActionListener { v, _, _ ->
+                iniciarBusca(v.text.toString().trim())
+            }
+        }
+        
+        viewModel.resultadoBusca.observe(this, {
+            binding.toolbar.subtitle = "Resultados: ${viewModel.resultCount}"
+    
+            (binding.recyclerView.adapter as RegistroAdapter).submitList(it)
+    
+            binding.textViewSemResultados.visibility =
+                if (viewModel.hasAnyResult()) View.VISIBLE else View.GONE
+        })
+    }
+    
+    private fun configureAdapter() {
         val adapter = RegistroAdapter()
         adapter.setClickListener(AdapterClickListener(
             onClick = {
-                DetalhesRegistroDialog(this, it).show()
-            }, onLongClick = { registro ->
-                var msg = "Nome: ${registro.descricao}"
-                msg += "\nValor: ${Utils.formatCurrency(registro.valor)}"
-        
-                AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
-                    .setPositiveButton("Excluir") { _, _ ->
-                        Async.doInBackground {
-                            registroRepository.excluirRegistro(registro)
+                DetalhesRegistroDialog(this, it).apply{
+                    setOnActionListener { action, registro ->
+                        when (action) {
+                            DetalhesRegistroDialog.ACTION_EDITAR -> abrirBottomSheetCriarRegistro(registro, this)
+                            DetalhesRegistroDialog.ACTION_EXCLUIR -> confirmarExcluirRegistro(registro, this)
                         }
-                    }.setNegativeButton("Cancelar", null).show()
-            }))
+                    }
+                    show()
+                }
+            }, onLongClick = { confirmarExcluirRegistro(it) })
+        )
     
-        rv_dialog_pesquisar_registros_resultados_busca.layoutManager = LinearLayoutManager(this)
-        rv_dialog_pesquisar_registros_resultados_busca.adapter = adapter
-    
-        til_dialog_pesquisar_registros_busca.setEndIconOnClickListener {
-            buscar(til_dialog_pesquisar_registros_busca.editText?.text.toString())
-        }
-        
-        til_dialog_pesquisar_registros_busca.editText?.setOnEditorActionListener { v, _, _ ->
-            buscar(v.text.toString())
-        }
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
     }
     
-    private fun buscar(busca: String): Boolean {
-        if (!busca.isBlank()) {
-            Async.doInBackground({ registroRepository.pesquisarRegistros(busca) },
-                { resultadoBusca ->
-                    toolbar_pesquisar_registro.subtitle = "Resultados: ${resultadoBusca.size}"
-            
-                    (rv_dialog_pesquisar_registros_resultados_busca.adapter as RegistroAdapter)
-                        .submitList(resultadoBusca)
-            
-                    tv_dialog_pesquisar_registros_sem_resultados.visibility =
-                        if (resultadoBusca.isEmpty()) View.VISIBLE else View.GONE
-                })
+    private fun abrirBottomSheetCriarRegistro(registro: Registro, dialog: DetalhesRegistroDialog? = null) {
+        CriarRegistroBottomSheet(registro, onSave = { bottomSheet, it ->
+            viewModel.salvar(it) {
+                toast("Salvo!")
+                dialog?.bindData(it)
+            }
+            bottomSheet.dismiss()
+        })
+    }
+    
+    private fun confirmarExcluirRegistro(registro: Registro, dialog: DetalhesRegistroDialog? = null) {
+        var msg = "Nome: ${registro.descricao}"
+        msg += "\nValor: ${Utils.formatCurrency(registro.valor)}"
+    
+        AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
+            .setPositiveButton("Excluir") { _, _ ->
+                viewModel.excluir(registro) {
+                    toast("Removido!")
+                    dialog?.dismiss()
+                }
+            }.setNegativeButton("Cancelar", null).show()
+    
+    }
+    
+    private fun iniciarBusca(busca: String): Boolean {
+        if (busca.isNotBlank()) {
+            viewModel.setBusca(busca)
         } else {
-            (rv_dialog_pesquisar_registros_resultados_busca.adapter as RegistroAdapter)
+            (binding.recyclerView.adapter as RegistroAdapter)
                 .submitList(null)
-            tv_dialog_pesquisar_registros_sem_resultados.visibility = View.VISIBLE
-            toolbar_pesquisar_registro.subtitle = "Resultados: 0"
+            binding.textViewSemResultados.visibility = View.VISIBLE
+            binding.toolbar.subtitle = "Resultados: 0"
         }
-        
         return true
     }
     

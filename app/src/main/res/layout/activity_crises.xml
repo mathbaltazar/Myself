@@ -44,7 +44,7 @@
             android:text="Número de crises: " />
 
         <TextView
-            android:id="@+id/tv_crises_numero_crises"
+            android:id="@+id/text_view_numero_crises"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/darker_gray"
@@ -65,7 +65,7 @@
             android:textSize="@dimen/text_size_16" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_crises_mais_detalhes"
+            android:id="@+id/button_mais_detalhes"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
@@ -77,7 +77,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_crises_mais_detalhes"
+        android:id="@+id/layout_mais_detalhes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/all_default_layout_offset_16"
@@ -107,7 +107,7 @@
     Dias que não tomou a dosagem corretamente... (Notificações??)
     -->
     <TextView
-        android:id="@+id/tv_crises_sem_crises_registradas"
+        android:id="@+id/text_view_sem_crises_registradas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Não há registros de crises."
@@ -127,7 +127,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_crises_registrar_crise"
+        android:id="@+id/button_registrar_crise"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -26,7 +26,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_adapter_despesas_item_nome"
+                    android:id="@+id/textview_nome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
@@ -43,7 +43,7 @@
                     tools:visibility="visible" />-->
 
                 <TextView
-                    android:id="@+id/tv_adapter_despesas_item_valor"
+                    android:id="@+id/textview_valor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
@@ -54,7 +54,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_adapter_despesas_item_vencimento"
+                android:id="@+id/layout_vencimento"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:background="@drawable/backgroung_component_vencimento"
@@ -67,7 +67,7 @@
                     android:text="Venc." />
 
                 <TextView
-                    android:id="@+id/tv_adapter_despesas_item_dia_vencimento"
+                    android:id="@+id/textview_vencimento"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
@@ -92,7 +92,7 @@
             app:justifyContent="space_around">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_adapter_despesas_item_excluir"
+                android:id="@+id/button_excluir"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                 app:cornerRadius="@dimen/all_default_layout_offset_32" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_adapter_despesas_item_detalhes"
+                android:id="@+id/button_detalhes"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                 app:cornerRadius="@dimen/all_default_layout_offset_32" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_adapter_despesas_item_registrar"
+                android:id="@+id/button_registrar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Registrar"

@@ -19,7 +19,6 @@ class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewMo
     lateinit var registrosDaDespesa: LiveData<List<Registro>>
     
     val despesaEdited: MutableLiveData<Boolean> = MutableLiveData(false)
-    val wasEdited get() = despesaEdited.value!!
     
     fun loadDespesa(id: Long, onLoaded: () -> Unit) {
         Async.doInBackground({ despesaRepository.getDespesa(id) }, {
@@ -28,6 +27,8 @@ class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewMo
             onLoaded()
         })
     }
+    
+    fun wasEdited() = despesaEdited.value ?: false
     
     fun excluirDespesa(onDeleted: () -> Unit) {
         Async.doInBackground({ despesaRepository.excluir(despesa) }) {

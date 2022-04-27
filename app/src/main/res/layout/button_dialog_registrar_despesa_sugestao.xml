@@ -8,4 +8,5 @@
     android:layout_marginHorizontal="@dimen/all_default_layout_offset_4"
     android:textColor="@color/colorAccent"
     app:cornerRadius="32dp"
-    tools:text="R$ 120,00" />
+    tools:text="R$ 120,00"
+    tools:viewBindingIgnore="true" />

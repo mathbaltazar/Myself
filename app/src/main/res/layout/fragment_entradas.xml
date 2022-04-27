@@ -45,7 +45,7 @@
             app:justifyContent="space_between">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_decrement_year"
+                android:id="@+id/button_voltar_ano"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="38dp"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 tools:text="2022" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_increment_year"
+                android:id="@+id/button_avancar_ano"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="38dp"
                 android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
 
 
         <TextView
-            android:id="@+id/tv_entradas_empty"
+            android:id="@+id/textview_sem_entradas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/all_default_layout_offset_16"
@@ -86,7 +86,7 @@
             android:textStyle="italic" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_entradas"
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/all_default_layout_offset_2"
@@ -95,7 +95,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_entradas_add"
+        android:id="@+id/button_adicionar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

@@ -22,7 +22,7 @@
         android:background="@color/off_white" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view_financas"
+        android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:elevation="@dimen/all_default_layout_offset_8"

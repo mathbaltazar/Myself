@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
+import br.com.myself.databinding.AdapterRegistroBinding
 import br.com.myself.domain.entity.Registro
 import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.formattedDate
-import kotlinx.android.synthetic.main.layout_adapter_registro.view.*
 
 class RegistroAdapter : ListAdapter<Registro, RecyclerView.ViewHolder>(COMPARATOR) {
     companion object {
@@ -27,7 +27,7 @@ class RegistroAdapter : ListAdapter<Registro, RecyclerView.ViewHolder>(COMPARATO
     private var mListener: AdapterClickListener<Registro>? = null
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return RegistroViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_adapter_registro, parent,false))
+        return RegistroViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.adapter_registro, parent,false))
     }
     
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -39,35 +39,35 @@ class RegistroAdapter : ListAdapter<Registro, RecyclerView.ViewHolder>(COMPARATO
     }
     
     private inner class RegistroViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val binding = AdapterRegistroBinding.bind(itemView)
+        
         fun bind(registro: Registro) {
-            
-            itemView.tv_registro_descricao.text = registro.descricao
-            itemView.tv_registro_valor.text = Utils.formatCurrency(registro.valor)
-            itemView.tv_registro_data.text = registro.data.formattedDate()
-            itemView.tv_registro_outros.text = registro.outros
-            
-            itemView.tv_registro_outros.visibility =
+    
+            binding.textviewDescricao.text = registro.descricao
+            binding.textviewValor.text = Utils.formatCurrency(registro.valor)
+            binding.textviewData.text = registro.data.formattedDate()
+            binding.textviewOutros.text = registro.outros
+    
+            binding.textviewOutros.visibility =
                 if (registro.outros.isNullOrBlank()) View.GONE else View.VISIBLE
-            
-            itemView.iv_icon_registro_item_despesa_atrelada.visibility =
+    
+            binding.imageviewIconeDespesa.visibility =
                 if (registro.despesa_id == null || registro.despesa_id == 0L) View.INVISIBLE else View.VISIBLE
-            
+    
             //TODO HABILITAR ÍCONE QUANDO REGISTRO HOUVER ANEXO
             /*itemView.iv_icon_registro_item_anexo.visibility =
                 if (registro.anexo == null) View.GONE else View.VISIBLE*/
-            
+    
             itemView.setOnClickListener {
                 mListener?.let { it.onClick(registro) }
             }
-            
+    
             itemView.setOnLongClickListener {
                 mListener?.let { it.onLongClick(registro) }
                 true
             }
-            
+    
         }
-        
-        
     }
     
 }

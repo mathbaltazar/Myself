@@ -6,71 +6,71 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.PopupMenu
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
+import br.com.myself.databinding.ActivityCrisesBinding
 import br.com.myself.domain.entity.Crise
 import br.com.myself.ui.adapter.CrisesAdapter
 import br.com.myself.util.Utils.Companion.formattedDate
 import br.com.myself.viewmodel.CrisesActivityViewModel
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_crises.*
 import org.jetbrains.anko.toast
 
 class CrisesActivity : AppCompatActivity() {
     
-    private lateinit var viewModel: CrisesActivityViewModel
+    private val binding: ActivityCrisesBinding by lazy { ActivityCrisesBinding.inflate(layoutInflater) }
+    private val viewModel: CrisesActivityViewModel by viewModels()
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_crises)
-        
-        viewModel = ViewModelProvider(this).get(CrisesActivityViewModel::class.java)
-        
+        setContentView(binding.root)
         setUpView()
-    
+        
         viewModel.crises.observe(this, { crises ->
-            (recycler_view_crises.adapter as CrisesAdapter).submitList(crises)
+            (binding.recyclerViewCrises.adapter as CrisesAdapter).submitList(crises)
     
-            tv_crises_sem_crises_registradas.visibility =
+            binding.textViewSemCrisesRegistradas.visibility =
                 if (crises.isEmpty()) View.VISIBLE else View.GONE
     
-            tv_crises_numero_crises.text = crises.size.toString()
+            binding.textViewNumeroCrises.text = crises.size.toString()
         })
     }
     
     @SuppressLint("SetTextI18n")
     private fun setUpView() {
-        button_crises_mais_detalhes.setOnClickListener {
+        
+        binding.buttonMaisDetalhes.setOnClickListener {
             // TOGGLE LAYOUT MAIS DETALHES
-            if (ll_crises_mais_detalhes.visibility != View.VISIBLE) {
-                ll_crises_mais_detalhes.visibility = View.VISIBLE
-                button_crises_mais_detalhes.setIconResource(R.drawable.ic_arrow_up)
-                button_crises_mais_detalhes.text = "Menos"
+            if (binding.layoutMaisDetalhes.visibility != View.VISIBLE) {
+                binding.layoutMaisDetalhes.visibility = View.VISIBLE
+                binding.buttonMaisDetalhes.setIconResource(R.drawable.ic_arrow_up)
+                binding.buttonMaisDetalhes.text = "Menos"
             } else {
-                ll_crises_mais_detalhes.visibility = View.GONE
-                button_crises_mais_detalhes.setIconResource(R.drawable.ic_arrow_down)
-                button_crises_mais_detalhes.text = "Mais"
+                binding.layoutMaisDetalhes.visibility = View.GONE
+                binding.buttonMaisDetalhes.setIconResource(R.drawable.ic_arrow_down)
+                binding.buttonMaisDetalhes.text = "Mais"
             }
         }
-    
-        button_crises_registrar_crise.setOnClickListener {
+        
+        binding.buttonRegistrarCrise.setOnClickListener {
             abrirDialogRegistrarCrise()
         }
-    
+        
         configureAdapter()
     }
     
     private fun configureAdapter() {
-        recycler_view_crises.adapter = CrisesAdapter().apply {
-            setOnItemClickListener { crise, view ->
+        binding.recyclerViewCrises.apply {
+            val adapter = CrisesAdapter()
+            adapter.setOnItemClickListener { crise, view ->
                 showPopupMenu(crise, view)
             }
+            this.adapter = adapter
+            this.layoutManager = LinearLayoutManager(this@CrisesActivity)
         }
-        
-        recycler_view_crises.layoutManager = LinearLayoutManager(this)
     }
     
     private fun showPopupMenu(crise: Crise, view: View) {
@@ -79,7 +79,7 @@ class CrisesActivity : AppCompatActivity() {
             abrirDialogRegistrarCrise(crise)
             true
         }
-    
+        
         popup.menu.add("Excluir").setOnMenuItemClickListener {
             confirmarExcluirCrise(crise)
             true
@@ -88,12 +88,12 @@ class CrisesActivity : AppCompatActivity() {
     }
     
     private fun abrirDialogRegistrarCrise(crise: Crise? = null) {
-        val dialog = RegistrarCriseDialog(crise) { dialog,  novacrise ->
+        val dialog = RegistrarCriseDialog(crise, onSave = { dialog, novacrise ->
             viewModel.salvarCrise(novacrise) {
                 toast("Salvo!")
                 dialog.dismiss()
             }
-        }
+        })
         dialog.show(supportFragmentManager, null)
     }
     
@@ -101,17 +101,15 @@ class CrisesActivity : AppCompatActivity() {
         var mensagem = "Data: ${crise.data.formattedDate()}"
         mensagem += "\nHorários: Entre ${crise.horario1} e ${crise.horario2}"
         mensagem += "\nObservações: ${crise.observacoes}"
-    
-        AlertDialog.Builder(this).setTitle("Excluir")
-            .setMessage(mensagem)
+        
+        AlertDialog.Builder(this).setTitle("Excluir").setMessage(mensagem)
             .setPositiveButton("Excluir") { _, _ ->
                 
                 viewModel.excluirCrise(crise) {
                     toast("Removido!")
                 }
-    
-            }.setNegativeButton("Cancelar", null)
-            .show()
+                
+            }.setNegativeButton("Cancelar", null).show()
     }
     
     override fun attachBaseContext(newBase: Context) {

@@ -23,5 +23,5 @@ interface RegistroDAO  {
     fun findAllRegistrosByDespesaId(despesaId: Long): LiveData<List<Registro>>
     
     @Query("SELECT * FROM Registro WHERE descricao LIKE :buscar")
-    fun findAllRegistrosByDescricao(buscar: String): List<Registro>
+    fun findAllRegistrosByDescricao(buscar: String): LiveData<List<Registro>>
 }

@@ -33,7 +33,7 @@ class RegistroRepository(application: Application) {
         return registroDAO.findAllValorByDespesaId(despesaId)
     }
     
-    fun pesquisarRegistros(pesquisa: String): List<Registro> {
+    fun pesquisarRegistros(pesquisa: String): LiveData<List<Registro>> {
         return registroDAO.findAllRegistrosByDescricao("%$pesquisa%")
     }
     

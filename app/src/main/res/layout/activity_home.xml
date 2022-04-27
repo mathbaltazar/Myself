@@ -39,7 +39,7 @@
             app:justifyContent="space_evenly">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_home_financas"
+                android:id="@+id/button_financas"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
@@ -55,7 +55,7 @@
                 app:strokeColor="@color/white" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_home_crises"
+                android:id="@+id/button_crises"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
