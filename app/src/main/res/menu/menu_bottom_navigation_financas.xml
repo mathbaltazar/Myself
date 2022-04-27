@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/bottom_navigation_registros"
         android:enabled="true"
         android:icon="@drawable/ic_registros"
-        android:title="Registros" />
+        android:title="Registros"
+        app:showAsAction="always" />
     <item
         android:id="@+id/bottom_navigation_entradas"
         android:enabled="true"
-        android:icon="@drawable/ic_drawer_entradas"
-        android:title="Entradas" />
+        android:icon="@drawable/ic_entradas"
+        android:title="Entradas"
+        app:showAsAction="always" />
     <item
         android:id="@+id/bottom_navigation_despesas"
         android:enabled="true"
         android:icon="@drawable/ic_despesa"
-        android:title="Despesas" />
+        android:title="Despesas"
+        app:showAsAction="always" />
 
 </menu>

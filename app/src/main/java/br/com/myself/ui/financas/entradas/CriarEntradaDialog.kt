@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
 import br.com.myself.databinding.DialogCriarEntradaBinding
-import br.com.myself.domain.entity.Entrada
+import br.com.myself.model.entity.Entrada
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions

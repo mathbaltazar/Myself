@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
 import br.com.myself.databinding.AdapterEntradaItemBinding
 import br.com.myself.databinding.AdapterEntradaSeparatorBinding
-import br.com.myself.domain.entity.Entrada
+import br.com.myself.model.entity.Entrada
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.formattedDate
 

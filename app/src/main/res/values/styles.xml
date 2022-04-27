@@ -14,11 +14,6 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="Widget.MaterialComponents.Button.NoInset" parent="Widget.MaterialComponents.Button">
-        <item name="android:insetTop">4dp</item>
-        <item name="android:insetBottom">4dp</item>
-    </style>
-
     <style name="CalendarPickerLayoutTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
         <item name="materialCalendarHeaderLayout">@style/MaterialCalendarHeader</item>
     </style>

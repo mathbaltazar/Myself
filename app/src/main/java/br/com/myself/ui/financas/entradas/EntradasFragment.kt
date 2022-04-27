@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.databinding.FragmentEntradasBinding
-import br.com.myself.domain.entity.Entrada
+import br.com.myself.model.entity.Entrada
 import br.com.myself.ui.adapter.EntradaAdapter
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.EntradasFragmentViewModel

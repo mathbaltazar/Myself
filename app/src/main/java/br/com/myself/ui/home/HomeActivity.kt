@@ -7,15 +7,10 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.com.myself.databinding.ActivityHomeBinding
 import br.com.myself.notification.Notification
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
 import br.com.myself.ui.crises.CrisesActivity
 import br.com.myself.ui.financas.FinancasActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.toast
 
 class HomeActivity : AppCompatActivity() {
     
@@ -35,17 +30,6 @@ class HomeActivity : AppCompatActivity() {
         binding.buttonCrises.setOnClickListener {
             startActivity(Intent(applicationContext, CrisesActivity::class.java))
         }
-        
-        registerGlobalToast()
-    }
-    
-    private fun registerGlobalToast() {
-        Trigger.watcher().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe { t ->
-                when (t) {
-                    is Events.Toast -> toast(t.message)
-                }
-            }.apply {  }
     }
     
     private fun setupFirebaseMessaging() {

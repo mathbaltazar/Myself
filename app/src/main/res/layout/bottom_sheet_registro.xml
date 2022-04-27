@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:hint="Descrição"
         android:padding="@dimen/all_default_layout_offset_4"
-        app:boxBackgroundColor="@color/white"
+        app:boxBackgroundColor="@android:color/white"
         app:startIconCheckable="true"
 
         app:startIconDrawable="@drawable/ic_edit">
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:hint="Valor"
         android:padding="@dimen/all_default_layout_offset_4"
-        app:boxBackgroundColor="@color/white"
+        app:boxBackgroundColor="@android:color/white"
         app:startIconDrawable="@drawable/ic_money">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:hint="Outros"
         android:padding="@dimen/all_default_layout_offset_4"
-        app:boxBackgroundColor="@color/white"
+        app:boxBackgroundColor="@android:color/white"
         app:startIconDrawable="@drawable/ic_info">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:hint="Data"
         android:padding="@dimen/all_default_layout_offset_4"
-        app:boxBackgroundColor="@color/white"
+        app:boxBackgroundColor="@android:color/white"
         app:startIconDrawable="@drawable/ic_calendar">
 
         <br.com.myself.components.CalendarPickerEditText

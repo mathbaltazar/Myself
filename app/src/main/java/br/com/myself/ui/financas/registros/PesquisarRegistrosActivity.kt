@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.databinding.ActivityPesquisarRegistrosBinding
-import br.com.myself.domain.entity.Registro
+import br.com.myself.model.entity.Registro
 import br.com.myself.ui.adapter.RegistroAdapter
 import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.Utils

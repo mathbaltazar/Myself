@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.*
 import androidx.lifecycle.map
 import androidx.paging.*
-import br.com.myself.domain.entity.Entrada
-import br.com.myself.domain.repository.EntradaRepository
+import br.com.myself.model.entity.Entrada
+import br.com.myself.repository.EntradaRepository
 import br.com.myself.ui.adapter.EntradaAdapter
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.monthString

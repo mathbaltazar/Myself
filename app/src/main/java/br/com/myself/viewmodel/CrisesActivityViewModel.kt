@@ -3,8 +3,8 @@ package br.com.myself.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import br.com.myself.domain.entity.Crise
-import br.com.myself.domain.repository.CriseRepository
+import br.com.myself.model.entity.Crise
+import br.com.myself.repository.CriseRepository
 import br.com.myself.util.Async
 
 class CrisesActivityViewModel(application: Application): AndroidViewModel(application) {

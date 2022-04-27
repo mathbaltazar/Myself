@@ -8,7 +8,7 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import br.com.myself.databinding.DialogRegistrarCriseBinding
-import br.com.myself.domain.entity.Crise
+import br.com.myself.model.entity.Crise
 import br.com.myself.util.Utils.Companion.setUpDimensions
 
 class RegistrarCriseDialog(

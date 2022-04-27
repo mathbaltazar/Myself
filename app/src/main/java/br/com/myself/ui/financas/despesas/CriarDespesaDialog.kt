@@ -5,15 +5,13 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Window
 import android.widget.ArrayAdapter
-import br.com.myself.R
 import br.com.myself.databinding.DialogCriarDespesaBinding
-import br.com.myself.domain.entity.Despesa
-import br.com.myself.observer.Events
-import br.com.myself.observer.Trigger
+import br.com.myself.model.entity.Despesa
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
 import com.google.android.material.textfield.TextInputEditText
+import org.jetbrains.anko.toast
 
 class CriarDespesaDialog(context: Context, private val onSave: (Dialog, Despesa) -> Unit) : Dialog(context) {
     
@@ -57,12 +55,12 @@ class CriarDespesaDialog(context: Context, private val onSave: (Dialog, Despesa)
         
             if (nome.isBlank()) {
                 binding.textinputNome.requestFocus()
-                Trigger.launch(Events.Toast("Nome inválido"))
+                context.toast("Nome inválido")
                 return@setOnClickListener
             }
             if (valor.isBlank()) {
                 binding.textinputValor.requestFocus()
-                Trigger.launch(Events.Toast("Valor inválido"))
+                context.toast("Valor inválido")
                 return@setOnClickListener
             }
             

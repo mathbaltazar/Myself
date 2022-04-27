@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
 import br.com.myself.databinding.AdapterDespesasItemBinding
-import br.com.myself.domain.entity.Despesa
+import br.com.myself.model.entity.Despesa
 import br.com.myself.util.Utils
 
 class DespesaAdapter : ListAdapter<Despesa, RecyclerView.ViewHolder>(COMPARATOR) {

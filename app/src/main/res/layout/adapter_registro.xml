@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/all_default_layout_offset_4"
     android:layout_marginVertical="@dimen/all_default_layout_offset_2"
-    android:background="@drawable/background_section_item_selected"
     android:clickable="true"
     android:focusable="true"
     android:layoutDirection="ltr"

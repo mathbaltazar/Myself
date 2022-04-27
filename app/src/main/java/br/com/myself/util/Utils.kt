@@ -1,5 +1,6 @@
 package br.com.myself.util
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Point
@@ -10,7 +11,8 @@ import java.util.*
 
 class Utils {
     companion object {
-        private val mLocale = Locale("pt", "BR")
+        @SuppressLint("ConstantLocale")
+        private val mLocale = Locale.getDefault()
         private val sdf = SimpleDateFormat("dd/MM/yyyy", mLocale)
         val MESES_STRING = arrayOf(
             "JANEIRO",

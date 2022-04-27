@@ -9,13 +9,12 @@ import androidx.fragment.app.DialogFragment
 import br.com.myself.R
 import br.com.myself.components.CalendarPickerEditText
 import br.com.myself.databinding.DialogRegistrarDespesaBinding
-import br.com.myself.domain.entity.Despesa
+import br.com.myself.model.entity.Despesa
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.dialog_registrar_despesa.*
 import java.math.BigDecimal
 import java.util.*
 

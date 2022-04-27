@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import br.com.myself.components.CalendarPickerEditText
 import br.com.myself.databinding.BottomSheetRegistroBinding
-import br.com.myself.domain.entity.Registro
+import br.com.myself.model.entity.Registro
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -58,7 +58,8 @@ class CriarRegistroBottomSheet(
                     descricao = descricao.trim(),
                     valor = Utils.unformatCurrency(valor).toDouble(),
                     outros = outros.trim(),
-                    data = data
+                    data = data,
+                    despesa_id = registro?.despesa_id
                 ))
             }
         }

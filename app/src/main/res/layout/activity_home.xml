@@ -19,7 +19,7 @@
             android:gravity="center"
             android:padding="@dimen/all_default_layout_offset_16"
             android:text="myself"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="24sp" />
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_marginTop="48dp"
             android:gravity="center"
             android:text="Meus controles"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="16sp" />
 
         <com.google.android.flexbox.FlexboxLayout
@@ -45,14 +45,14 @@
                 android:layout_height="160dp"
                 android:text="Finanças"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="16sp"
                 app:icon="@drawable/ic_registros"
                 app:iconGravity="textTop"
                 app:iconPadding="@dimen/all_default_layout_offset_16"
                 app:iconSize="48dp"
-                app:iconTint="@color/white"
-                app:strokeColor="@color/white" />
+                app:iconTint="@android:color/white"
+                app:strokeColor="@android:color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_crises"
@@ -61,14 +61,14 @@
                 android:layout_height="160dp"
                 android:text="Crises"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="16sp"
                 app:icon="@drawable/ic_despesa"
                 app:iconGravity="textTop"
                 app:iconPadding="@dimen/all_default_layout_offset_16"
                 app:iconSize="48dp"
-                app:iconTint="@color/white"
-                app:strokeColor="@color/white" />
+                app:iconTint="@android:color/white"
+                app:strokeColor="@android:color/white" />
 
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -76,14 +76,14 @@
                 android:layout_height="160dp"
                 android:text="Dados"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="16sp"
-                app:icon="@drawable/ic_drawer_backup"
+                app:icon="@drawable/ic_cloud"
                 app:iconGravity="textTop"
                 app:iconPadding="@dimen/all_default_layout_offset_16"
                 app:iconSize="48dp"
-                app:iconTint="@color/white"
-                app:strokeColor="@color/white" />
+                app:iconTint="@android:color/white"
+                app:strokeColor="@android:color/white" />
 
         </com.google.android.flexbox.FlexboxLayout>
 
@@ -94,7 +94,7 @@
             android:layout_marginTop="64dp"
             android:gravity="center"
             android:text="Desenvolvido por"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -103,7 +103,7 @@
             android:layout_marginBottom="64dp"
             android:gravity="center"
             android:text="Matheus Baltazar"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>

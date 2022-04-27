@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
 import br.com.myself.databinding.AdapterCrisesItemBinding
-import br.com.myself.domain.entity.Crise
+import br.com.myself.model.entity.Crise
 import br.com.myself.util.Utils.Companion.formattedDate
 
 class CrisesAdapter : ListAdapter<Crise, RecyclerView.ViewHolder>(COMPARATOR) {

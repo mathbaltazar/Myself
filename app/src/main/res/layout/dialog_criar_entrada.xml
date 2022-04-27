@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:hint="Fonte"
             android:padding="@dimen/all_default_layout_offset_4"
-            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundColor="@android:color/white"
             app:startIconDrawable="@drawable/ic_edit">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:hint="Valor"
             android:padding="@dimen/all_default_layout_offset_4"
-            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundColor="@android:color/white"
             app:startIconDrawable="@drawable/ic_money">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:hint="Data"
             android:padding="@dimen/all_default_layout_offset_4"
-            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundColor="@android:color/white"
             app:startIconDrawable="@drawable/ic_calendar">
 
             <br.com.myself.components.CalendarPickerEditText

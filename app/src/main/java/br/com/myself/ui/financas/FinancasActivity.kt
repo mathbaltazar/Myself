@@ -13,7 +13,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
 class FinancasActivity : AppCompatActivity() {
     
-    private val binding: ActivityFinancasBinding by viewModels()
+    private val binding: ActivityFinancasBinding by lazy { ActivityFinancasBinding.inflate(layoutInflater) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
