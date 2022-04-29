@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service android:name=".notification.Notification">
+        <service android:name=".notification.Notification"
+            android:exported="false">
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
                 android:resource="@drawable/notification_icon" />
@@ -25,8 +26,8 @@
         <activity
             android:name=".ui.home.HomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,13 +39,11 @@
 
         <activity
             android:name=".ui.financas.FinancasActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
             android:name=".ui.financas.registros.PesquisarRegistrosActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustNothing" />
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,7 +15,6 @@ import br.com.myself.model.entity.Despesa
 import br.com.myself.ui.adapter.DespesaAdapter
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.DespesasFragmentViewModel
-import org.jetbrains.anko.support.v4.toast
 
 class DespesasFragment : Fragment() {
     
@@ -48,7 +48,7 @@ class DespesasFragment : Fragment() {
         binding.buttonAdicionar.setOnClickListener {
             CriarDespesaDialog(it.context) { dialog, despesa ->
                 viewModel.salvar(despesa) {
-                    toast("Salvo!")
+                    Toast.makeText(context, "Salvo!", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
             }.show()
@@ -71,13 +71,14 @@ class DespesasFragment : Fragment() {
         adapter.setOnItemActionListener { action, despesa ->
             when (action) {
                 DespesaAdapter.ACTION_EXCLUIR -> confirmarExcluirDespesa(despesa)
-                DespesaAdapter.ACTION_DETALHES -> startActivity(DetalhesDespesaActivity.getIntent(context!!, despesa))
+                DespesaAdapter.ACTION_DETALHES -> startActivity(DetalhesDespesaActivity.getIntent(requireContext(), despesa))
                 DespesaAdapter.ACTION_REGISTRAR -> {
                     viewModel.getSugestoes(despesa) { sugestoes ->
                         val dialog =
                             RegistrarDespesaDialog(despesa, sugestoes) { dialog, valor, data ->
                                 viewModel.registrarDespesa(despesa, valor, data) {
-                                    toast("Registrado!")
+                                    Toast.makeText(context, "Registrado!", Toast.LENGTH_SHORT)
+                                        .show()
                                     dialog.dismiss()
                                 }
                             }
@@ -97,7 +98,7 @@ class DespesasFragment : Fragment() {
             .setMessage(mensagem)
             .setPositiveButton("Excluir") { _, _ ->
                 viewModel.excluir(despesa) {
-                    toast("Removido!")
+                    Toast.makeText(context, "Removido!", Toast.LENGTH_SHORT).show()
                 }
             }.setNegativeButton("Cancelar", null)
             .show()

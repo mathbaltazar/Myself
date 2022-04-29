@@ -42,8 +42,7 @@ class CrisesAdapter : ListAdapter<Crise, RecyclerView.ViewHolder>(COMPARATOR) {
             binding.textviewData.text = crise.data.formattedDate()
             binding.textviewHorario1.text = crise.horario1
             binding.textviewHorario2.text = crise.horario2
-            binding.textviewObservacoes.text =
-                if (crise.observacoes.isBlank()) "Nada registrado." else crise.observacoes
+            binding.textviewObservacoes.text = crise.observacoes.ifBlank { "Nada registrado." }
         }
     }
 }

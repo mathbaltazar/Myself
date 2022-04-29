@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,6 @@ import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.PesquisarRegistrosActivityViewModel
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import org.jetbrains.anko.toast
 
 class PesquisarRegistrosActivity : AppCompatActivity() {
     
@@ -71,7 +71,7 @@ class PesquisarRegistrosActivity : AppCompatActivity() {
     private fun abrirBottomSheetCriarRegistro(registro: Registro, dialog: DetalhesRegistroDialog? = null) {
         CriarRegistroBottomSheet(registro, onSave = { bottomSheet, it ->
             viewModel.salvar(it) {
-                toast("Salvo!")
+                Toast.makeText(this, "Salvo!", Toast.LENGTH_SHORT).show()
                 dialog?.bindData(it)
             }
             bottomSheet.dismiss()
@@ -85,7 +85,7 @@ class PesquisarRegistrosActivity : AppCompatActivity() {
         AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
             .setPositiveButton("Excluir") { _, _ ->
                 viewModel.excluir(registro) {
-                    toast("Removido!")
+                    Toast.makeText(this, "Removido!", Toast.LENGTH_SHORT).show()
                     dialog?.dismiss()
                 }
             }.setNegativeButton("Cancelar", null).show()

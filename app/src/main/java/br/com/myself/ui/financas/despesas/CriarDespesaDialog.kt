@@ -5,13 +5,13 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Window
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import br.com.myself.databinding.DialogCriarDespesaBinding
 import br.com.myself.model.entity.Despesa
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
 import com.google.android.material.textfield.TextInputEditText
-import org.jetbrains.anko.toast
 
 class CriarDespesaDialog(context: Context, private val onSave: (Dialog, Despesa) -> Unit) : Dialog(context) {
     
@@ -55,12 +55,12 @@ class CriarDespesaDialog(context: Context, private val onSave: (Dialog, Despesa)
         
             if (nome.isBlank()) {
                 binding.textinputNome.requestFocus()
-                context.toast("Nome inválido")
+                Toast.makeText(context, "Nome inválido", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (valor.isBlank()) {
                 binding.textinputValor.requestFocus()
-                context.toast("Valor inválido")
+                Toast.makeText(context, "Valor inválido", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             

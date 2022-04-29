@@ -45,7 +45,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'org.jetbrains.anko:anko:0.10.8'
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.core:core-ktx:1.7.0'

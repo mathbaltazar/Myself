@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,15 +28,13 @@ import br.com.myself.viewmodel.DetalhesDespesaActivityViewModel
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
 import java.math.BigDecimal
 
 class DetalhesDespesaActivity : AppCompatActivity() {
     
     companion object {
         fun getIntent(context: Context, despesa: Despesa): Intent {
-            val intent = context.intentFor<DetalhesDespesaActivity>()
+            val intent = Intent(context, DetalhesDespesaActivity::class.java)
             intent.putExtra(DESPESA_EXTRA, despesa as Parcelable)
             return intent
         }
@@ -133,7 +132,9 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     
         AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
             .setPositiveButton("Excluir") { _, _ ->
-                viewModel.excluirRegistro(registro, onDeleted = { toast("Excluído!") })
+                viewModel.excluirRegistro(registro, onDeleted = {
+                    Toast.makeText(this, "Excluído!", Toast.LENGTH_SHORT).show()
+                })
             }.setNegativeButton("Cancelar", null)
             .show()
     }
@@ -157,7 +158,7 @@ class DetalhesDespesaActivity : AppCompatActivity() {
             .setMessage(msg)
             .setPositiveButton("Excluir") { _, _ ->
                viewModel.excluirDespesa(onDeleted = {
-                   toast("Removido!")
+                   Toast.makeText(this, "Removido!", Toast.LENGTH_SHORT).show()
                    finish()
                })
             }.setNegativeButton("Cancelar", null)
@@ -170,13 +171,13 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         
         if (nome.isBlank()) {
             binding.textinputNome.requestFocus()
-            toast("Nome inválido")
+            Toast.makeText(this, "Nome inválido", Toast.LENGTH_SHORT).show()
             return
         }
         
         if (valor <= BigDecimal.ZERO) {
             binding.textinputValor.requestFocus()
-            toast("Valor inválido")
+            Toast.makeText(this, "Valor inválido", Toast.LENGTH_SHORT).show()
             return
         }
         

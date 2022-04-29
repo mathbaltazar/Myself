@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,6 @@ import br.com.myself.ui.adapter.CrisesAdapter
 import br.com.myself.util.Utils.Companion.formattedDate
 import br.com.myself.viewmodel.CrisesActivityViewModel
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import org.jetbrains.anko.toast
 
 class CrisesActivity : AppCompatActivity() {
     
@@ -90,7 +90,7 @@ class CrisesActivity : AppCompatActivity() {
     private fun abrirDialogRegistrarCrise(crise: Crise? = null) {
         val dialog = RegistrarCriseDialog(crise, onSave = { dialog, novacrise ->
             viewModel.salvarCrise(novacrise) {
-                toast("Salvo!")
+                Toast.makeText(this, "Salvo!", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
         })
@@ -106,7 +106,7 @@ class CrisesActivity : AppCompatActivity() {
             .setPositiveButton("Excluir") { _, _ ->
                 
                 viewModel.excluirCrise(crise) {
-                    toast("Removido!")
+                    Toast.makeText(this, "Removido!", Toast.LENGTH_SHORT).show()
                 }
                 
             }.setNegativeButton("Cancelar", null).show()

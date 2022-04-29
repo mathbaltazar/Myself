@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import br.com.myself.databinding.DialogCriarEntradaBinding
 import br.com.myself.model.entity.Entrada
@@ -12,7 +13,6 @@ import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
 import com.google.android.material.textfield.TextInputEditText
-import org.jetbrains.anko.support.v4.toast
 import java.math.BigDecimal
 
 class CriarEntradaDialog(
@@ -65,10 +65,10 @@ class CriarEntradaDialog(
     
             if (fonte.isBlank()) {
                 binding.textinputFonte.requestFocus()
-                toast("Campo Fonte vazio")
+                Toast.makeText(context, "Campo Fonte vazio", Toast.LENGTH_SHORT).show()
             } else if (!isValorValido(valor)) {
                 binding.textinputValor.requestFocus()
-                toast("Campo Valor inválido")
+                Toast.makeText(context, "Campo Valor inválido", Toast.LENGTH_SHORT).show()
             } else {
                 onSave(this, Entrada(
                     id = entrada?.id,

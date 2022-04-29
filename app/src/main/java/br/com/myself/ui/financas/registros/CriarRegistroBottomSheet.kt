@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import br.com.myself.components.CalendarPickerEditText
 import br.com.myself.databinding.BottomSheetRegistroBinding
@@ -12,7 +13,6 @@ import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
-import org.jetbrains.anko.support.v4.toast
 import java.math.BigDecimal
 
 class CriarRegistroBottomSheet(
@@ -48,10 +48,10 @@ class CriarRegistroBottomSheet(
             
             if (descricao.isBlank()) {
                 binding.textinputDescricao.requestFocus()
-                toast("Campo Descrição vazio")
+                Toast.makeText(context, "Campo Descrição vazio", Toast.LENGTH_SHORT).show()
             } else if (!isValorValido(valor)) {
                 binding.textinputValor.requestFocus()
-                toast("Campo Valor inválido")
+                Toast.makeText(context, "Campo Valor inválido", Toast.LENGTH_SHORT).show()
             } else {
                 onSave(this, Registro(
                     id = registro?.id,

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -16,7 +17,6 @@ import br.com.myself.model.entity.Entrada
 import br.com.myself.ui.adapter.EntradaAdapter
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.EntradasFragmentViewModel
-import org.jetbrains.anko.support.v4.toast
 
 class EntradasFragment : Fragment(R.layout.fragment_entradas) {
     
@@ -94,7 +94,9 @@ class EntradasFragment : Fragment(R.layout.fragment_entradas) {
     
         AlertDialog.Builder(requireContext()).setTitle("Excluir").setMessage(mensagem)
             .setPositiveButton("Excluir") { _, _ ->
-                viewModel.excluir(entrada, onComplete = { toast("Removido!") })
+                viewModel.excluir(entrada, onComplete = {
+                    Toast.makeText(context, "Removido!", Toast.LENGTH_SHORT).show()
+                })
             }.setNegativeButton("Cancelar", null).show()
     }
     
@@ -105,7 +107,7 @@ class EntradasFragment : Fragment(R.layout.fragment_entradas) {
     private fun iniciarDialogCriarEntrada(entrada: Entrada? = null) {
         val dialog = CriarEntradaDialog(entrada, onSave = { dialog, novaentrada ->
             viewModel.salvar(novaentrada, onComplete = {
-                toast("Dados salvos!")
+                Toast.makeText(context, "Dados salvos!", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             })
         })

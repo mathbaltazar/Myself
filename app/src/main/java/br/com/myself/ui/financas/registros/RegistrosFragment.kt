@@ -1,10 +1,12 @@
 package br.com.myself.ui.financas.registros
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -16,8 +18,6 @@ import br.com.myself.ui.adapter.RegistroAdapter
 import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.RegistrosFragmentViewModel
-import org.jetbrains.anko.support.v4.intentFor
-import org.jetbrains.anko.support.v4.toast
 
 class RegistrosFragment : Fragment(R.layout.fragment_registros) {
     
@@ -86,7 +86,8 @@ class RegistrosFragment : Fragment(R.layout.fragment_registros) {
         
         // AÇÃO BOTÃO PESQUISAR
         binding.buttonPesquisar.setOnClickListener {
-            requireActivity().startActivity(intentFor<PesquisarRegistrosActivity>())
+            val intent = Intent(context, PesquisarRegistrosActivity::class.java)
+            requireActivity().startActivity(intent)
         }
         
         // AÇÃO BOTÃO ADICIONAR (+)
@@ -124,7 +125,7 @@ class RegistrosFragment : Fragment(R.layout.fragment_registros) {
         AlertDialog.Builder(requireContext()).setTitle("Excluir registro?").setMessage(mensagem)
             .setPositiveButton("Excluir") { _, _ ->
                 viewModel.excluirRegistro(registro) {
-                    toast("Removido!")
+                    Toast.makeText(context, "Removido!", Toast.LENGTH_SHORT).show()
                     dialog?.dismiss()
                 }
             }.setNegativeButton("Cancelar", null).show()
@@ -152,7 +153,7 @@ class RegistrosFragment : Fragment(R.layout.fragment_registros) {
     private fun abrirBottomSheetCriarRegistro(registro: Registro?, detalhesDialog: DetalhesRegistroDialog? = null) {
         val bottomSheet = CriarRegistroBottomSheet(registro) { dialog, novoregistro ->
             viewModel.salvarRegistro(novoregistro) {
-                toast("Dados salvos!")
+                Toast.makeText(context, "Dados salvos!", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
                 detalhesDialog?.bindData(novoregistro)
             }
