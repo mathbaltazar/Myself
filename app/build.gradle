@@ -1,11 +1,12 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-//apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-parcelize'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 
-apply plugin: 'com.google.gms.google-services'
+    id 'com.google.gms.google-services'
+}
 
 android {
     compileSdkVersion 31
@@ -44,7 +45,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'org.jetbrains.anko:anko:0.10.8'
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -78,9 +78,9 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     // Room
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt("androidx.room:room-compiler:$roomVersion")
-    //implementation "androidx.room:room-paging:$roomVersion" necessário a partir de 2.4.0 (atual 2.3.0)
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-paging:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 
     // Paging 3
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
