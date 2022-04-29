@@ -1,6 +1,8 @@
 # Myself
 
-About:\n\tMyself é um aplicativo de uso pessoal que fornece controle para as minhas finanças pessoais, e também um histórico de minhas **condições neurológicas.
+About:
+
+  Myself é um aplicativo de uso pessoal que fornece controle para as minhas finanças pessoais, e também um histórico de minhas **condições neurológicas.
 
 Configuração do Android Studio:
 
