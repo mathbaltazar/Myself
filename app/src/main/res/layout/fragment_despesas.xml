@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ui.financas.despesas.DespesasFragment"
     tools:ignore="HardcodedText,ContentDescription">
 
@@ -14,59 +13,13 @@
         app:alignItems="center"
         app:flexDirection="column">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            app:cardElevation="4dp">
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Despesas"
-                    android:textSize="@dimen/text_size_20"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_despesas_info"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="34dp"
-                    android:layout_height="33dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="18dp"
-                    app:icon="@drawable/ic_info"
-                    app:iconGravity="textStart"
-                    app:iconPadding="0dp"
-                    tools:ignore="ContentDescription" />
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/all_default_layout_offset_8"
-                android:text="Resumo das Despesas"
-                android:textAllCaps="true"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
+            android:layout_marginStart="@dimen/all_default_layout_offset_8"
+            android:text="Resumo das Despesas"
+            android:textAllCaps="true"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textview_sem_depesas"
@@ -129,9 +82,9 @@
                 android:layout_height="36dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                app:icon="@drawable/ic_close"
                 app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:icon="@drawable/ic_close" />
+                app:iconPadding="0dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

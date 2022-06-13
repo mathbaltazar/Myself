@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".ui.financas.entradas.DetalhesEntradaBottomSheet"
+    tools:ignore="HardcodedText">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indeterminateAnimationType="disjoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:trackThickness="3dp"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/all_default_layout_offset_16"
+        app:layout_constraintTop_toBottomOf="@id/progressIndicator">
+
+        <!--DESCRIÇÃO-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descrição:  "
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/textview_descricao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset_8"
+            android:button="@drawable/ic_despesa"
+            android:gravity="top"
+            android:paddingHorizontal="8dp"
+            android:textColor="?android:attr/colorControlNormal"
+            android:textSize="@dimen/text_size_18"
+            tools:text="ESTE É O TEXTO DE UMA DESCRIÇÃO" />
+
+        <!--VALOR-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Valor:  "
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textview_valor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset_8"
+            android:drawablePadding="8dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_18"
+            app:drawableStartCompat="@drawable/ic_money"
+            tools:text="R$ 200,00" />
+
+        <!--DATA-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset_8"
+            android:text="Data:  "
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textview_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset_8"
+            android:drawablePadding="8dp"
+            android:textSize="@dimen/text_size_18"
+            app:drawableStartCompat="@drawable/ic_calendar"
+            tools:text="14/03/2021" />
+
+        <!--SINCRONIZADO COM SERVIDOR-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset_8"
+            android:text="Sincornizado com servidor: "
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold" />
+
+        <CheckedTextView
+            android:id="@+id/textview_sincronizado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset_8"
+            android:checkMark="@drawable/ic_close"
+            android:checkMarkTint="@android:color/holo_red_light"
+            android:checked="true"
+            android:drawablePadding="@dimen/all_default_layout_offset_8"
+            android:gravity="center"
+            android:text="Não sincronizado "
+            android:textColor="?attr/colorControlNormal"
+            android:textSize="@dimen/text_size_18"
+            app:drawableStartCompat="@drawable/ic_cloud" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/all_default_layout_offset_16"
+            app:justifyContent="space_around">
+
+            <!--AÇÕES-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_excluir"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Excluir"
+                app:cornerRadius="32dp"
+                app:icon="@drawable/ic_delete"
+                app:iconTint="@android:color/holo_red_light" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_editar"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar"
+                app:cornerRadius="32dp"
+                app:icon="@drawable/ic_edit" />
+        </com.google.android.flexbox.FlexboxLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

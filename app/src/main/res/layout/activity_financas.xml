@@ -1,30 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:isScrollContainer="true"
-    tools:context="br.com.myself.ui.financas.FinancasActivity">
+    app:flexDirection="column"
+    tools:context=".ui.financas.FinancasActivity">
 
-    <FrameLayout
-        android:id="@+id/container_finanacas"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:nestedScrollingEnabled="true" />
+        android:layout_height="56dp"
+        android:background="@android:color/white">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Entradas"
+            app:titleCentered="true"
+            app:titleTextColor="@android:color/black" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <View
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="1.8dp"
-        android:background="@color/off_white" />
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="true"
+        app:defaultNavHost="true"
+        app:layout_flexGrow="1"
+        app:navGraph="@navigation/financas_nav_graph"
+        tools:layout="@layout/fragment_entradas" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:elevation="@dimen/all_default_layout_offset_8"
-        app:menu="@menu/menu_bottom_navigation_financas" />
-</LinearLayout>
+        app:menu="@menu/menu_bottom_nav_financas" />
+</com.google.android.flexbox.FlexboxLayout>

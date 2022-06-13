@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/financas_nav_graph"
+    app:startDestination="@id/registros_dest">
+
+    <fragment
+        android:id="@+id/registros_dest"
+        android:name="br.com.myself.ui.financas.registros.RegistrosFragment"
+        android:label="Registros"
+        tools:layout="@layout/fragment_registros" />
+    <fragment
+        android:id="@+id/entradas_dest"
+        android:name="br.com.myself.ui.financas.entradas.EntradasFragment"
+        android:label="Entradas"
+        tools:layout="@layout/fragment_entradas">
+        <action
+            android:id="@+id/to_entrada_form_dest"
+            app:destination="@id/entrada_form_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/to_entrada_detalhes_dest"
+            app:destination="@id/entrada_detalhes_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/despesas_dest"
+        android:name="br.com.myself.ui.financas.despesas.DespesasFragment"
+        android:label="Despesas"
+        tools:layout="@layout/fragment_despesas" />
+    <fragment
+        android:id="@+id/entrada_form_dest"
+        android:name="br.com.myself.ui.financas.entradas.EntradaFormFragment"
+        android:label="Salvar Entrada"
+        tools:layout="@layout/fragment_entrada_form" >
+        <argument
+            android:name="entrada"
+            app:argType="br.com.myself.model.entity.Entrada"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <dialog
+        android:id="@+id/entrada_detalhes_dest"
+        android:name="br.com.myself.ui.financas.entradas.DetalhesEntradaBottomSheet"
+        android:label="Detalhes"
+        tools:layout="@layout/dialog_card_entrada_detalhes">
+        <action
+            android:id="@+id/to_entrada_form_dest"
+            app:destination="@id/entrada_form_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="entradaId"
+            app:argType="long" />
+    </dialog>
+    <dialog
+        android:id="@+id/confirmation_dest"
+        android:name="br.com.myself.ui.confirmation.ConfirmationDialog"
+        tools:layout="@layout/dialog_confirmation"
+        android:label="Confirmar" >
+        <argument android:name="requestKey"
+            app:argType="string" />
+        <argument
+            android:name="message"
+            app:argType="string" />
+    </dialog>
+    <action
+        android:id="@+id/toConfirm"
+        app:destination="@id/confirmation_dest" />
+</navigation>

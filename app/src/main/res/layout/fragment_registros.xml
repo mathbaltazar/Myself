@@ -5,27 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:ignore="ContentDescription,HardcodedText">
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        app:cardElevation="4dp"
-        android:layout_height="56dp">
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Registros"
-                android:textSize="@dimen/text_size_20"
-                android:textStyle="bold" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+    tools:context=".ui.financas.registros.RegistrosFragment"
+    tools:ignore="HardcodedText">
 
     <!--PAINEL DADOS E AÇÕES-->
     <com.google.android.flexbox.FlexboxLayout
@@ -139,8 +120,8 @@
             android:layout_height="match_parent"
             android:textSize="@dimen/text_size_16"
             android:textStyle="bold"
-            tools:visibility="gone"
-            tools:text="MARÇO/2022"/>
+            tools:text="MARÇO/2022"
+            tools:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/component_dropdown_mes_ano"

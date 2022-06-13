@@ -3,24 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:ignore="HardcodedText">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_incicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
+        android:visibility="gone"
+        app:indicatorDirectionLinear="endToStart"
+        app:trackThickness="2.8dp"
+        tools:visibility="visible" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/backgroung_gradient_app_color"
-        android:padding="@dimen/all_default_layout_offset_8"
-        android:text="Entrada"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/text_size_16"
-        android:textStyle="bold" />
+        android:layout_margin="@dimen/all_default_layout_offset_8"
+        android:paddingHorizontal="@dimen/all_default_layout_offset_8"
+        android:text="Preencha os dados"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:textColor="@color/colorPrimary" />
 
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="@dimen/all_default_layout_offset_8"
         app:flexDirection="column">
 
@@ -28,13 +37,13 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Fonte"
+            android:hint="Descrição"
             android:padding="@dimen/all_default_layout_offset_4"
             app:boxBackgroundColor="@android:color/white"
             app:startIconDrawable="@drawable/ic_edit">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textinput_fonte"
+                android:id="@+id/textinput_descricao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences" />
@@ -80,7 +89,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/all_default_layout_offset_4"
             android:text="Salvar"
-            app:backgroundTint="@color/colorAccent"
-            android:textSize="18sp" />
+            app:cornerRadius="@dimen/all_default_layout_offset_16" />
     </com.google.android.flexbox.FlexboxLayout>
 </LinearLayout>

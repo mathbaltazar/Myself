@@ -3,7 +3,6 @@ package br.com.myself.components
 import android.content.Context
 import android.util.AttributeSet
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import br.com.myself.R
 import br.com.myself.util.Utils.Companion.formattedDate
 import com.google.android.material.datepicker.CalendarConstraints
@@ -17,6 +16,8 @@ class CalendarPickerEditText(context: Context, attrs: AttributeSet) :
     
     private val mDatePicker: MaterialDatePicker<Long>
     private val calendar: Calendar = Calendar.getInstance()
+    private var mFragmentManager: FragmentManager? = null
+    private var mDateSelectedListener: ((Calendar) -> Unit)? = null
     
     init {
         calendar.timeInMillis = MaterialDatePicker.todayInUtcMilliseconds()
@@ -35,13 +36,17 @@ class CalendarPickerEditText(context: Context, attrs: AttributeSet) :
         
         mDatePicker.addOnPositiveButtonClickListener {
             calendar.timeInMillis = it
-            setText(calendar.formattedDate())
+            setTime(calendar)
         }
         
         setText(calendar.formattedDate())
+    
+        isFocusable = false
+        isCursorVisible = false
         
-        setFocusable(false)
-        setCursorVisible(false)
+        setOnClickListener {
+            mFragmentManager?.let { mDatePicker.show(it, null) }
+        }
         
     }
     
@@ -52,14 +57,19 @@ class CalendarPickerEditText(context: Context, attrs: AttributeSet) :
     fun setTime(calendar: Calendar) {
         this.calendar.timeInMillis = calendar.timeInMillis
         setText(calendar.formattedDate())
+        mDateSelectedListener?.invoke(this.calendar)
+    }
+    
+    fun bindFragmentManager(fragmentManager: FragmentManager) {
+        this.mFragmentManager = fragmentManager
+    }
+    
+    fun setOnDateSelected(listener: (Calendar) -> Unit) {
+        this.mDateSelectedListener = listener
     }
     
     fun showCalendar(fragmentManager: FragmentManager, tag: String?) {
         mDatePicker.show(fragmentManager, tag)
-    }
-    
-    fun showCalendar(fragmentTransaction: FragmentTransaction, tag: String?) {
-        mDatePicker.show(fragmentTransaction, tag)
     }
     
 }

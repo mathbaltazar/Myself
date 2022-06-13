@@ -54,7 +54,7 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
     
         if (intent.action == "abrir_adicionar_gasto" && firstUse) {
-            /* TODO val dialog = CriarRegistroDialog(this)
+            /* TODO val dialog = CriarRegistroDialog(this) DEEP LINK ??
             dialog.show()*/
         }
         firstUse = false

@@ -9,11 +9,18 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+const val DEFAULT_REQUEST_LOAD_SIZE = 5
+const val START_PAGE_INDEX = 0
+
 class Utils {
     companion object {
+    
         @SuppressLint("ConstantLocale")
         private val mLocale = Locale.getDefault()
-        private val sdf = SimpleDateFormat("dd/MM/yyyy", mLocale)
+        private const val mPattern = "dd/MM/yyyy"
+        
+        private val sdf = SimpleDateFormat(mPattern, mLocale)
+        
         val MESES_STRING = arrayOf(
             "JANEIRO",
             "FEVEREIRO",
@@ -31,16 +38,21 @@ class Utils {
         val ANOS = (2000..getCalendar().get(Calendar.YEAR)).sortedDescending()
     
     
-        fun Calendar.formattedDate(): String {
-            return sdf.format(this.time)
+        fun Calendar.formattedDate(pattern: String = mPattern): String {
+            sdf.applyPattern(pattern)
+            return sdf.format(this.time).also { sdf.applyPattern(mPattern) }
         }
         
-        fun Calendar.monthString() : String {
-            return MESES_STRING[get(Calendar.MONTH)]
-        }
-    
         fun getCalendar(): Calendar {
             return GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"), mLocale)
+        }
+        
+        fun String.parseCalendar(pattern: String? = mPattern): Calendar {
+            sdf.applyPattern(pattern)
+            return getCalendar().apply {
+                time = sdf.parse(this@parseCalendar)!!
+            }
+                .also { sdf.applyPattern(mPattern) }
         }
     
         fun formatCurrency(valor: Double?): String {

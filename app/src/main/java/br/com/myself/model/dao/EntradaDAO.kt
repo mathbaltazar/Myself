@@ -8,15 +8,24 @@ import br.com.myself.model.entity.Entrada
 @Dao
 interface EntradaDAO {
     
-    @Query("SELECT * FROM Entrada WHERE data LIKE :yearLike ORDER BY data DESC")
-    fun findAllByYear(yearLike: String): PagingSource<Int, Entrada>
+    @Query("SELECT * FROM Entrada WHERE data LIKE :yearLike AND deleted =:deleted ORDER BY data DESC, serverId DESC, id DESC")
+    fun findAllByYear(yearLike: String, deleted: Boolean = false): PagingSource<Int, Entrada>
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun persist(entrada: Entrada): Long
+    suspend fun persist(entrada: Entrada): Long
     
     @Delete
-    fun delete (entrada: Entrada)
+    suspend fun delete (entrada: Entrada)
     
     @Query("SELECT COUNT(*) FROM Entrada WHERE data LIKE :yearLike")
     fun countByYear(yearLike: String): LiveData<Int>
+    
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entradas: List<Entrada>)
+    
+    @Query("DELETE FROM Entrada")
+    suspend fun deleteAll()
+    
+    @Query("SELECT * FROM Entrada WHERE id=:itemId")
+    fun findById(itemId: Long): LiveData<Entrada>
 }

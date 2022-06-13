@@ -1,47 +1,35 @@
 package br.com.myself.ui.financas.despesas
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import br.com.myself.R
 import br.com.myself.databinding.FragmentDespesasBinding
 import br.com.myself.model.entity.Despesa
 import br.com.myself.ui.adapter.DespesaAdapter
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.DespesasFragmentViewModel
 
-class DespesasFragment : Fragment() {
+class DespesasFragment : Fragment(R.layout.fragment_despesas) {
     
     private val viewModel: DespesasFragmentViewModel by viewModels()
     private var _binding: FragmentDespesasBinding? = null
     private val binding get() = _binding!!
     
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDespesasBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
-        binding.buttonDespesasInfo.setOnClickListener {
-            binding.cardDespesasInfo.visibility = View.VISIBLE
-            binding.cardDespesasInfo.animation = null
-        }
+        _binding = FragmentDespesasBinding.bind(view)
         
         binding.buttonCardDespesasInfoClose.setOnClickListener {
             binding.cardDespesasInfo.animation =
-                AnimationUtils.loadAnimation(it.context, android.R.anim.fade_out)
+                AnimationUtils.loadAnimation(it.context, android.R.anim.slide_out_right)
             binding.cardDespesasInfo.visibility = View.GONE
         }
         
@@ -55,13 +43,33 @@ class DespesasFragment : Fragment() {
         }
     
         setUpAdapter()
+        subscribeObservers()
+        setupMenu()
+    }
     
+    private fun setupMenu() {
+        val menuHost = requireActivity() as MenuHost
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_despesas, menu)
+            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                if (menuItem.itemId == R.id.menu_item_info_despesa) {
+                    binding.cardDespesasInfo.visibility = View.VISIBLE
+                    binding.cardDespesasInfo.animation =
+                        AnimationUtils.loadAnimation(requireContext(), android.R.anim.slide_in_left)
+                }
+                return true
+            }
+        }, viewLifecycleOwner)
+    }
+    
+    private fun subscribeObservers() {
         viewModel.despesas.observe(viewLifecycleOwner) { despesas ->
             (binding.recyclerviewDespesas.adapter as DespesaAdapter).submitList(despesas)
             binding.textviewSemDepesas.visibility =
                 if (despesas.isEmpty()) View.VISIBLE else View.GONE
         }
-        
     }
     
     private fun setUpAdapter() {

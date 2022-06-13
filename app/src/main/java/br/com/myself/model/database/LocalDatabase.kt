@@ -15,12 +15,13 @@ import br.com.myself.model.entity.Despesa
 import br.com.myself.model.entity.Entrada
 import br.com.myself.model.entity.Registro
 
-@Database(entities = arrayOf(
+@Database(entities = [
     Registro::class,
     Despesa::class,
     Entrada::class,
     Crise::class
-), version = 3, exportSchema = true)
+],
+version = 6, exportSchema = true)
 @TypeConverters(DateConverter::class)
 abstract class LocalDatabase : RoomDatabase() {
     
