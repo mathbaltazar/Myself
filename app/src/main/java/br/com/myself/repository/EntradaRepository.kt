@@ -7,16 +7,16 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
 import br.com.myself.data.dto.EntradaDTO
-import br.com.myself.model.dao.EntradaDAO
-import br.com.myself.model.entity.Entrada
-import br.com.myself.services.BackendError
-import br.com.myself.services.EntradaService
+import br.com.myself.data.dao.EntradaDAO
+import br.com.myself.data.model.Entrada
+import br.com.myself.data.api.BackendError
+import br.com.myself.data.api.EntradaAPI
 import br.com.myself.util.DEFAULT_REQUEST_LOAD_SIZE
 import br.com.myself.util.Utils.Companion.formattedDate
 
 class EntradaRepository(
     private val dao: EntradaDAO,
-    private val service: EntradaService,
+    private val api: EntradaAPI,
 ) {
     
     
@@ -40,7 +40,7 @@ class EntradaRepository(
                 valor = entrada.valor,
                 data = entrada.data.formattedDate("yyyy-MM-dd")
             )
-            val response = service.insertOrUpdate(dto)
+            val response = api.insertOrUpdate(dto)
             if (entrada.serverId == null) {
                 entrada.serverId = response.body()!!.id
             }
@@ -57,7 +57,7 @@ class EntradaRepository(
     suspend fun delete(entrada: Entrada) {
         try {
             if (entrada.serverId != null) {
-                service.deleteById(entrada.serverId!!)
+                api.deleteById(entrada.serverId!!)
             }
             dao.delete(entrada)
             Log.d("EntradaRepository | delete(Entrada)", "Entrada removida! --> $entrada")

@@ -1,8 +1,8 @@
-package br.com.myself.model.dao
+package br.com.myself.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import br.com.myself.model.entity.Registro
+import br.com.myself.data.model.Registro
 
 @Dao
 interface RegistroDAO  {

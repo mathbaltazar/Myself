@@ -1,4 +1,4 @@
-package br.com.myself.model.database.convertors
+package br.com.myself.database.convertors
 
 import androidx.room.TypeConverter
 import br.com.myself.util.Utils

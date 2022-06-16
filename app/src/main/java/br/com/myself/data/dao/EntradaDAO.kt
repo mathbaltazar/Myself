@@ -1,9 +1,9 @@
-package br.com.myself.model.dao
+package br.com.myself.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.*
-import br.com.myself.model.entity.Entrada
+import br.com.myself.data.model.Entrada
 
 @Dao
 interface EntradaDAO {

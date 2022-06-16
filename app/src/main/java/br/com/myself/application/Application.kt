@@ -2,7 +2,7 @@ package br.com.myself.application
 
 import android.app.Application
 import br.com.myself.R
-import br.com.myself.model.database.LocalDatabase
+import br.com.myself.database.LocalDatabase
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump

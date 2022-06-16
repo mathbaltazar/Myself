@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.myself.R
 import br.com.myself.databinding.AdapterRegistroBinding
-import br.com.myself.model.entity.Registro
+import br.com.myself.data.model.Registro
 import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.formattedDate

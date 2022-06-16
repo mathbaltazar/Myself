@@ -2,8 +2,8 @@ package br.com.myself.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import br.com.myself.model.database.LocalDatabase
-import br.com.myself.model.entity.Despesa
+import br.com.myself.database.LocalDatabase
+import br.com.myself.data.model.Despesa
 
 class DespesaRepository(application: Application) {
     

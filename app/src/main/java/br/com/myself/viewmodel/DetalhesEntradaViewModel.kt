@@ -3,8 +3,8 @@ package br.com.myself.viewmodel
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import br.com.myself.repository.EntradaRepository
-import br.com.myself.model.entity.Entrada
-import br.com.myself.services.BackendError
+import br.com.myself.data.model.Entrada
+import br.com.myself.data.api.BackendError
 import kotlinx.coroutines.launch
 
 class DetalhesEntradaViewModel(

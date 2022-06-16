@@ -18,8 +18,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.databinding.ActivityDetalhesDespesaBinding
-import br.com.myself.model.entity.Despesa
-import br.com.myself.model.entity.Registro
+import br.com.myself.data.model.Despesa
+import br.com.myself.data.model.Registro
 import br.com.myself.ui.adapter.RegistroAdapter
 import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.CurrencyMask

@@ -2,9 +2,9 @@ package br.com.myself.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import br.com.myself.model.dao.RegistroDAO
-import br.com.myself.model.database.LocalDatabase
-import br.com.myself.model.entity.Registro
+import br.com.myself.data.dao.RegistroDAO
+import br.com.myself.database.LocalDatabase
+import br.com.myself.data.model.Registro
 
 class RegistroRepository(application: Application) {
     

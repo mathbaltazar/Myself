@@ -1,4 +1,4 @@
-package br.com.myself.model.entity
+package br.com.myself.data.model
 
 import androidx.room.*
 import java.util.*

@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_entrada_form" >
         <argument
             android:name="entrada"
-            app:argType="br.com.myself.model.entity.Entrada"
+            app:argType="br.com.myself.data.model.Entrada"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>

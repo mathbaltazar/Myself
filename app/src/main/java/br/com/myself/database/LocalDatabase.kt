@@ -1,19 +1,19 @@
-package br.com.myself.model.database
+package br.com.myself.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import br.com.myself.model.dao.CriseDAO
-import br.com.myself.model.dao.DespesaDAO
-import br.com.myself.model.dao.EntradaDAO
-import br.com.myself.model.dao.RegistroDAO
-import br.com.myself.model.database.convertors.DateConverter
-import br.com.myself.model.entity.Crise
-import br.com.myself.model.entity.Despesa
-import br.com.myself.model.entity.Entrada
-import br.com.myself.model.entity.Registro
+import br.com.myself.data.dao.CriseDAO
+import br.com.myself.data.dao.DespesaDAO
+import br.com.myself.data.dao.EntradaDAO
+import br.com.myself.data.dao.RegistroDAO
+import br.com.myself.database.convertors.DateConverter
+import br.com.myself.data.model.Crise
+import br.com.myself.data.model.Despesa
+import br.com.myself.data.model.Entrada
+import br.com.myself.data.model.Registro
 
 @Database(entities = [
     Registro::class,

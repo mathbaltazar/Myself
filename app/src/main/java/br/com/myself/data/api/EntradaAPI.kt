@@ -1,19 +1,13 @@
-package br.com.myself.services
+package br.com.myself.data.api
 
 import br.com.myself.data.dto.EntradaDTO
-import br.com.myself.data.dto.PageResultEntrada
-import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.*
 
-interface EntradaService {
+interface EntradaAPI {
     
     @GET("entradas/{year}")
-    fun getEntradas(
-        @Path("year") ano: Int,
-        @Query("page") page: Int,
-        @Query("size") size: Int,
-    ): Observable<Response<PageResultEntrada>>
+    fun getEntradas(): Response<List<EntradaDTO>> // TODO Refatorar endpoint no backend
     
     @DELETE("entradas/{id}")
     suspend fun deleteById(@Path("id") id: Long): Response<Void>

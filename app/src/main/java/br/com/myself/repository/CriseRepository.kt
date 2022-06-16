@@ -2,9 +2,9 @@ package br.com.myself.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import br.com.myself.model.dao.CriseDAO
-import br.com.myself.model.database.LocalDatabase
-import br.com.myself.model.entity.Crise
+import br.com.myself.data.dao.CriseDAO
+import br.com.myself.database.LocalDatabase
+import br.com.myself.data.model.Crise
 
 class CriseRepository(application: Application) {
     private val dao: CriseDAO =

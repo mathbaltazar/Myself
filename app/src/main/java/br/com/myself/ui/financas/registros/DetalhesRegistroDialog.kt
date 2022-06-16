@@ -5,7 +5,7 @@ import android.content.Context
 import android.view.View
 import android.view.Window
 import br.com.myself.databinding.DialogDetalhesRegistroBinding
-import br.com.myself.model.entity.Registro
+import br.com.myself.data.model.Registro
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.formattedDate
 

@@ -7,7 +7,7 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import br.com.myself.databinding.DialogCriarDespesaBinding
-import br.com.myself.model.entity.Despesa
+import br.com.myself.data.model.Despesa
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions

@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.databinding.ActivityCrisesBinding
-import br.com.myself.model.entity.Crise
+import br.com.myself.data.model.Crise
 import br.com.myself.ui.adapter.CrisesAdapter
 import br.com.myself.util.Utils.Companion.formattedDate
 import br.com.myself.viewmodel.CrisesActivityViewModel

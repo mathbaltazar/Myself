@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import br.com.myself.model.entity.Despesa
-import br.com.myself.model.entity.Registro
+import br.com.myself.data.model.Despesa
+import br.com.myself.data.model.Registro
 import br.com.myself.repository.DespesaRepository
 import br.com.myself.repository.RegistroRepository
 import br.com.myself.util.Async

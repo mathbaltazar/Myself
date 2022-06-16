@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import br.com.myself.model.entity.Registro
+import br.com.myself.data.model.Registro
 import br.com.myself.repository.RegistroRepository
 import br.com.myself.util.Async
 import br.com.myself.util.Utils

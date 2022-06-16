@@ -1,4 +1,4 @@
-package br.com.myself.services
+package br.com.myself.data.api
 
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -67,7 +67,7 @@ class BackendInterceptor : Interceptor {
         val logStringMessage = "Message: ${response.message()}"
         val logStringBody = "Body: ${response.body()}"
         
-        logger.log(Level.FINE, "----> RETURNED RESPONSE TO BACKEND")
+        logger.log(Level.FINE, "----> RETURNED RESPONSE FROM BACKEND")
         logger.log(Level.FINE, logStringCode)
         logger.log(Level.FINE, logStringMessage)
         logger.log(Level.FINE, logStringBody)

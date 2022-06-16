@@ -4,8 +4,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import br.com.myself.application.Application
 import br.com.myself.repository.EntradaRepository
-import br.com.myself.services.EntradaService
-import br.com.myself.services.ServiceProvider
+import br.com.myself.data.api.EntradaAPI
+import br.com.myself.data.api.ServiceProvider
 import com.google.android.material.snackbar.Snackbar
 
 fun Fragment.activityContentView(): View {
@@ -28,7 +28,7 @@ fun <T> Fragment.provideRepo(repositoryClass: Class<T>): T {
     if (repositoryClass == EntradaRepository::class.java) {
         return EntradaRepository(
             getApplicationContext().database.getEntradaDAO(),
-            ServiceProvider.get(EntradaService::class.java)
+            ServiceProvider.get(EntradaAPI::class.java)
         ) as T
     }
     throw IllegalArgumentException("Unknown repository")

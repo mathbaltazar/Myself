@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import br.com.myself.components.CalendarPickerEditText
 import br.com.myself.databinding.BottomSheetRegistroBinding
-import br.com.myself.model.entity.Registro
+import br.com.myself.data.model.Registro
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

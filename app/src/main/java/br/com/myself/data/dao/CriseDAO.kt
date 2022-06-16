@@ -1,8 +1,8 @@
-package br.com.myself.model.dao
+package br.com.myself.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import br.com.myself.model.entity.Crise
+import br.com.myself.data.model.Crise
 
 @Dao
 interface CriseDAO {

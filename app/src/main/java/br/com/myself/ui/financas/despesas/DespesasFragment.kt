@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.databinding.FragmentDespesasBinding
-import br.com.myself.model.entity.Despesa
+import br.com.myself.data.model.Despesa
 import br.com.myself.ui.adapter.DespesaAdapter
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.DespesasFragmentViewModel
