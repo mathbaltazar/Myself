@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Workspace/AndroidStudio/SDK/platforms/android-31/data/res/layout/simple_spinner_dropdown_item.xml" value="0.25052083333333336" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/drawable/ic_info.xml" value="0.203" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/activity_financas.xml" value="0.25052083333333336" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/activity_pesquisar_registros.xml" value="0.25416666666666665" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/adapter_registro.xml" value="0.536" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/bottom_sheet_detalhes_registro.xml" value="0.25052083333333336" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/card_bottom_sheet_registro.xml" value="0.25052083333333336" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/dialog_detalhes_registro.xml" value="0.32715477293790546" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/fragment_entrada_form.xml" value="0.25052083333333336" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/fragment_pesquisar_registros.xml" value="0.25052083333333336" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/fragment_registro_form.xml" value="0.25052083333333336" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/layout/fragment_registros.xml" value="0.25416666666666665" />
+        <entry key="..\:/Workspace/Projetos/Myself/app/src/main/res/menu/menu_fragment_despesas.xml" value="0.25416666666666665" />
+      </map>
+    </option>
+  </component>
   <component name="EntryPointsManager">
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="androidx.room.TypeConverter" />

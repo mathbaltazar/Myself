@@ -10,9 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import br.com.myself.R
-import br.com.myself.repository.EntradaRepository
 import br.com.myself.databinding.FragmentEntradaFormBinding
-import br.com.myself.injectors.provideRepo
+import br.com.myself.injectors.provideEntradaRepo
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.EntradaFormViewModel
@@ -24,7 +23,7 @@ class EntradaFormFragment : Fragment(R.layout.fragment_entrada_form) {
     private val binding get() = _binding!!
     
     private val viewModel: EntradaFormViewModel
-        by viewModels { EntradaFormViewModel.Factory(provideRepo(EntradaRepository::class.java)) }
+        by viewModels { EntradaFormViewModel.Factory(provideEntradaRepo()) }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

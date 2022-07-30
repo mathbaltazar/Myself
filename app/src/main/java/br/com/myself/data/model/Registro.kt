@@ -1,6 +1,9 @@
 package br.com.myself.data.model
 
+import android.os.Parcelable
 import androidx.room.*
+import br.com.myself.data.BackendModelState
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Entity(
@@ -13,6 +16,7 @@ import java.util.*
         )
     )*/
 )
+@Parcelize
 data class Registro(
     @PrimaryKey(autoGenerate = true) var id: Long? = null,
     @ColumnInfo val descricao: String,
@@ -20,4 +24,4 @@ data class Registro(
     @ColumnInfo val data: Calendar,
     @ColumnInfo val outros: String? = null,
     @ColumnInfo val despesa_id: Long? = null
-)
+): BackendModelState(), Parcelable

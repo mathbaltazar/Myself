@@ -1,14 +1,11 @@
 package br.com.myself.repository
 
-import android.app.Application
 import androidx.lifecycle.LiveData
+import br.com.myself.data.api.RegistroAPI
 import br.com.myself.data.dao.RegistroDAO
-import br.com.myself.database.LocalDatabase
 import br.com.myself.data.model.Registro
 
-class RegistroRepository(application: Application) {
-    
-    private val registroDAO: RegistroDAO = LocalDatabase.getInstance(application).getRegistroDAO()
+class RegistroRepository(private val registroDAO: RegistroDAO) {
     
     fun pesquisarRegistros(mes: Int, ano: Int): LiveData<List<Registro>> {
         // Seguindo o pattern "yyyy-MM-dd"
@@ -21,12 +18,12 @@ class RegistroRepository(application: Application) {
         return registroDAO.findAllRegistrosByData(monthLike, yearLike)
     }
     
-    fun salvarRegistro(registro: Registro) {
-        registroDAO.persist(registro)
+    suspend fun salvarRegistro(registro: Registro) {
+        registroDAO.persist(registro.apply { isSynchronized = false })
     }
     
-    fun excluirRegistro(registro: Registro) {
-        registroDAO.delete(registro)
+    suspend fun excluirRegistro(registro: Registro) {
+        registroDAO.persist(registro.apply { isDeleted = true })
     }
     
     fun getValoresPelaDespesaId(despesaId: Long): List<Double> {
@@ -39,6 +36,10 @@ class RegistroRepository(application: Application) {
     
     fun getRegistrosDaDespesa(despesaId: Long): LiveData<List<Registro>> {
         return registroDAO.findAllRegistrosByDespesaId(despesaId)
+    }
+    
+    fun getRegistroById(registroId: Long): LiveData<Registro> {
+        return registroDAO.findById(registroId)
     }
     
 }

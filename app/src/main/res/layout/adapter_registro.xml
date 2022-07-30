@@ -49,9 +49,9 @@
                     android:id="@+id/textview_outros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="italic"
-                    android:maxLines="2"
                     android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textStyle="italic"
                     tools:text="Outros textos do registro" />
 
             </LinearLayout>
@@ -68,10 +68,20 @@
 
         </com.google.android.flexbox.FlexboxLayout>
 
-        <LinearLayout
+        <com.google.android.flexbox.FlexboxLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:flexDirection="column"
+            app:justifyContent="space_evenly">
+
+            <ImageView
+                android:id="@+id/imageview_icone_sync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cloud"
+                android:visibility="invisible"
+                app:tint="@color/colorPrimary"
+                tools:visibility="visible" />
 
             <ImageView
                 android:id="@+id/imageview_icone_despesa"
@@ -91,6 +101,6 @@
                 app:tint="@color/colorPrimary"
                 tools:visibility="visible" />
 
-        </LinearLayout>
+        </com.google.android.flexbox.FlexboxLayout>
     </com.google.android.flexbox.FlexboxLayout>
 </com.google.android.material.card.MaterialCardView>

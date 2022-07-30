@@ -132,9 +132,7 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     
         AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
             .setPositiveButton("Excluir") { _, _ ->
-                viewModel.excluirRegistro(registro, onDeleted = {
-                    Toast.makeText(this, "Excluído!", Toast.LENGTH_SHORT).show()
-                })
+                viewModel.excluirRegistro(registro)
             }.setNegativeButton("Cancelar", null)
             .show()
     }

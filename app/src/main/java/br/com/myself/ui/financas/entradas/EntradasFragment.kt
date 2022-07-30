@@ -8,11 +8,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
-import br.com.myself.repository.EntradaRepository
 import br.com.myself.databinding.FragmentEntradasBinding
-import br.com.myself.ui.adapter.EntradaAdapter
 import br.com.myself.injectors.longSnackBar
-import br.com.myself.injectors.provideRepo
+import br.com.myself.injectors.provideEntradaRepo
+import br.com.myself.ui.adapter.EntradaAdapter
 import br.com.myself.util.FRAGMENT_RESULT_IS_ENTRADA_EDITING
 import br.com.myself.util.REQUEST_KEY_ENTRADA_DETAILS_CLOSE
 import br.com.myself.viewmodel.EntradaViewModel
@@ -23,7 +22,7 @@ class EntradasFragment : Fragment(R.layout.fragment_entradas) {
     private val binding get() = _binding!!
     
     private val viewModel: EntradaViewModel
-        by viewModels { EntradaViewModel.Factory(provideRepo(EntradaRepository::class.java)) }
+        by viewModels { EntradaViewModel.Factory(provideEntradaRepo()) }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,7 +53,7 @@ class EntradasFragment : Fragment(R.layout.fragment_entradas) {
                     val direction = EntradasFragmentDirections.toEntradaDetalhesDest(event.itemId)
                     findNavController().navigate(direction)
                 }
-                is EntradaViewModel.Events.Message -> longSnackBar(event.message.toString()).show()
+                is EntradaViewModel.Events.Message -> longSnackBar(event.message.toString())
                 is EntradaViewModel.Events.HideCardDetails -> {}
             }
         }

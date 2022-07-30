@@ -3,11 +3,13 @@ package br.com.myself.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import br.com.myself.data.model.Despesa
 import br.com.myself.data.model.Registro
 import br.com.myself.repository.DespesaRepository
 import br.com.myself.repository.RegistroRepository
 import br.com.myself.util.Async
+import kotlinx.coroutines.launch
 import java.util.*
 
 class DespesasFragmentViewModel(application: Application) : AndroidViewModel(application) {
@@ -23,15 +25,12 @@ class DespesasFragmentViewModel(application: Application) : AndroidViewModel(app
         Async.doInBackground({ repository.excluir(despesa) }, { onDeleted() })
     }
     
-    fun registrarDespesa(despesa: Despesa, valor: Double, data: Calendar, onRegistered: () -> Unit) {
-        Async.doInBackground({
-            RegistroRepository(getApplication()).salvarRegistro(Registro(
-                descricao = despesa.nome,
-                valor = valor,
-                data = data,
-                despesa_id = despesa.id
-            ))
-        },{ onRegistered() })
+    fun registrarDespesa(despesa: Despesa, valor: Double, data: Calendar, onRegistered: () -> Unit) = viewModelScope.launch {
+        RegistroRepository(getApplication()).salvarRegistro(Registro(descricao = despesa.nome,
+            valor = valor,
+            data = data,
+            despesa_id = despesa.id))
+        onRegistered()
     }
     
     fun getSugestoes(despesa: Despesa, onComplete: (List<Double>) -> Unit) {

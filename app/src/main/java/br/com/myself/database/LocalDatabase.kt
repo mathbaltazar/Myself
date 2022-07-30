@@ -21,7 +21,7 @@ import br.com.myself.data.model.Registro
     Entrada::class,
     Crise::class
 ],
-version = 6, exportSchema = true)
+version = 7, exportSchema = true)
 @TypeConverters(DateConverter::class)
 abstract class LocalDatabase : RoomDatabase() {
     

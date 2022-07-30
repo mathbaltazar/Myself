@@ -7,7 +7,6 @@
     app:cardCornerRadius="@dimen/all_default_layout_offset_4"
     tools:ignore="HardcodedText">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -134,8 +133,6 @@
                 android:textSize="@dimen/text_size_16"
                 android:textStyle="italic"
                 tools:text="Pago com atraso" />
-
         </LinearLayout>
-
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -7,4 +7,4 @@ local.properties
 /captures
 .externalNativeBuild
 /.idea/
-/.idea
+**/.idea/

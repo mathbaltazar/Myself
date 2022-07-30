@@ -45,6 +45,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textinput_descricao"
                 android:layout_width="match_parent"
+                tools:text="Salário"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -87,7 +88,8 @@
             android:id="@+id/button_salvar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/all_default_layout_offset_4"
+            android:layout_marginTop="@dimen/all_default_layout_offset_8"
+            android:layout_marginHorizontal="@dimen/all_default_layout_offset_4"
             android:text="Salvar"
             app:cornerRadius="@dimen/all_default_layout_offset_16" />
     </com.google.android.flexbox.FlexboxLayout>

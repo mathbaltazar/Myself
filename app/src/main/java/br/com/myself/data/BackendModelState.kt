@@ -2,7 +2,7 @@ package br.com.myself.data
 
 import androidx.room.ColumnInfo
 
-open  class BackendState {
+open  class BackendModelState {
     @ColumnInfo(name = "serverId")
     var serverId: Long? = null
     @ColumnInfo(name = "synchronized")

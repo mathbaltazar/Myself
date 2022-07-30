@@ -7,7 +7,7 @@ import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
 
-class Application : Application() {
+class MyselfApplication : Application() {
     
     
     internal val database: LocalDatabase by lazy { LocalDatabase.getInstance(this) }

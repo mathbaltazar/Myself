@@ -5,26 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.financas.registros.PesquisarRegistrosActivity"
+    tools:context=".ui.financas.registros.PesquisarRegistrosFragment"
     tools:ignore="HardcodedText">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="62dp"
-        android:background="@android:color/white">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:navigationIcon="@drawable/ic_close"
-            app:navigationIconTint="@android:color/black"
-            app:subtitle="Resultados: 0"
-            app:subtitleTextColor="@color/colorPrimary"
-            app:titleCentered="true"
-            app:subtitleCentered="true"
-            app:title="Pesquisa de Registros" />
-    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutBusca"
@@ -34,6 +16,8 @@
         android:layout_margin="@dimen/all_default_layout_offset_8"
         app:endIconDrawable="@drawable/ic_search"
         app:endIconMode="custom"
+        app:helperText="Resultado: 0"
+        app:helperTextTextColor="@color/colorPrimary"
         app:hintEnabled="false">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -45,11 +29,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/text_view_sem_resultados"
+        android:id="@+id/text_view_nenhuma_busca"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/all_default_layout_offset_8"
-        android:text="Sem resultados."
+        android:text="Nenhuma busca."
         android:textAlignment="center" />
 
     <androidx.recyclerview.widget.RecyclerView

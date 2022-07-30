@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="br.com.myself">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".application.Application"
+        android:name=".application.MyselfApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
@@ -41,12 +43,8 @@
             android:name=".ui.financas.FinancasActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="userPortrait"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".ui.financas.registros.PesquisarRegistrosActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".ui.crises.CrisesActivity"

@@ -11,6 +11,7 @@ import br.com.myself.R
 import br.com.myself.databinding.DialogConfirmationBinding
 import br.com.myself.util.Utils.Companion.setUpDimensions
 
+const val CONFIRMATION_DIALOG_RESULT = "DIALOG_RESULT"
 class ConfirmationDialog : DialogFragment(R.layout.dialog_confirmation) {
     
     private val args: ConfirmationDialogArgs by navArgs()
@@ -21,7 +22,7 @@ class ConfirmationDialog : DialogFragment(R.layout.dialog_confirmation) {
             textviewMessage.text = args.message
             buttonCancelar.setOnClickListener { findNavController().popBackStack() }
             buttonConfirmar.setOnClickListener {
-                val bundle = bundleOf("result" to true)
+                val bundle = bundleOf(CONFIRMATION_DIALOG_RESULT to true)
                 setFragmentResult(requestKey = args.requestKey, bundle)
                 findNavController().popBackStack()
             }

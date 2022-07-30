@@ -5,28 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/all_default_layout_offset_4"
+    android:padding="@dimen/all_default_layout_offset_8"
     tools:ignore="HardcodedText">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/all_default_layout_offset_8"
-        android:text="Registro"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/off_white" />
+        android:layout_marginVertical="@dimen/all_default_layout_offset_4"
+        android:paddingHorizontal="@dimen/all_default_layout_offset_8"
+        android:text="Preencha os dados"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:textColor="@color/colorPrimary" />
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/all_default_layout_offset_8"
         android:hint="Descrição"
         android:padding="@dimen/all_default_layout_offset_4"
         app:boxBackgroundColor="@android:color/white"
@@ -91,19 +86,14 @@
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_margin="@dimen/all_default_layout_offset_16"
-        android:background="@color/off_white" />
-
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_registrar"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/all_default_layout_offset_4"
+        android:layout_marginHorizontal="@dimen/all_default_layout_offset_4"
+        android:layout_marginTop="@dimen/all_default_layout_offset_8"
         android:background="@drawable/backgroung_rounded_gradient_app_color"
         android:text="Salvar"
         android:textSize="18sp"

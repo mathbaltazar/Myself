@@ -4,15 +4,15 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import br.com.myself.data.model.Despesa
 import br.com.myself.data.model.Registro
 import br.com.myself.repository.DespesaRepository
-import br.com.myself.repository.RegistroRepository
 import br.com.myself.util.Async
+import kotlinx.coroutines.launch
 import java.util.*
 
 class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewModel(application) {
-    private val registroRepository: RegistroRepository by lazy { RegistroRepository(application) }
     private val despesaRepository: DespesaRepository by lazy { DespesaRepository(application) }
     
     lateinit var despesa: Despesa
@@ -22,7 +22,7 @@ class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewMo
     
     fun attachDespesa(despesa: Despesa) {
         this.despesa = despesa
-        registrosDaDespesa = registroRepository.getRegistrosDaDespesa(despesa.id)
+        //registrosDaDespesa = registroRepository.getRegistrosDaDespesa(despesa.id)
     }
     fun wasEdited() = despesaEdited.value ?: false
     
@@ -32,29 +32,17 @@ class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewMo
         }
     }
     
-    fun excluirRegistro(registro: Registro, onDeleted: () -> Unit) {
-        Async.doInBackground({
-            registroRepository.excluirRegistro(registro)
-        }, { onDeleted() })
+    fun excluirRegistro(registro: Registro) = viewModelScope.launch {
+        //registroRepository.excluirRegistro(registro)
     }
     
     fun getSugestoes(onComplete: (List<Double>) -> Unit) {
-        Async.doInBackground({ registroRepository.getValoresPelaDespesaId(despesa.id) }, { valores ->
-            onComplete(valores)
-        })
+        // todo
     }
     
     fun registrar(valor: Double, data: Calendar, onRegistered: () -> Unit) {
-        Async.doInBackground({
-            registroRepository.salvarRegistro(
-                Registro(
-                    descricao = despesa.nome,
-                    valor = valor,
-                    data = data,
-                    despesa_id = despesa.id
-                )
-            )
-        },{ onRegistered() })
+        Registro(descricao = despesa.nome, valor = valor, data = data, despesa_id = despesa.id)
+        // todo
     }
     
     fun salvarDespesa(onSaved: (() -> Unit)? = null) {

@@ -9,7 +9,21 @@
         android:id="@+id/registros_dest"
         android:name="br.com.myself.ui.financas.registros.RegistrosFragment"
         android:label="Registros"
-        tools:layout="@layout/fragment_registros" />
+        tools:layout="@layout/fragment_registros">
+        <action
+            android:id="@+id/to_pesquisar_registro_dest"
+            app:destination="@id/pesquisar_registro_dest" />
+        <action
+            android:id="@+id/to_card_detalhes_registro_dest"
+            app:destination="@id/detalhes_registro_dest" />
+        <action
+            android:id="@+id/to_registro_form_dest"
+            app:destination="@id/registro_form_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
     <fragment
         android:id="@+id/entradas_dest"
         android:name="br.com.myself.ui.financas.entradas.EntradasFragment"
@@ -34,19 +48,23 @@
     <fragment
         android:id="@+id/entrada_form_dest"
         android:name="br.com.myself.ui.financas.entradas.EntradaFormFragment"
-        android:label="Salvar Entrada"
-        tools:layout="@layout/fragment_entrada_form" >
+        android:label="{title}"
+        tools:layout="@layout/fragment_entrada_form">
         <argument
             android:name="entrada"
+            android:defaultValue="@null"
             app:argType="br.com.myself.data.model.Entrada"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string"
             app:nullable="true"
-            android:defaultValue="@null" />
+            android:defaultValue="Salvar Entrada" />
     </fragment>
     <dialog
         android:id="@+id/entrada_detalhes_dest"
         android:name="br.com.myself.ui.financas.entradas.DetalhesEntradaBottomSheet"
-        android:label="Detalhes"
-        tools:layout="@layout/dialog_card_entrada_detalhes">
+        tools:layout="@layout/bottom_sheet_detalhes_entrada">
         <action
             android:id="@+id/to_entrada_form_dest"
             app:destination="@id/entrada_form_dest"
@@ -61,9 +79,10 @@
     <dialog
         android:id="@+id/confirmation_dest"
         android:name="br.com.myself.ui.confirmation.ConfirmationDialog"
-        tools:layout="@layout/dialog_confirmation"
-        android:label="Confirmar" >
-        <argument android:name="requestKey"
+        android:label="Confirmar"
+        tools:layout="@layout/dialog_confirmation">
+        <argument
+            android:name="requestKey"
             app:argType="string" />
         <argument
             android:name="message"
@@ -72,4 +91,46 @@
     <action
         android:id="@+id/toConfirm"
         app:destination="@id/confirmation_dest" />
+    <fragment
+        android:id="@+id/pesquisar_registro_dest"
+        android:name="br.com.myself.ui.financas.registros.PesquisarRegistrosFragment"
+        android:label="Pesquisar"
+        tools:layout="@layout/fragment_pesquisar_registros">
+
+        <action
+            android:id="@+id/to_card_detalhes_registro_dest"
+            app:destination="@id/detalhes_registro_dest" />
+    </fragment>
+    <dialog
+        android:id="@+id/detalhes_registro_dest"
+        android:name="br.com.myself.ui.financas.registros.DetalhesRegistroBottomSheet"
+        tools:layout="@layout/bottom_sheet_detalhes_registro">
+        <argument
+            android:name="registroId"
+            app:argType="long" />
+        <action
+            android:id="@+id/to_registro_form_dest"
+            app:destination="@id/registro_form_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </dialog>
+    <fragment
+        android:id="@+id/registro_form_dest"
+        android:name="br.com.myself.ui.financas.registros.RegistroFormFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_registro_form">
+
+        <argument
+            android:name="registro"
+            android:defaultValue="@null"
+            app:argType="br.com.myself.data.model.Registro"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="Salvar Registro" />
+    </fragment>
 </navigation>

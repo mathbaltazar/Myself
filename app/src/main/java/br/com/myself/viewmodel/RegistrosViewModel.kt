@@ -1,41 +1,38 @@
 package br.com.myself.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import br.com.myself.data.model.Registro
+import br.com.myself.network.BackendNetworkIntegration
 import br.com.myself.repository.RegistroRepository
-import br.com.myself.util.Async
 import br.com.myself.util.Utils
 import java.util.*
 
-class RegistrosFragmentViewModel(application: Application) : AndroidViewModel(application) {
+class RegistrosViewModel(private val repository: RegistroRepository) : ViewModel() {
     
-    private val registroRepository by lazy { RegistroRepository(application) }
-    private val dateQueryLiveData = MutableLiveData<MonthPageFilter>()
     private val monthPageFilter: MonthPageFilter = MonthPageFilter()
+    private val dateQueryLiveData = MutableLiveData(monthPageFilter)
+    private val _pageFilterState =
+        MutableLiveData<MonthPageFilterState>(MonthPageFilterState.LabelState)
+    private val _eventsStream = MutableLiveData<Event>()
     
     val registros: LiveData<List<Registro>> =
         Transformations.switchMap(dateQueryLiveData) { filter ->
-            registroRepository.pesquisarRegistros(filter.month(), filter.year())
+            repository.pesquisarRegistros(filter.month(), filter.year())
         }
     val totalMesAtualFormatado: String get() = Utils.formatCurrency(calcularTotal())
     val labelPageFormatado: String get() = "${Utils.MESES_STRING[monthPageFilter.month()]}/${monthPageFilter.year()}"
-    val month: Int get() = monthPageFilter.month()
-    val year: Int get() = monthPageFilter.year()
-    
-    init {
-        dateQueryLiveData.value = monthPageFilter
-    }
+    val monthPageLayoutState: LiveData<MonthPageFilterState> get() = _pageFilterState
+    val eventsStreamLiveData: LiveData<Event> get() = _eventsStream
+    val backendNetworkIntegration = BackendNetworkIntegration()
     
     fun proximoMes() {
         dateQueryLiveData.value = monthPageFilter.proximoMes()
+        _pageFilterState.value = MonthPageFilterState.LabelState
     }
     
     fun mesAnterior() {
         dateQueryLiveData.value = monthPageFilter.mesAnterior()
+        _pageFilterState.value = MonthPageFilterState.LabelState
     }
     
     fun irParaData(month: Int = monthPageFilter.month(), year: Int = monthPageFilter.year()) {
@@ -46,27 +43,23 @@ class RegistrosFragmentViewModel(application: Application) : AndroidViewModel(ap
         return registros.value?.sumOf(Registro::valor)
     }
     
-    fun salvarRegistro(registro: Registro, onSaved: () -> Unit) {
-        Async.doInBackground({
-            registroRepository.salvarRegistro(registro)
-        }, { onSaved() })
+    fun showJumpToDate() {
+        _pageFilterState.value = MonthPageFilterState.DropdownState
     }
     
-    fun excluirRegistro(registro: Registro, onDeleted: () -> Unit) {
-        Async.doInBackground({
-            registroRepository.excluirRegistro(registro)
-        }, { onDeleted() })
+    fun mostrarDetalhes(registroId: Long) {
+        _eventsStream.postValue(Event.NavigateToCardDetails(registroId))
     }
     
     
     private class MonthPageFilter(private val calendar: Calendar = Utils.getCalendar()) {
         fun proximoMes(): MonthPageFilter {
-            calendar.roll(Calendar.MONTH, true)
+            calendar.add(Calendar.MONTH, 1)
             return this
         }
         
         fun mesAnterior(): MonthPageFilter {
-            calendar.roll(Calendar.MONTH, false)
+            calendar.add(Calendar.MONTH, -1)
             return this
         }
         
@@ -82,6 +75,22 @@ class RegistrosFragmentViewModel(application: Application) : AndroidViewModel(ap
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             return this
+        }
+    }
+    
+    sealed class MonthPageFilterState {
+        object LabelState : MonthPageFilterState()
+        object DropdownState : MonthPageFilterState()
+    }
+    
+    sealed class Event {
+        class NavigateToCardDetails(val id: Long) : Event()
+    }
+    
+    class Factory(private val repo: RegistroRepository) : ViewModelProvider.NewInstanceFactory() {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return RegistrosViewModel(repo) as T
         }
     }
 }

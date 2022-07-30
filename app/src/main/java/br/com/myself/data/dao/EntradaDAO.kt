@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.*
 import br.com.myself.data.model.Entrada
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EntradaDAO {
@@ -28,4 +29,7 @@ interface EntradaDAO {
     
     @Query("SELECT * FROM Entrada WHERE id=:itemId")
     fun findById(itemId: Long): LiveData<Entrada>
+    
+    @Query("SELECT * FROM Entrada WHERE synchronized =:sync")
+    fun findAllToSync(sync: Boolean = false): Flow<List<Entrada>>
 }

@@ -51,6 +51,9 @@ class RegistroAdapter : ListAdapter<Registro, RecyclerView.ViewHolder>(COMPARATO
             binding.textviewOutros.visibility =
                 if (registro.outros.isNullOrBlank()) View.GONE else View.VISIBLE
     
+            binding.imageviewIconeSync.visibility =
+                if (registro.isSynchronized) View.VISIBLE else View.INVISIBLE
+    
             binding.imageviewIconeDespesa.visibility =
                 if (registro.despesa_id == null || registro.despesa_id == 0L) View.INVISIBLE else View.VISIBLE
     
