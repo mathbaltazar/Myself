@@ -22,7 +22,6 @@ class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewMo
     
     fun attachDespesa(despesa: Despesa) {
         this.despesa = despesa
-        //registrosDaDespesa = registroRepository.getRegistrosDaDespesa(despesa.id)
     }
     fun wasEdited() = despesaEdited.value ?: false
     
@@ -31,17 +30,9 @@ class DetalhesDespesaActivityViewModel(application: Application) : AndroidViewMo
             onDeleted()
         }
     }
-    
-    fun excluirRegistro(registro: Registro) = viewModelScope.launch {
-        //registroRepository.excluirRegistro(registro)
-    }
-    
-    fun getSugestoes(onComplete: (List<Double>) -> Unit) {
-        // todo
-    }
-    
+
     fun registrar(valor: Double, data: Calendar, onRegistered: () -> Unit) {
-        Registro(descricao = despesa.nome, valor = valor, data = data, despesa_id = despesa.id)
+        Registro(descricao = despesa.nome, valor = valor, data = data)
         // todo
     }
     

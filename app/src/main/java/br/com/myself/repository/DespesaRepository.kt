@@ -12,11 +12,7 @@ class DespesaRepository(application: Application) {
     fun getAllDespesas(): LiveData<List<Despesa>> {
         return dao.findAll()
     }
-    
-    fun getDespesa(id: Long): Despesa {
-        return dao.find(id)
-    }
-    
+
     fun excluir(despesa: Despesa) {
         dao.delete(despesa)
     }

@@ -2,29 +2,35 @@ package br.com.myself.ui.financas.registros
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.clearFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
-import br.com.myself.data.model.Registro
 import br.com.myself.databinding.FragmentRegistrosBinding
 import br.com.myself.injectors.provideRegistroRepo
 import br.com.myself.ui.adapter.RegistroAdapter
-import br.com.myself.util.AdapterClickListener
+import br.com.myself.ui.confirmation.ConfirmationDialogDirections
+import br.com.myself.ui.financas.state.RegistrosFragmentUIState
+import br.com.myself.util.KEY_IS_REGISTRO_DETAILS_SHOWN
+import br.com.myself.util.KEY_REGISTRO_ID
+import br.com.myself.util.observe
 import br.com.myself.viewmodel.RegistrosViewModel
 
 class RegistrosFragment : Fragment(R.layout.fragment_registros) {
-    
+
     private val viewModel: RegistrosViewModel by viewModels { RegistrosViewModel.Factory(provideRegistroRepo()) }
-    
+
     private var _binding: FragmentRegistrosBinding? = null
     private val binding  get() = _binding!!
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentRegistrosBinding.bind(view)
-        
+
         // MONTH PAGE
         binding.buttonPageMesAnterior.setOnClickListener {
             viewModel.mesAnterior()
@@ -32,98 +38,63 @@ class RegistrosFragment : Fragment(R.layout.fragment_registros) {
         binding.buttonPageProximoMes.setOnClickListener {
             viewModel.proximoMes()
         }
-    
-        // LABEL MÊS/ANO ACIONA DROPDOWNS
-        binding.textViewMesAno.setOnClickListener {
-            // TODO Criar componente independente
-            /*binding.textViewMesAno.visibility = View.GONE
-            binding.componentDropdownMesAno.visibility = View.VISIBLE
-            viewModel.showDropdowns()*/
-        }
-    
-        // DROPDOWN MÊS
-        binding.dropdownMes.apply {
-            // todo
-        }
-    
-        // DROPDOWN ANO
-        binding.dropdownAno.apply {
-            // todo
-        }
-        
+
         // AÇÃO BOTÃO PESQUISAR
         binding.buttonPesquisar.setOnClickListener {
             val direction = RegistrosFragmentDirections.toPesquisarRegistroDest()
             findNavController().navigate(direction)
         }
-        
+
         // AÇÃO BOTÃO ADICIONAR (+)
         binding.buttonAdicionar.setOnClickListener {
             val direction = RegistrosFragmentDirections.toRegistroFormDest()
             findNavController().navigate(direction)
         }
-    
-        // INSTANCIAR ADAPTER E CLICKLISTENERS
-        setupRegistroAdapter()
+
+        // RECYCLER VIEW
+        binding.recyclerviewRegistros.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerviewRegistros.adapter = RegistroAdapter()
+
         registerObservers()
     }
-    
+
     private fun registerObservers() {
-        viewModel.eventsStreamLiveData.observe(viewLifecycleOwner) { event ->
-            when (event) {
-                is RegistrosViewModel.Event.NavigateToCardDetails -> {
-                    val direction = RegistrosFragmentDirections.toCardDetalhesRegistroDest(event.id)
-                    findNavController().navigate(direction)
+        viewModel.uiBehaviorState.observe(viewLifecycleOwner) { currentState ->
+            currentState.registroId?.let {
+                findNavController().navigate(R.id.to_card_detalhes_registro_dest,
+                        bundleOf(KEY_REGISTRO_ID to it))
+                setFragmentResultListener(KEY_IS_REGISTRO_DETAILS_SHOWN) { _, bdl ->
+                    if (bdl.getBoolean(KEY_IS_REGISTRO_DETAILS_SHOWN, false)) {
+                        viewModel.detailsShown()
+                    }
                 }
+                clearFragmentResult(KEY_IS_REGISTRO_DETAILS_SHOWN)
             }
         }
-        
-        viewModel.registros.observe(viewLifecycleOwner) { registros ->
-            (binding.recyclerviewRegistros.adapter as RegistroAdapter).submitList(registros)
-            
-            val quantidade = registros?.size ?: 0
-    
-            binding.textViewMesAno.text = viewModel.labelPageFormatado
-            binding.textViewTotalMes.text = viewModel.totalMesAtualFormatado
-            binding.textViewQuantidadeRegistros.text = "$quantidade"
-            binding.textviewNenhumRegistroEncontrado.visibility =
-                if (quantidade == 0) View.VISIBLE else View.GONE
-        }
-        
-        viewModel.monthPageLayoutState.observe(viewLifecycleOwner) { layoutState ->
-            when(layoutState) {
-                is RegistrosViewModel.MonthPageFilterState.LabelState -> {
-                    binding.textViewMesAno.visibility = View.VISIBLE
-                    binding.componentDropdownMesAno.visibility = View.GONE
-                }
-                is RegistrosViewModel.MonthPageFilterState.DropdownState -> {
-                    binding.textViewMesAno.visibility = View.GONE
-                    binding.componentDropdownMesAno.visibility = View.VISIBLE
-                }
+
+        viewModel.observeRegistroUIState(viewLifecycleOwner, ::setupView)
+
+        viewModel.expenseDataIntegration.doObserve(requireContext(), viewLifecycleOwner) { state ->
+            binding.progressIncicator.root.visibility = if (state.sendingData) View.VISIBLE else View.GONE
+
+            state.onError?.let {
+                ConfirmationDialogDirections.toConfirm("Network", it.stackTraceToString())
+                findNavController().navigate(R.id.confirmation_dest)
             }
         }
-        
-        viewModel.backendNetworkIntegration.observeExpsense(requireContext(), viewLifecycleOwner)
-        viewModel.backendNetworkIntegration.state(viewLifecycleOwner) {
-        
-        }
-    
-    
     }
-    
-    private fun setupRegistroAdapter() {
-        binding.recyclerviewRegistros.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = RegistroAdapter()
-        val listener = AdapterClickListener<Registro>(
-            onClick = { viewModel.mostrarDetalhes(registroId = it.id!!) }
-        )
-        adapter.setClickListener(listener)
-        binding.recyclerviewRegistros.adapter = adapter
+
+    private fun setupView(state: RegistrosFragmentUIState) {
+        binding.textViewTotalMes.text = state.totalGastos
+        binding.textViewQuantidadeRegistros.text = state.quantidadeGastos
+        binding.textViewMesAnoSelecionado.text = state.labelMesAnoSelecionado
+        binding.textviewNenhumRegistroEncontrado.visibility = if (state.isEmpty) View.VISIBLE else View.GONE
+
+        (binding.recyclerviewRegistros.adapter as RegistroAdapter).submitList(state.registros)
     }
-    
+
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
     }
-    
 }

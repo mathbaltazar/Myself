@@ -9,7 +9,7 @@ import androidx.paging.liveData
 import br.com.myself.data.dto.EntradaDTO
 import br.com.myself.data.dao.EntradaDAO
 import br.com.myself.data.model.Entrada
-import br.com.myself.data.api.BackendError
+import br.com.myself.data.api.utils.BackendError
 import br.com.myself.data.api.EntradaAPI
 import br.com.myself.util.DEFAULT_REQUEST_LOAD_SIZE
 import br.com.myself.util.Utils.Companion.formattedDate
@@ -35,16 +35,13 @@ class EntradaRepository(
         var synchronized = false
         try {
             val dto = EntradaDTO(
-                id = entrada.serverId,
-                fonte = entrada.descricao,
+                objectID = entrada.objectID,
+                descricao = entrada.descricao,
                 valor = entrada.valor,
                 data = entrada.data.formattedDate("yyyy-MM-dd")
             )
-            val response = api.insertOrUpdate(dto)
-            if (entrada.serverId == null) {
-                entrada.serverId = response.body()!!.id
-            }
-             synchronized = true
+            api.insertOrUpdate(dto)
+            synchronized = true
         } catch (e: BackendError) {
             Log.d("EntradaRepository | salvar(Entrada)", "Error Response :: ${e.message}")
             throw e
@@ -56,14 +53,13 @@ class EntradaRepository(
     
     suspend fun delete(entrada: Entrada) {
         try {
-            if (entrada.serverId != null) {
-                api.deleteById(entrada.serverId!!)
-            }
-            dao.delete(entrada)
+            val response = api.deleteById(entrada.objectID)
+            if (response.isSuccessful)
+                dao.delete(entrada)
             Log.d("EntradaRepository | delete(Entrada)", "Entrada removida! --> $entrada")
         } catch (e: BackendError) {
-            dao.persist(entrada.apply { isDeleted = true })
             Log.d("EntradaRepository | delete(Entrada)", "Error Response :: ${e.message}")
+            dao.persist(entrada.apply { isDeleted = true })
             throw e
         }
     }

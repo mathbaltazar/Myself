@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface EntradaDAO {
     
-    @Query("SELECT * FROM Entrada WHERE data LIKE :yearLike AND deleted =:deleted ORDER BY data DESC, serverId DESC, id DESC")
+    @Query("SELECT * FROM Entrada WHERE data LIKE :yearLike AND deleted =:deleted ORDER BY data DESC, id DESC")
     fun findAllByYear(yearLike: String, deleted: Boolean = false): PagingSource<Int, Entrada>
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)

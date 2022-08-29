@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.clearFragmentResult
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import br.com.myself.databinding.BottomSheetDetalhesRegistroBinding
 import br.com.myself.injectors.provideRegistroRepo
 import br.com.myself.ui.confirmation.CONFIRMATION_DIALOG_RESULT
+import br.com.myself.util.KEY_IS_REGISTRO_DETAILS_SHOWN
 import br.com.myself.util.REQUEST_KEY_CARD_DETAILS_DELETE
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.formattedDate
@@ -18,11 +21,12 @@ import br.com.myself.viewmodel.DetalhesRegistroViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class DetalhesRegistroBottomSheet : BottomSheetDialogFragment() {
-    
+
     private val viewModel: DetalhesRegistroViewModel by viewModels {
         DetalhesRegistroViewModel.Factory(provideRegistroRepo())
     }
-    
+    private var isEditing = false
+
     private var _binding: BottomSheetDetalhesRegistroBinding? = null
     private val binding get() = _binding!!
     
@@ -46,6 +50,7 @@ class DetalhesRegistroBottomSheet : BottomSheetDialogFragment() {
         }
     
         subscribeObservers()
+        isEditing = false
     }
     
     private fun subscribeObservers() {
@@ -55,15 +60,13 @@ class DetalhesRegistroBottomSheet : BottomSheetDialogFragment() {
                 binding.textviewData.text = registro.data.formattedDate()
                 binding.textviewValor.text = Utils.formatCurrency(registro.valor)
                 binding.textviewOutros.text = registro.outros
-            
-                binding.textviewReferenciaDespesa.visibility =
-                    if (registro.despesa_id != null) View.VISIBLE else View.GONE
             }
         }
     
         viewModel.eventStream.observe(viewLifecycleOwner) { event ->
             when (event) {
                 is DetalhesRegistroViewModel.Event.OnEdit -> {
+                    isEditing = true
                     val title = "Editar Registro"
                     val direction = RegistrosFragmentDirections.toRegistroFormDest(event.registro, title)
                     findNavController().navigate(direction)
@@ -75,8 +78,11 @@ class DetalhesRegistroBottomSheet : BottomSheetDialogFragment() {
                     findNavController().navigate(direction)
                     setFragmentResultListener(requestKey) { _, bdl ->
                         val confirm = bdl.getBoolean(CONFIRMATION_DIALOG_RESULT, false)
-                        viewModel.delete(confirm)
-                        clearFragmentResult(requestKey)
+                        if (confirm) {
+                            viewModel.deleteRegistro()
+                            findNavController().navigateUp()
+                        }
+                        clearFragmentResult(CONFIRMATION_DIALOG_RESULT)
                     }
                 }
             }
@@ -85,7 +91,8 @@ class DetalhesRegistroBottomSheet : BottomSheetDialogFragment() {
     
     override fun onDestroyView() {
         _binding = null
+        setFragmentResult(KEY_IS_REGISTRO_DETAILS_SHOWN,
+            bundleOf(KEY_IS_REGISTRO_DETAILS_SHOWN to !isEditing))
         super.onDestroyView()
     }
-    
 }

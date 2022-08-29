@@ -4,7 +4,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import br.com.myself.application.MyselfApplication
 import br.com.myself.data.api.EntradaAPI
-import br.com.myself.data.api.ServiceProvider
+import br.com.myself.data.api.utils.ApiProvider
 import br.com.myself.repository.EntradaRepository
 import br.com.myself.repository.RegistroRepository
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -32,7 +32,7 @@ fun Fragment.getApplicationContext(): MyselfApplication {
 
 fun Fragment.provideEntradaRepo(): EntradaRepository =
     EntradaRepository(getApplicationContext().database.getEntradaDAO(),
-        ServiceProvider.get(EntradaAPI::class.java))
+        ApiProvider.get(EntradaAPI::class.java))
 
 fun Fragment.provideRegistroRepo(): RegistroRepository =
     RegistroRepository(getApplicationContext().database.getRegistroDAO())

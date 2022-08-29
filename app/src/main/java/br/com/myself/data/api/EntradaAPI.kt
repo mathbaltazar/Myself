@@ -10,7 +10,7 @@ interface EntradaAPI {
     fun getEntradas(): Response<List<EntradaDTO>> // TODO Refatorar endpoint no backend
     
     @DELETE("entradas/{id}")
-    suspend fun deleteById(@Path("id") id: Long): Response<Void>
+    suspend fun deleteById(@Path("id") id: String): Response<Void>
     
     @POST("entradas")
     suspend fun insertOrUpdate(@Body entrada: EntradaDTO): Response<EntradaDTO>

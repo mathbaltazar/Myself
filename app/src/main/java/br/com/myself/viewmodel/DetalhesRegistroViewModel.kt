@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import br.com.myself.data.model.Registro
 import br.com.myself.repository.RegistroRepository
+import br.com.myself.util.KEY_REGISTRO_ID
 import kotlinx.coroutines.launch
 
 class DetalhesRegistroViewModel(
@@ -13,8 +14,8 @@ class DetalhesRegistroViewModel(
     
     
     private val _events = MutableLiveData<Event>()
-    private val registroId: Long = savedStateHandle["registroId"]!!
-    
+    private val registroId: Long = savedStateHandle[KEY_REGISTRO_ID]!!
+
     val registro: LiveData<Registro> = repository.getRegistroById(registroId)
     val eventStream: LiveData<Event> = _events
     
@@ -26,8 +27,8 @@ class DetalhesRegistroViewModel(
         _events.value = Event.OnDelete(registroId)
     }
     
-    fun delete(confirmation: Boolean) = viewModelScope.launch {
-        if (confirmation) repository.excluirRegistro(registro.value!!)
+    fun deleteRegistro() = viewModelScope.launch {
+        repository.excluirRegistro(registro.value!!)
     }
     
     sealed class Event {

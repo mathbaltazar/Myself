@@ -3,3 +3,5 @@ package br.com.myself.util
 const val REQUEST_KEY_CARD_DETAILS_DELETE = "ENTRADA_DETAILS_DELETE_RK"
 const val REQUEST_KEY_ENTRADA_DETAILS_CLOSE = "ENTRADA_DETAILS_CLOSE_RK"
 const val FRAGMENT_RESULT_IS_ENTRADA_EDITING = "IS_ENTRADA_EDITING_FR"
+const val KEY_IS_REGISTRO_DETAILS_SHOWN = "action_registro_details_shown"
+const val KEY_REGISTRO_ID = "registro_id"

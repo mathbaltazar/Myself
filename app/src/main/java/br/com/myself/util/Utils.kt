@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 const val DEFAULT_REQUEST_LOAD_SIZE = 5
-const val START_PAGE_INDEX = 0
 
 class Utils {
     companion object {
@@ -35,9 +34,7 @@ class Utils {
             "NOVEMBRO",
             "DEZEMBRO"
         )
-        val ANOS = (2000..getCalendar().get(Calendar.YEAR)).sortedDescending()
-    
-    
+
         fun Calendar.formattedDate(pattern: String = mPattern): String {
             sdf.applyPattern(pattern)
             return sdf.format(this.time).also { sdf.applyPattern(mPattern) }
@@ -46,15 +43,7 @@ class Utils {
         fun getCalendar(): Calendar {
             return GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"), mLocale)
         }
-        
-        fun String.parseCalendar(pattern: String? = mPattern): Calendar {
-            sdf.applyPattern(pattern)
-            return getCalendar().apply {
-                time = sdf.parse(this@parseCalendar)!!
-            }
-                .also { sdf.applyPattern(mPattern) }
-        }
-    
+
         fun formatCurrency(valor: Double?): String {
             return NumberFormat.getCurrencyInstance(mLocale)
                 .format(valor ?: 0)

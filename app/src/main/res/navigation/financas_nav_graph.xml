@@ -57,9 +57,9 @@
             app:nullable="true" />
         <argument
             android:name="title"
+            android:defaultValue="Salvar Entrada"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="Salvar Entrada" />
+            app:nullable="true" />
     </fragment>
     <dialog
         android:id="@+id/entrada_detalhes_dest"
@@ -106,7 +106,7 @@
         android:name="br.com.myself.ui.financas.registros.DetalhesRegistroBottomSheet"
         tools:layout="@layout/bottom_sheet_detalhes_registro">
         <argument
-            android:name="registroId"
+            android:name="registro_id"
             app:argType="long" />
         <action
             android:id="@+id/to_registro_form_dest"
@@ -129,8 +129,8 @@
             app:nullable="true" />
         <argument
             android:name="title"
+            android:defaultValue="Salvar Registro"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="Salvar Registro" />
+            app:nullable="true" />
     </fragment>
 </navigation>

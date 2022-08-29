@@ -21,7 +21,7 @@ import br.com.myself.data.model.Registro
     Entrada::class,
     Crise::class
 ],
-version = 7, exportSchema = true)
+version = 1, exportSchema = true)
 @TypeConverters(DateConverter::class)
 abstract class LocalDatabase : RoomDatabase() {
     
@@ -34,18 +34,16 @@ abstract class LocalDatabase : RoomDatabase() {
     abstract fun getCriseDAO(): CriseDAO
     
     companion object {
-        const val NAME = "_myself-database"
-    
+        private const val DATABASE_NAME = "_myself"
         var instance: LocalDatabase? = null
         fun getInstance(context: Context) = synchronized(this) {
             instance ?: Room.databaseBuilder(
                 context.applicationContext,
                 LocalDatabase::class.java,
-                NAME
+                DATABASE_NAME
             ).fallbackToDestructiveMigration()
                 .build()
                 .also { instance = it }
         }
-        
     }
 }

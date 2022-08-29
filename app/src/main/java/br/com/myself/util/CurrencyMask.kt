@@ -24,12 +24,10 @@ class CurrencyMask(private var editText: EditText) : TextWatcher {
                 campo =
                     Utils.formatCurrency("0.0$campo".toDouble())
             } else {
-                campo =
-                    Utils.unformatCurrency(campo)
-                campo = campo.replace(".", "")
+                campo = Utils.unformatCurrency(campo)
+                    .replace(".", "")
                 campo = StringBuilder(campo).insert(campo.lastIndex - 1, ".").toString()
-                campo =
-                    Utils.formatCurrency(campo.toDouble())
+                campo = Utils.formatCurrency(campo.toDouble())
             }
             
         } catch (ex: Exception) {

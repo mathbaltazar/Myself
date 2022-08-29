@@ -17,11 +17,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
-import br.com.myself.databinding.ActivityDetalhesDespesaBinding
 import br.com.myself.data.model.Despesa
-import br.com.myself.data.model.Registro
+import br.com.myself.databinding.ActivityDetalhesDespesaBinding
 import br.com.myself.ui.adapter.RegistroAdapter
-import br.com.myself.util.AdapterClickListener
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.DetalhesDespesaActivityViewModel
@@ -89,15 +87,13 @@ class DetalhesDespesaActivity : AppCompatActivity() {
         }
     
         binding.buttonRegistrar.setOnClickListener {
-            viewModel.getSugestoes { sugestoes ->
-                val dialog =
-                    RegistrarDespesaDialog(viewModel.despesa, sugestoes) { dialog, valor, data ->
-                        viewModel.registrar(valor, data) {
-                            dialog.dismiss()
-                        }
+            val dialog =
+                RegistrarDespesaDialog(viewModel.despesa) { dialog, valor, data ->
+                    viewModel.registrar(valor, data) {
+                        dialog.dismiss()
                     }
-                dialog.show(supportFragmentManager, null)
-            }
+                }
+            dialog.show(supportFragmentManager, null)
         }
     
         setUpRegistrosAdapter()
@@ -108,7 +104,7 @@ class DetalhesDespesaActivity : AppCompatActivity() {
             binding.textviewSemRegistros.visibility =
                 if (registros.isEmpty()) View.VISIBLE else View.GONE
         
-            (binding.recyclerviewRegistros.adapter as RegistroAdapter).submitList(registros)
+            //todo (binding.recyclerviewRegistros.adapter as RegistroAdapter).submitList(registros)
         }
         
         viewModel.despesaEdited.observe(this) {
@@ -117,26 +113,10 @@ class DetalhesDespesaActivity : AppCompatActivity() {
     }
     
     private fun setUpRegistrosAdapter() {
-        val adapter = RegistroAdapter()
-        adapter.setClickListener(AdapterClickListener(
-            onLongClick = { registro ->
-                confirmarExcluirRegistro(registro)
-            }))
-        binding.recyclerviewRegistros.adapter = adapter
+        binding.recyclerviewRegistros.adapter = RegistroAdapter()
         binding.recyclerviewRegistros.layoutManager = LinearLayoutManager(this)
     }
-    
-    private fun confirmarExcluirRegistro(registro: Registro) {
-        var msg = "Descrição: ${registro.descricao}"
-        msg += "\nValor: ${Utils.formatCurrency(registro.valor)}"
-    
-        AlertDialog.Builder(this).setTitle("Excluir registro?").setMessage(msg)
-            .setPositiveButton("Excluir") { _, _ ->
-                viewModel.excluirRegistro(registro)
-            }.setNegativeButton("Cancelar", null)
-            .show()
-    }
-    
+
     private fun obterVencimentoAdapter(): ArrayAdapter<String> {
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item)
     

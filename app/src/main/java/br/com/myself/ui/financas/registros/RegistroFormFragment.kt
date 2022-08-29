@@ -71,7 +71,7 @@ class RegistroFormFragment : Fragment(R.layout.fragment_registro_form) {
         
         viewModel.events.observe(viewLifecycleOwner) { event ->
             if (event is RegistroFormViewModel.Event.NavigateBack) {
-                findNavController().popBackStack()
+                findNavController().navigateUp()
             }
         }
     }

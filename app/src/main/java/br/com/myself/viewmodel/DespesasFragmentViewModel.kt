@@ -28,15 +28,8 @@ class DespesasFragmentViewModel(application: Application) : AndroidViewModel(app
     fun registrarDespesa(despesa: Despesa, valor: Double, data: Calendar, onRegistered: () -> Unit) = viewModelScope.launch {
         RegistroRepository(getApplication()).salvarRegistro(Registro(descricao = despesa.nome,
             valor = valor,
-            data = data,
-            despesa_id = despesa.id))
+            data = data))
         onRegistered()
-    }
-    
-    fun getSugestoes(despesa: Despesa, onComplete: (List<Double>) -> Unit) {
-        Async.doInBackground({
-            RegistroRepository(getApplication()).getValoresPelaDespesaId(despesa.id)
-        }, { valores -> onComplete(valores) })
     }
     
 }

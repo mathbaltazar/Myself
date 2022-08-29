@@ -1,4 +1,4 @@
-package br.com.myself.data.api
+package br.com.myself.data.api.utils
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -6,16 +6,17 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-private const val DEFAULT_NETWORK_URL = "http://192.168.1.66:8080/myself/"
 
-class ServiceProvider {
+class ApiProvider {
     companion object {
+        private const val DEFAULT_NETWORK_URL = "http://192.168.1.66:8080/myself/"
+
         private var mRetrofitClient: Retrofit? = null
         private val mClient =
             OkHttpClient()
                 .newBuilder()
                 .addInterceptor(BackendInterceptor())
-                .connectTimeout(4, TimeUnit.SECONDS)
+                .connectTimeout(15, TimeUnit.SECONDS)
                 .build()
         
         

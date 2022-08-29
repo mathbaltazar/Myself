@@ -6,21 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
-import br.com.myself.R
 import br.com.myself.components.CalendarPickerEditText
-import br.com.myself.databinding.DialogRegistrarDespesaBinding
 import br.com.myself.data.model.Despesa
+import br.com.myself.databinding.DialogRegistrarDespesaBinding
 import br.com.myself.util.CurrencyMask
 import br.com.myself.util.Utils
 import br.com.myself.util.Utils.Companion.setUpDimensions
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import java.math.BigDecimal
 import java.util.*
 
 class RegistrarDespesaDialog(
     private val despesa: Despesa,
-    private val sugestoes: List<Double>,
     private val onRegister: (DialogFragment, Double, Calendar) -> Unit
 ) : DialogFragment() {
     
@@ -69,8 +66,6 @@ class RegistrarDespesaDialog(
             // Criação do registro a partir da despesa
             onRegister(this, valor, binding.calendarPickerData.getTime())
         }
-    
-        setUpSugestoes()
     }
     
     override fun onStart() {
@@ -79,20 +74,5 @@ class RegistrarDespesaDialog(
         dialog?.window?.setBackgroundDrawableResource(android.R.color.white)
         dialog?.setUpDimensions(widthPercent = (Utils.getScreenSize(requireContext()).x * .85).toInt())
     }
-    
-    private fun setUpSugestoes() {
-        sugestoes.sorted().forEach { valor ->
-            val button = layoutInflater.inflate(R.layout.button_dialog_registrar_despesa_sugestao,
-                binding.flexboxSugestoes,
-                false) as MaterialButton
-            
-            button.text = Utils.formatCurrency(valor)
-            button.setOnClickListener {
-                binding.textinputValor.setText(button.text)
-            }
-            
-            binding.flexboxSugestoes.addView(button)
-        }
-    }
-    
+
 }

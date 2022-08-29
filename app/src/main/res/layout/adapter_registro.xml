@@ -13,15 +13,11 @@
     app:contentPadding="@dimen/all_default_layout_offset_8"
     tools:ignore="ContentDescription">
 
-    <com.google.android.flexbox.FlexboxLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:alignItems="stretch">
-
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/all_default_layout_offset_2"
+            app:flexDirection="row"
             app:alignItems="center">
 
             <LinearLayout
@@ -56,51 +52,44 @@
 
             </LinearLayout>
 
-
-            <TextView
-                android:id="@+id/textview_valor"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/all_default_layout_offset_4"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_size_24"
-                tools:text="R$ 45,00" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_icon_registro_item_anexo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_anexo"
+                        android:visibility="invisible"
+                        app:tint="@color/colorPrimary"
+                        tools:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/imageview_icone_sync"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_cloud"
+                        android:visibility="invisible"
+                        app:tint="@color/colorPrimary"
+                        tools:visibility="visible" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textview_valor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/all_default_layout_offset_4"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text_size_24"
+                    tools:text="R$ 45,00" />
+            </LinearLayout>
         </com.google.android.flexbox.FlexboxLayout>
-
-        <com.google.android.flexbox.FlexboxLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:flexDirection="column"
-            app:justifyContent="space_evenly">
-
-            <ImageView
-                android:id="@+id/imageview_icone_sync"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_cloud"
-                android:visibility="invisible"
-                app:tint="@color/colorPrimary"
-                tools:visibility="visible" />
-
-            <ImageView
-                android:id="@+id/imageview_icone_despesa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_despesa"
-                android:visibility="invisible"
-                app:tint="@color/colorPrimary"
-                tools:visibility="visible" />
-
-            <ImageView
-                android:id="@+id/iv_icon_registro_item_anexo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_anexo"
-                android:visibility="invisible"
-                app:tint="@color/colorPrimary"
-                tools:visibility="visible" />
-
-        </com.google.android.flexbox.FlexboxLayout>
-    </com.google.android.flexbox.FlexboxLayout>
 </com.google.android.material.card.MaterialCardView>

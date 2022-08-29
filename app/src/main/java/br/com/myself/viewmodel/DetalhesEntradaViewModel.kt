@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import br.com.myself.repository.EntradaRepository
 import br.com.myself.data.model.Entrada
-import br.com.myself.data.api.BackendError
+import br.com.myself.data.api.utils.BackendError
 import kotlinx.coroutines.launch
 
 class DetalhesEntradaViewModel(

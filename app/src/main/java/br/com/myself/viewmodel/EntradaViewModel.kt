@@ -1,12 +1,9 @@
 package br.com.myself.viewmodel
 
 import androidx.lifecycle.*
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.insertSeparators
-import androidx.paging.map
+import androidx.paging.*
 import br.com.myself.repository.EntradaRepository
-import br.com.myself.ui.utils.UIModel
+import br.com.myself.ui.adapter.state.UIModelState
 import br.com.myself.util.Utils
 import java.util.*
 import java.util.Calendar.YEAR
@@ -20,21 +17,21 @@ class EntradaViewModel(repository: EntradaRepository) : ViewModel() {
     val isEmpty: LiveData<Boolean> get() = Transformations.map(totalCount) { it == 0 }
     val entradaEventsLiveData: LiveData<Events> get() = _eventStream
     
-    val entradas: LiveData<PagingData<UIModel>> = Transformations.switchMap(_year) {
+    val entradas: LiveData<PagingData<UIModelState>> = Transformations.switchMap(_year) {
         repository.pesquisarEntradas(it).map { pagingData ->
-            pagingData.map { entrada -> UIModel.UIEntrada(entrada) }
+            pagingData.map { entrada -> UIModelState.UIEntradaState(entrada) }
                 .insertSeparators { before, after ->
                     if (before == null) { /* Beginning of the list */
                         if (after == null) { /* list is empty */
                             return@insertSeparators null
                         }
-                        return@insertSeparators UIModel.SeparatorEntrada(after.entrada.data[Calendar.MONTH])
+                        return@insertSeparators UIModelState.SeparatorEntrada(after.entrada.data[Calendar.MONTH])
                     }
                     
                     if (after == null) /* end of the list */ return@insertSeparators null
                     
                     if (before.entrada.data[Calendar.MONTH] != after.entrada.data[Calendar.MONTH]) {
-                        return@insertSeparators UIModel.SeparatorEntrada(after.entrada.data[Calendar.MONTH])
+                        return@insertSeparators UIModelState.SeparatorEntrada(after.entrada.data[Calendar.MONTH])
                     }
                     return@insertSeparators null
                 }

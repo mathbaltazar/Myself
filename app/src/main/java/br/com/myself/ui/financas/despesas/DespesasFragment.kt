@@ -1,7 +1,10 @@
 package br.com.myself.ui.financas.despesas
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -11,8 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
-import br.com.myself.databinding.FragmentDespesasBinding
 import br.com.myself.data.model.Despesa
+import br.com.myself.databinding.FragmentDespesasBinding
 import br.com.myself.ui.adapter.DespesaAdapter
 import br.com.myself.util.Utils
 import br.com.myself.viewmodel.DespesasFragmentViewModel
@@ -81,17 +84,15 @@ class DespesasFragment : Fragment(R.layout.fragment_despesas) {
                 DespesaAdapter.ACTION_EXCLUIR -> confirmarExcluirDespesa(despesa)
                 DespesaAdapter.ACTION_DETALHES -> startActivity(DetalhesDespesaActivity.getIntent(requireContext(), despesa))
                 DespesaAdapter.ACTION_REGISTRAR -> {
-                    viewModel.getSugestoes(despesa) { sugestoes ->
-                        val dialog =
-                            RegistrarDespesaDialog(despesa, sugestoes) { dialog, valor, data ->
-                                viewModel.registrarDespesa(despesa, valor, data) {
-                                    Toast.makeText(context, "Registrado!", Toast.LENGTH_SHORT)
-                                        .show()
-                                    dialog.dismiss()
-                                }
+                    val dialog =
+                        RegistrarDespesaDialog(despesa) { dialog, valor, data ->
+                            viewModel.registrarDespesa(despesa, valor, data) {
+                                Toast.makeText(context, "Registrado!", Toast.LENGTH_SHORT)
+                                    .show()
+                                dialog.dismiss()
                             }
-                        dialog.show(childFragmentManager, null)
-                    }
+                        }
+                    dialog.show(childFragmentManager, null)
                 }
             }
         }

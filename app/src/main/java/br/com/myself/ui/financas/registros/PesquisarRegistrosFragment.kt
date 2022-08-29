@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.myself.R
 import br.com.myself.databinding.FragmentPesquisarRegistrosBinding
 import br.com.myself.injectors.provideRegistroRepo
 import br.com.myself.ui.adapter.RegistroAdapter
-import br.com.myself.util.AdapterClickListener
 import br.com.myself.viewmodel.PesquisarRegistrosViewModel
 
 class PesquisarRegistrosFragment : Fragment(R.layout.fragment_pesquisar_registros) {
@@ -39,7 +37,7 @@ class PesquisarRegistrosFragment : Fragment(R.layout.fragment_pesquisar_registro
         viewModel.resultadoBusca.observe(viewLifecycleOwner) {
             binding.textInputLayoutBusca.helperText = "Resultados: ${viewModel.resultCount}"
             
-            (binding.recyclerView.adapter as RegistroAdapter).submitList(it)
+            // todo (binding.recyclerView.adapter as RegistroAdapter).submitList(it)
             
             binding.textViewNenhumaBusca.visibility =
                 if (viewModel.hasAnyResult()) View.VISIBLE else View.GONE
@@ -47,13 +45,7 @@ class PesquisarRegistrosFragment : Fragment(R.layout.fragment_pesquisar_registro
     }
     
     private fun configureAdapter() {
-        val adapter = RegistroAdapter()
-        adapter.setClickListener(AdapterClickListener(onClick = {
-            val direction = PesquisarRegistrosFragmentDirections.toCardDetalhesRegistroDest(it.id!!)
-            findNavController().navigate(direction)
-        }))
-        
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = RegistroAdapter()
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
     }
     

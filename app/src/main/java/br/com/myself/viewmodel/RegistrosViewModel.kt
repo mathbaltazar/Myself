@@ -1,64 +1,88 @@
 package br.com.myself.viewmodel
 
 import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import br.com.myself.data.model.Registro
-import br.com.myself.network.BackendNetworkIntegration
+import br.com.myself.network.ExpenseIntegration
+import br.com.myself.network.NetworkDataIntegration
 import br.com.myself.repository.RegistroRepository
+import br.com.myself.ui.financas.state.RegistrosFragmentUIState
+import br.com.myself.ui.adapter.state.UIModelState
+import br.com.myself.ui.financas.state.RegistrosFragmentBehaviorState
 import br.com.myself.util.Utils
+import br.com.myself.util.Utils.Companion.formattedDate
+import kotlinx.coroutines.flow.*
 import java.util.*
 
 class RegistrosViewModel(private val repository: RegistroRepository) : ViewModel() {
-    
-    private val monthPageFilter: MonthPageFilter = MonthPageFilter()
-    private val dateQueryLiveData = MutableLiveData(monthPageFilter)
-    private val _pageFilterState =
-        MutableLiveData<MonthPageFilterState>(MonthPageFilterState.LabelState)
-    private val _eventsStream = MutableLiveData<Event>()
-    
-    val registros: LiveData<List<Registro>> =
-        Transformations.switchMap(dateQueryLiveData) { filter ->
-            repository.pesquisarRegistros(filter.month(), filter.year())
+
+
+
+    private val monthPageManager: MonthPageManager = MonthPageManager()
+    private val pageManagerLiveData = MutableLiveData(monthPageManager)
+    private val uiState = MutableStateFlow(RegistrosFragmentUIState.create())
+    private val registrosLiveData: LiveData<List<Registro>> =
+        Transformations.switchMap(pageManagerLiveData) {
+            repository.pesquisarRegistros(monthPageManager.month(), monthPageManager.year())
         }
-    val totalMesAtualFormatado: String get() = Utils.formatCurrency(calcularTotal())
-    val labelPageFormatado: String get() = "${Utils.MESES_STRING[monthPageFilter.month()]}/${monthPageFilter.year()}"
-    val monthPageLayoutState: LiveData<MonthPageFilterState> get() = _pageFilterState
-    val eventsStreamLiveData: LiveData<Event> get() = _eventsStream
-    val backendNetworkIntegration = BackendNetworkIntegration()
-    
+    private val _uiBehaviorState = MutableStateFlow(RegistrosFragmentBehaviorState.create())
+    val uiBehaviorState: StateFlow<RegistrosFragmentBehaviorState> get() = _uiBehaviorState.asStateFlow()
+    val expenseDataIntegration: NetworkDataIntegration = ExpenseIntegration()
+
     fun proximoMes() {
-        dateQueryLiveData.value = monthPageFilter.proximoMes()
-        _pageFilterState.value = MonthPageFilterState.LabelState
+        pageManagerLiveData.value = monthPageManager.proximoMes()
     }
     
     fun mesAnterior() {
-        dateQueryLiveData.value = monthPageFilter.mesAnterior()
-        _pageFilterState.value = MonthPageFilterState.LabelState
+        pageManagerLiveData.value = monthPageManager.mesAnterior()
     }
     
-    fun irParaData(month: Int = monthPageFilter.month(), year: Int = monthPageFilter.year()) {
-        dateQueryLiveData.value = monthPageFilter.goTo(month = month, year = year)
+    private fun mostrarDetalhes(id: Long) {
+        _uiBehaviorState.update { it.copy(registroId = id) }
     }
-    
-    private fun calcularTotal(): Double? {
-        return registros.value?.sumOf(Registro::valor)
+
+    fun detailsShown() {
+        _uiBehaviorState.update { it.copy(registroId = null) }
     }
-    
-    fun showJumpToDate() {
-        _pageFilterState.value = MonthPageFilterState.DropdownState
+
+    fun observeRegistroUIState(
+        lifecycleOwner: LifecycleOwner,
+        observer: (RegistrosFragmentUIState) -> Unit
+    ) {
+        registrosLiveData.observe(lifecycleOwner, Observer { listaRegistros ->
+            observer(uiState.updateAndGet { it.copy(
+                    labelMesAnoSelecionado = monthPageManager.getCurrentDate().formattedDate("MMMM/yyyy"),
+                    quantidadeGastos = "${registrosLiveData.value!!.size}",
+                    totalGastos = Utils.formatCurrency(listaRegistros.sumOf(Registro::valor)),
+                    isEmpty = listaRegistros.isEmpty(),
+                    registros = listaRegistros.map(::toRegistroItemUIState)
+                )
+            })
+        })
     }
-    
-    fun mostrarDetalhes(registroId: Long) {
-        _eventsStream.postValue(Event.NavigateToCardDetails(registroId))
+
+    private fun toRegistroItemUIState(registro: Registro): UIModelState {
+        return UIModelState.UIRegistroState(
+            id = registro.id!!,
+            descricao = registro.descricao,
+            valor = Utils.formatCurrency(registro.valor),
+            data = registro.data.formattedDate(),
+            outros = registro.outros,
+            isSync = registro.isSynchronized,
+            onItemSelected = {
+                mostrarDetalhes(registro.id!!)
+            }
+        )
     }
-    
-    
-    private class MonthPageFilter(private val calendar: Calendar = Utils.getCalendar()) {
-        fun proximoMes(): MonthPageFilter {
+
+
+    private class MonthPageManager(private val calendar: Calendar = Utils.getCalendar()) {
+        fun proximoMes(): MonthPageManager {
             calendar.add(Calendar.MONTH, 1)
             return this
         }
         
-        fun mesAnterior(): MonthPageFilter {
+        fun mesAnterior(): MonthPageManager {
             calendar.add(Calendar.MONTH, -1)
             return this
         }
@@ -70,21 +94,8 @@ class RegistrosViewModel(private val repository: RegistroRepository) : ViewModel
         fun year(): Int {
             return calendar[Calendar.YEAR]
         }
-        
-        fun goTo(month: Int = month(), year: Int = year()): MonthPageFilter {
-            calendar.set(Calendar.YEAR, year)
-            calendar.set(Calendar.MONTH, month)
-            return this
-        }
-    }
-    
-    sealed class MonthPageFilterState {
-        object LabelState : MonthPageFilterState()
-        object DropdownState : MonthPageFilterState()
-    }
-    
-    sealed class Event {
-        class NavigateToCardDetails(val id: Long) : Event()
+
+        fun getCurrentDate(): Calendar = calendar
     }
     
     class Factory(private val repo: RegistroRepository) : ViewModelProvider.NewInstanceFactory() {

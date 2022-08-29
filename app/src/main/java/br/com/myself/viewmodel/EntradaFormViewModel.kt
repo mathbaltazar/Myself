@@ -2,9 +2,9 @@ package br.com.myself.viewmodel
 
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
-import br.com.myself.repository.EntradaRepository
+import br.com.myself.data.api.utils.BackendError
 import br.com.myself.data.model.Entrada
-import br.com.myself.data.api.BackendError
+import br.com.myself.repository.EntradaRepository
 import br.com.myself.util.Utils
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -48,15 +48,15 @@ class EntradaFormViewModel(
             viewModelScope.launch {
                 try {
                     _events.value = Events.Saving
-                    val entrada = Entrada(
-                        id = savedStateHandle.get<Entrada>("entrada")?.id,
+                    val entrada = entrada.value?.copy(
                         valor = formValor,
                         descricao = formDescricao,
                         data = formData,
-                    ).apply {
-                        // Caso já tenha sido sincronizado com backend
-                        serverId = savedStateHandle.get<Entrada>("entrada")?.serverId
-                    }
+                    ) ?: Entrada(
+                        valor = formValor,
+                        descricao = formDescricao,
+                        data = formData,
+                    )
             
                     repository.salvar(entrada)
                 } catch (e: BackendError) {

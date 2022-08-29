@@ -1,4 +1,4 @@
-package br.com.myself.data.api
+package br.com.myself.data.api.utils
 
 import java.io.IOException
 
