@@ -75,6 +75,10 @@ class RegistrosViewModel(private val repository: RegistroRepository) : ViewModel
         )
     }
 
+    fun syncErrorShown() {
+        this.expenseDataIntegration.updateState { it.copy(onError = null) }
+    }
+
 
     private class MonthPageManager(private val calendar: Calendar = Utils.getCalendar()) {
         fun proximoMes(): MonthPageManager {

@@ -37,7 +37,14 @@ android {
         viewBinding true
     }
     buildTypes {
+
+        debug {
+            buildConfigField 'String', 'DATABASE_NAME', '"_myself-DEV"'
+        }
+
         release {
+            buildConfigField 'String', 'DATABASE_NAME', '"_myself"'
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

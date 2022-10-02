@@ -2,6 +2,7 @@ package br.com.myself.ui.financas.registros
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.clearFragmentResult
@@ -13,7 +14,6 @@ import br.com.myself.R
 import br.com.myself.databinding.FragmentRegistrosBinding
 import br.com.myself.injectors.provideRegistroRepo
 import br.com.myself.ui.adapter.RegistroAdapter
-import br.com.myself.ui.confirmation.ConfirmationDialogDirections
 import br.com.myself.ui.financas.state.RegistrosFragmentUIState
 import br.com.myself.util.KEY_IS_REGISTRO_DETAILS_SHOWN
 import br.com.myself.util.KEY_REGISTRO_ID
@@ -77,11 +77,16 @@ class RegistrosFragment : Fragment(R.layout.fragment_registros) {
         viewModel.expenseDataIntegration.doObserve(requireContext(), viewLifecycleOwner) { state ->
             binding.progressIncicator.root.visibility = if (state.sendingData) View.VISIBLE else View.GONE
 
+            if (!state.isUpToDate)  {
+                // TODO something
+            }
+
             state.onError?.let {
-                ConfirmationDialogDirections.toConfirm("Network", it.stackTraceToString())
-                findNavController().navigate(R.id.confirmation_dest)
+                Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                viewModel.syncErrorShown()
             }
         }
+
     }
 
     private fun setupView(state: RegistrosFragmentUIState) {

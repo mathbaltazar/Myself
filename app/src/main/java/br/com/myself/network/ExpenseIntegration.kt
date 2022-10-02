@@ -24,49 +24,51 @@ class ExpenseIntegration : NetworkDataIntegration() {
             database.getRegistroDAO().let { expenseDAO ->
                 // Start observing Expense data
                 expenseDAO.findAllToSync().observe(lifecycleOwner) { expenses ->
-                    observe(lifecycleOwner, expenses, expenseDAO)
+                    if (!expenses.isNullOrEmpty()) {
+                        lifecycleOwner.lifecycleScope.launch {
+                            sync(expenses, expenseDAO)
+                        }
+                    }
                 }
             }
         }
 
     }
 
-    private fun observe(
-        lifecycleOwner: LifecycleOwner,
-        expenses: List<Registro>?,
-        dao: RegistroDAO) {
-        if (!expenses.isNullOrEmpty()) {
-            lifecycleOwner.lifecycleScope.launch {
-                try {
-                    Log.d("Expense Network Integration", "Registers to send: $expenses")
-                    updateState { state -> state.copy(sendingData = true, onError = null) }
+    private suspend fun sync(expenses: List<Registro>, dao: RegistroDAO) {
+        try {
+            Log.d("Expense Network Integration", "Registers to send: $expenses")
+            updateState { state -> state.copy(sendingData = true, onError = null) }
 
-                    Log.d("Expense Network Integration", "Sending registers!")
-                    val response =
-                            expenseAPI.send(expenses.map(ExpenseTransformer::toDTO))
-
-                    if (response.isSuccessful) {
-                        Log.d("Network Integration | Expense","Response is successful")
-
-                        Log.d("Network Integration | Expense","Updating synchronized")
-                        val update = expenses.filterNot(Registro::isDeleted)
-                        dao.persist(update.map(::synchronize).toTypedArray())
-
-                        Log.d("Network Integration | Expense","Deleting synchronized")
-                        dao.clearDeleted()
+            val toDelete = expenses.filter(Registro::isDeleted)
+            if (toDelete.isNotEmpty()) {
+                expenseAPI.delete(toDelete.map(ExpenseTransformer::toDTO))
+                    .let { response ->
+                        if (response.isSuccessful) {
+                            Log.d("Network Integration | Expense", "Deleting synchronized")
+                            dao.clearDeleted()
+                        }
                     }
-
-                    updateState { state ->
-                        state.copy(sendingData = false, isUpToDate = response.isSuccessful)
-                    }
-                } catch (e: BackendError) {
-                    Log.d("Network Integration | Expense",
-                            "Error: $e")
-                    updateState { state -> state.copy(sendingData = false, onError = e) }
-                }
             }
 
+
+            val toUpdate = expenses.filterNot(Registro::isDeleted)
+            if (toUpdate.isNotEmpty()) {
+                expenseAPI.send(expenses.map(ExpenseTransformer::toDTO))
+                    .let { response ->
+                        if (response.isSuccessful) {
+                            Log.d("Network Integration | Expense", "Updating synchronized")
+                            dao.persist(toUpdate.map(::synchronize).toTypedArray())
+                        }
+                    }
+            }
+
+            updateState { state -> state.copy(sendingData = false, isUpToDate = true) }
+        } catch (e: BackendError) {
+            Log.d("Network Integration | Expense", "Error: $e")
+            updateState { state -> state.copy(sendingData = false, onError = e, isUpToDate = false) }
         }
+
     }
 }
     
